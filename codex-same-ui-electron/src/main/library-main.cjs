@@ -1,4 +1,4 @@
-const { app, BrowserWindow, nativeTheme, shell } = require("electron");
+const { app, BrowserWindow, shell } = require("electron");
 const path = require("node:path");
 const fs = require("node:fs");
 
@@ -13,8 +13,10 @@ function createWindow() {
     minWidth: 860,
     minHeight: 560,
     title: "Codex Same UI",
-    backgroundColor: nativeTheme.shouldUseDarkColors ? "#181818" : "#ffffff",
-    trafficLightPosition: { x: 14, y: 14 },
+    backgroundColor: "#00000000",
+    transparent: true,
+    vibrancy: process.platform === "darwin" ? "menu" : undefined,
+    trafficLightPosition: { x: 16, y: 16 },
     titleBarStyle: "hiddenInset",
     webPreferences: {
       preload,

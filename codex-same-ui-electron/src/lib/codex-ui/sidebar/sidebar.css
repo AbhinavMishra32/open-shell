@@ -5,8 +5,38 @@
   min-width: var(--codex-sidebar-width);
   height: 100%;
   flex-direction: column;
-  border-right: 1px solid var(--codex-border-subtle);
-  background: var(--codex-bg-secondary);
+  border-right: 1px solid color-mix(in srgb, var(--codex-border-subtle) 70%, transparent);
+  background: var(--color-token-editor-background);
+}
+
+[data-codex-window-type="electron"]:not([data-codex-os="win32"]) .app-shell-left-panel {
+  background: var(--color-token-editor-background);
+  -webkit-backdrop-filter: blur(var(--blur-md));
+  backdrop-filter: blur(var(--blur-md));
+}
+
+@supports (color: color-mix(in lab, red, red)) {
+  [data-codex-window-type="electron"]:not([data-codex-os="win32"]) .app-shell-left-panel {
+    background: color-mix(in srgb, var(--color-token-editor-background) 55%, transparent);
+  }
+}
+
+[data-codex-window-type="electron"]:not([data-codex-os="win32"]) .app-shell-left-panel:after {
+  position: absolute;
+  inset: 0 calc(-1 * var(--radius-2xl)) 0 auto;
+  width: var(--radius-2xl);
+  background: inherit;
+  -webkit-backdrop-filter: inherit;
+  backdrop-filter: inherit;
+  content: "";
+  pointer-events: none;
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  [data-codex-window-type="electron"]:not([data-codex-os="win32"]) .app-shell-left-panel {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
 }
 
 .codex-sidebar-drag {
@@ -18,13 +48,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px 10px;
+  padding: 5px 10px 8px 14px;
 }
 
 .codex-sidebar-brand {
   display: flex;
   align-items: center;
   gap: 8px;
+  color: var(--codex-text-primary);
+  font-size: 13px;
   font-weight: 600;
 }
 
@@ -34,13 +66,53 @@
   color: var(--codex-text-primary);
 }
 
+.codex-sidebar-search {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  margin: 4px 10px 10px;
+  border: 1px solid var(--codex-border-subtle);
+  border-radius: var(--codex-radius-md);
+  padding: 0 10px;
+  background: color-mix(in srgb, var(--codex-bg-primary) 44%, transparent);
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--codex-bg-primary) 40%, transparent);
+  color: var(--codex-text-placeholder);
+  font-size: 12px;
+}
+
+.codex-sidebar-primary {
+  display: grid;
+  gap: 1px;
+  padding: 0 8px 12px;
+}
+
+.codex-sidebar-nav-item {
+  display: flex;
+  height: 30px;
+  align-items: center;
+  gap: 9px;
+  border: 0;
+  border-radius: var(--codex-radius-md);
+  padding: 0 9px;
+  color: var(--codex-text-secondary);
+  background: transparent;
+  text-align: left;
+}
+
+.codex-sidebar-nav-item[data-active="true"],
+.codex-sidebar-nav-item:hover {
+  background: color-mix(in srgb, var(--codex-bg-primary) 42%, transparent);
+  color: var(--codex-text-primary);
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--codex-bg-primary) 32%, transparent);
+}
+
 .codex-sidebar-list {
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
   overflow: auto;
-  padding: 6px 8px;
+  padding: 4px 8px 8px;
 }
 
 .codex-sidebar-item {
@@ -49,8 +121,8 @@
   flex-direction: column;
   gap: 1px;
   border: 0;
-  border-radius: var(--codex-radius-md);
-  padding: 8px 10px;
+  border-radius: 9px;
+  padding: 7px 9px;
   color: var(--codex-text-secondary);
   background: transparent;
   text-align: left;
@@ -58,14 +130,17 @@
 
 .codex-sidebar-item:hover,
 .codex-sidebar-item[data-active="true"] {
-  background: var(--codex-bg-tertiary);
+  background: color-mix(in srgb, var(--codex-bg-primary) 42%, transparent);
   color: var(--codex-text-primary);
+  box-shadow: inset 0 0 0 0.5px color-mix(in srgb, var(--codex-bg-primary) 32%, transparent);
 }
 
 .codex-sidebar-item-title {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  font-size: 13px;
+  line-height: 18px;
 }
 
 .codex-sidebar-item-meta {
@@ -77,18 +152,25 @@
 }
 
 .codex-sidebar-footer {
-  display: grid;
-  gap: 2px;
-  padding: 12px 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid color-mix(in srgb, var(--codex-border-subtle) 65%, transparent);
+  padding: 10px 10px 12px 14px;
+  background: color-mix(in srgb, var(--codex-bg-primary) 22%, transparent);
 }
 
 .codex-sidebar-section-label {
+  padding: 0 16px;
   color: var(--codex-text-primary);
   font-size: 12px;
   font-weight: 600;
 }
 
-.codex-sidebar-footnote {
-  color: var(--codex-text-tertiary);
+.codex-sidebar-runtime {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: var(--codex-text-secondary);
   font-size: 12px;
 }

@@ -2,21 +2,28 @@
   width: min(840px, 100%);
   margin: 0 auto;
   border: 1px solid var(--codex-border-strong);
-  border-radius: 22px;
+  border-radius: var(--codex-radius-composer);
   background: var(--codex-bg-elevated);
   box-shadow: var(--codex-shadow-float);
+}
+
+.codex-composer-topline {
+  display: flex;
+  gap: 6px;
+  padding: 10px 12px 0;
 }
 
 .codex-composer textarea {
   display: block;
   width: 100%;
-  min-height: 82px;
+  min-height: 70px;
   resize: none;
   border: 0;
   outline: 0;
-  padding: 16px 18px 8px;
+  padding: 12px 18px 8px;
   color: var(--codex-text-primary);
   background: transparent;
+  font-size: 14px;
 }
 
 .codex-composer textarea::placeholder {
@@ -27,7 +34,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px;
+  padding: 7px;
 }
 
 .codex-composer-tools {

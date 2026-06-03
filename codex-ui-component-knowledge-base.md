@@ -57,14 +57,17 @@ Reference-only exact mode:
 Reconstructed component-library preview:
 - `npm run start:library`
 
+Non-agent copied app alias:
+- `npm run start:copy`
+
 Important distinction:
 - `src/unminified/upstream` is the formatted upstream bundle mirror.
 - `src/component-library/original/assets` is the literal copied component-library closure, preserving upstream relative imports.
 - `src/component-library/styles/index.js` loads copied upstream global renderer CSS and feature CSS.
 - `src/component-library/*/index.js` contains system wrappers for styles, shell, primitives, sidebar, thread, composer, markdown, settings, and browser sidebar.
 - `src/component-library/component-system.json` is the data catalog for copied systems, entry files, dependency closures, and detected export aliases.
-- `src/lib/codex-ui` is only the experimental readable/manual preview layer and should not be treated as the source of truth.
-- New apps that want the same Codex UI should start from `src/component-library`, not the handmade preview.
+- `src/lib/codex-ui` is the readable stripped shared UI library used by the non-agent copy app.
+- New apps that want the same Codex UI should render through `src/lib/codex-ui` and use `src/component-library` as the literal upstream source/reference catalog.
 
 ## 3. Core Architecture Model
 
@@ -171,7 +174,50 @@ Current literal extraction stats:
 - `src/unminified/upstream` contains 753 renderer files after dependency-aware refresh.
 - `src/component-library` contains a 579-asset copied component closure.
 - `src/component-library/component-system.json` currently detects exports in 507 copied JS modules.
-- `src/renderer/App.tsx` imports copied upstream styles and the upstream Button primitive as the first dogfood path.
+- `src/renderer/App.tsx` imports copied upstream styles and the readable stripped UI library from `src/lib/codex-ui`.
+
+Runtime note:
+- Do not render bundled upstream React components directly inside the readable app. They carry their own compiled React runtime and can crash with `useMemoCache` when mixed with npm React.
+- Use `src/component-library` as source/reference data, then expose compatible readable components through `src/lib/codex-ui`.
+- The readable layer must be treated as recovered/ported code, not a freehand rewrite. When possible, trace every token/class/component boundary back to `src/unminified/upstream` or `src/component-library/original/assets`.
+
+### 3.4.1 Radix Primitive Direction
+
+Codex builds many shared primitives over Radix-style building blocks.
+
+Direct evidence:
+- `dropdown-CHaZfyxI.js` exports `DropdownMenu`, `DropdownMenuTrigger`, `DropdownMenuContent`, `DropdownMenuItem`, `DropdownMenuCheckboxItem`, `DropdownMenuRadioItem`, `DropdownMenuSeparator`, `DropdownMenuSub`, and related primitives.
+- The readable library now includes `src/lib/codex-ui/primitives/DropdownMenu.tsx` as a Radix-backed wrapper and `Button.tsx` supports Radix `Slot` via `asChild`.
+
+Rule for future primitives:
+- Prefer Radix wrappers for dropdowns, dialogs, tooltips, scroll areas, switches, popovers, tabs, and slots.
+- Preserve Codex class contracts and CSS tokens while replacing handwritten behavior with Radix behavior.
+
+### 3.4.2 Electron Sidebar Transparency And Blur
+
+The left sidebar effect is not a baked gradient. It is a native transparent/material Electron surface plus CSS alpha and blur.
+
+Renderer evidence:
+- `app-main-C3VNTc8v.js` sets `document.documentElement.dataset.codexWindowType = "electron"` and `dataset.codexOs`.
+- `app-main-CYccuswF.css` sets Electron body background to transparent on non-Windows.
+- `app-main-CYccuswF.css` sets `.app-shell-left-panel` to `color-mix(in srgb, var(--color-token-editor-background) 55%, transparent)`.
+- `app-main-CYccuswF.css` extends the same background through `.app-shell-left-panel:after`.
+
+Token chain:
+- `--color-token-editor-background: var(--vscode-editor-background)`
+- `--vscode-editor-background: var(--color-background-editor-opaque)`
+- Light Electron value: `#ededed66`
+- Light Electron color-mix value: `color-mix(in oklab, var(--gray-100) 40%, transparent)`
+- `--gray-100: #ededed`
+
+Blur amount:
+- `app-main-CYccuswF.css` defines `--blur-md: 12px`.
+- `.backdrop-blur-md` resolves to `blur(var(--blur-md))`.
+- The readable sidebar applies `backdrop-filter: blur(var(--blur-md))` to `.app-shell-left-panel` and inherits it into the edge pseudo-element.
+
+Main-process evidence:
+- Original primary windows recover to `backgroundColor: "#00000000"`.
+- Non-opaque macOS primary windows recover to `vibrancy: "menu"`, `titleBarStyle: "hiddenInset"`, and traffic lights from `p2(1)`, which is `{ x: 16, y: 16 }`.
 
 ## 4. Shell Behavior Rules
 

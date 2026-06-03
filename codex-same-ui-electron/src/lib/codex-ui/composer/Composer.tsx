@@ -1,17 +1,24 @@
-import { Button } from "../primitives/Button";
+import { Button, Pill } from "../primitives/Button";
 import "./composer.css";
 
 export function Composer({ placeholder }: { placeholder: string }) {
   return (
     <form className="codex-composer">
-      <textarea aria-label="Prompt" placeholder={placeholder} rows={3} />
+      <div className="codex-composer-topline">
+        <Pill>desktop-agent-app</Pill>
+        <Pill>same UI copy</Pill>
+      </div>
+      <textarea aria-label="Prompt" placeholder={placeholder} rows={2} />
       <div className="codex-composer-footer">
         <div className="codex-composer-tools">
-          <Button type="button">Attach</Button>
-          <Button type="button">Agent</Button>
+          <Button type="button" variant="secondary">
+            +
+          </Button>
+          <Button type="button">Tools</Button>
+          <Button type="button">Mode</Button>
         </div>
-        <Button type="submit" variant="solid">
-          Send
+        <Button type="submit" variant="primary">
+          ↑
         </Button>
       </div>
     </form>

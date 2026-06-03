@@ -6,7 +6,8 @@ The project has two tracks:
 
 - `start` runs the upstream Codex Electron main process from `../app.app/Contents/Resources/app.asar` with a local repaired runtime copy. This is the real architecture/reference path.
 - `start:exact` runs an Electron shell that loads only the original renderer from `../app.app/Contents/Resources/app.asar`. This is useful for renderer experiments, but it does not provide the full host services.
-- `start:library` runs the component-library preview. It still contains some handmade scaffolding, but it now imports copied upstream styles and primitives from `src/component-library`.
+- `start:library` runs the non-agent Codex copy app built from the stripped readable shared UI library.
+- `start:copy` is an alias for `start:library`.
 - `extract:ui` creates a readable dependency-aware source mirror under `src/unminified/upstream` by extracting and formatting the original renderer/component chunks.
 - `extract:components` creates a literal upstream component-library closure under `src/component-library`, plus a catalog and system docs.
 
@@ -17,7 +18,7 @@ The goal is to keep the runnable UI tied to the original app while the component
 ```sh
 npm install
 npm run refresh:components
-npm run start:library
+npm run start:copy
 ```
 
 Current extraction scale:
@@ -34,7 +35,7 @@ Current extraction scale:
 - `src/component-library/COMPONENT_SYSTEM.md`: generated component-system knowledge base.
 - `src/unminified/upstream`: formatted original renderer files.
 - `src/unminified/component-system`: readable architecture notes.
-- `src/lib/codex-ui`: handmade preview components, not the source of truth.
+- `src/lib/codex-ui`: readable stripped shared UI library used by the non-agent copy app.
 - `.upstream-cache`: extracted `app.asar` cache, ignored by git.
 - `.runtime`: local repaired upstream runtime copy, ignored by git.
 

@@ -1,9 +1,5 @@
-import { AppShell } from "../lib/codex-ui/app-shell/AppShell";
-import { Composer } from "../lib/codex-ui/composer/Composer";
-import { Sidebar } from "../lib/codex-ui/sidebar/Sidebar";
-import { ThreadSurface } from "../lib/codex-ui/thread/ThreadSurface";
+import { AppShell, Composer, Sidebar, ThreadSurface } from "../lib/codex-ui";
 import "../component-library/styles/index.js";
-import { Button as UpstreamButton } from "../component-library/primitives/button.js";
 import "../lib/codex-ui/tokens/codex-theme.css";
 import "./app.css";
 
@@ -30,16 +26,7 @@ export function App() {
   return (
     <AppShell
       sidebar={<Sidebar items={threads} />}
-      main={
-        <>
-          <ThreadSurface title="Inspect Electron UI" messages={messages} />
-          <div className="codex-upstream-proof">
-            <UpstreamButton color="secondary" size="default">
-              Copied upstream Button primitive
-            </UpstreamButton>
-          </div>
-        </>
-      }
+      main={<ThreadSurface title="Inspect Electron UI" messages={messages} />}
       composer={<Composer placeholder="Ask Codex to build, inspect, or recreate a component..." />}
     />
   );

@@ -36,12 +36,12 @@ Notes:
 | Rebuild app | Exact renderer wrapper | `codex-same-ui-electron/src/main/exact-upstream-main.cjs` | high | Loads original `app.asar` renderer in a separate Electron app. |
 | Rebuild app | Reconstructed renderer wrapper | `codex-same-ui-electron/src/main/library-main.cjs` | high | Loads the readable component-system renderer from `dist/renderer`. |
 | Rebuild app | Main-mode selector | `codex-same-ui-electron/src/main/main.cjs` | high | Normal mode runs reconstructed UI; `CODEX_SAME_UI_EXACT=1` runs exact upstream reference. |
-| Rebuild app | Component-system source root | `codex-same-ui-electron/src/lib/codex-ui` | high | New readable UI library built from the extracted upstream visual/component system. |
+| Rebuild app | Readable shared UI root | `codex-same-ui-electron/src/lib/codex-ui` | high | Stripped shared UI library used by the non-agent Codex copy app. |
 | Rebuild app | Literal component-library root | `codex-same-ui-electron/src/component-library` | high | Generated library closure containing literal upstream modules plus system wrappers. |
 | Rebuild app | Component-library extractor | `codex-same-ui-electron/scripts/extract-component-library.cjs` | high | Copies dependency closures from the upstream mirror into `src/component-library`. |
 | Rebuild app | Component-library catalog | `codex-same-ui-electron/src/component-library/component-system.json` | high | Generated data catalog with copied systems, wrappers, entry files, closure sizes, and detected export aliases. |
 | Rebuild app | Component-library styles surface | `codex-same-ui-electron/src/component-library/styles/index.js` | high | Imports copied upstream global renderer CSS and feature CSS for new app reuse. |
-| Rebuild app | Component-system renderer | `codex-same-ui-electron/src/renderer` | high | Thin app consuming only `src/lib/codex-ui` components. |
+| Rebuild app | Non-agent copy renderer | `codex-same-ui-electron/src/renderer` | high | Thin app consuming `src/lib/codex-ui` and copied upstream global styles. |
 | Rebuild app | Unminified upstream mirror | `codex-same-ui-electron/src/unminified/upstream` | high | Dependency-aware formatted copies of original renderer/component chunks. |
 | Rebuild app | Extraction script | `codex-same-ui-electron/scripts/extract-upstream-renderer.cjs` | high | Rebuilds formatted upstream mirror from original `app.asar`, including JS imports and CSS url dependencies. |
 | Renderer | Main app entry | `webview/assets/app-main-C3VNTc8v.js` | high | Imports most feature chunks and route modules. |
@@ -124,7 +124,7 @@ Notes:
 | --- | --- | --- | --- | --- |
 | UI kit | Buttons | `button-Xd4Hy1MO.js` | high | Shared button primitives. |
 | UI kit | Dialog layout | `dialog-layout-CCvvb1Vc.js` | high | Shared dialog framing. |
-| UI kit | Dropdown | `dropdown-CHaZfyxI.js` | high | Shared dropdown/popover primitives. |
+| UI kit | Dropdown | `dropdown-CHaZfyxI.js` | high | Shared Radix-style dropdown primitives; exports `DropdownMenu*`, `Root`, `Trigger`, `Content`, `Item`, `CheckboxItem`, `RadioItem`, `Sub`, etc. |
 | UI kit | Tooltip | `tooltip-BhXPONlb.js` | high | Shared tooltip component. |
 | UI kit | Checkbox | `checkbox-Bz6PC7ig.js` | high | Shared checkbox component. |
 | UI kit | Spinner | `spinner-Dvc_A3Ae.js` | high | Shared spinner/loading indicator. |
@@ -187,4 +187,9 @@ Notes:
 | 2026-06-03 | Added literal component-library extraction system under `codex-same-ui-electron/src/component-library`, with 231 copied upstream assets and wrappers for shell, primitives, sidebar, thread, composer, markdown, settings, and browser sidebar. |
 | 2026-06-03 | Upgraded upstream extraction to dependency-aware mode: `refresh:ui` now extracts 753 renderer files by following JS imports and CSS `url(...)` assets. |
 | 2026-06-03 | Upgraded literal component-library extraction to copy 579 upstream assets, including CSS/font dependencies, emit `component-system.json`, emit `COMPONENT_SYSTEM.md`, and expose a `styles` wrapper. |
-| 2026-06-03 | The preview renderer now imports copied upstream global styles and the copied upstream Button primitive, proving the app can consume the literal component-library layer. |
+| 2026-06-03 | The preview renderer imports copied upstream global styles; direct bundled React component rendering was tested and rejected because it mixes React runtimes. |
+| 2026-06-03 | Fixed `npm run start:library` blank screen by removing direct bundled React component rendering; the readable copy app now renders through `src/lib/codex-ui` while keeping literal upstream assets as source/reference. |
+| 2026-06-03 | Added `npm run start:copy` alias and expanded the copy app shell with Codex-like titlebar, sidebar, toolbar, inspector panel, thread surface, composer dock, and shared primitives. |
+| 2026-06-03 | Recovered exact sidebar material chain: Electron/macOS body transparent, `.app-shell-left-panel` uses `color-mix(in srgb, var(--color-token-editor-background) 55%, transparent)`, token resolves through `--vscode-editor-background` to light `#ededed66` / `gray-100 40%`, and blur uses upstream `--blur-md: 12px`. |
+| 2026-06-03 | Recovered primary BrowserWindow material options from minified main bundle: non-opaque macOS primary uses `backgroundColor: "#00000000"`, `vibrancy: "menu"`, `titleBarStyle: "hiddenInset"`, and traffic lights at `{ x: 16, y: 16 }`. |
+| 2026-06-03 | Began changing readable primitives to Radix-backed components: `Button` now supports Radix `Slot` via `asChild`, and `DropdownMenu.tsx` wraps `@radix-ui/react-dropdown-menu` while preserving Codex CSS contracts. |

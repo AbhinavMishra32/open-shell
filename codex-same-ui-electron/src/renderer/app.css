@@ -2,12 +2,6 @@
   animation: codex-shell-enter 180ms ease-out both;
 }
 
-.codex-upstream-proof {
-  display: flex;
-  justify-content: flex-end;
-  padding: 0 18px 14px;
-}
-
 @keyframes codex-shell-enter {
   from {
     opacity: 0;
