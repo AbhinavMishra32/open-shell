@@ -1,0 +1,28 @@
+{
+  "name": "codex-same-ui-electron",
+  "productName": "Codex Same UI",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Side-by-side Electron app for mirroring the Codex desktop UI component system.",
+  "main": "src/main/main.cjs",
+  "scripts": {
+    "start": "npm run build && electron .",
+    "dev": "vite --host 127.0.0.1",
+    "build": "vite build",
+    "start:exact": "CODEX_SAME_UI_EXACT=1 electron .",
+    "extract:ui": "node scripts/extract-upstream-renderer.cjs",
+    "refresh:ui": "node scripts/extract-upstream-renderer.cjs --force"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.1.1",
+    "vite": "^7.2.6",
+    "typescript": "^5.9.3",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1"
+  },
+  "devDependencies": {
+    "@electron/asar": "^4.1.2",
+    "electron": "42.1.0",
+    "prettier": "^3.7.4"
+  }
+}
