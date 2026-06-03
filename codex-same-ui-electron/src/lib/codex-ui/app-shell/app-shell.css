@@ -1,0 +1,29 @@
+.codex-app-shell {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--codex-bg-primary);
+}
+
+.codex-app-main {
+  display: grid;
+  min-width: 0;
+  flex: 1;
+  grid-template-rows: var(--codex-titlebar-height) minmax(0, 1fr) auto;
+  background: var(--codex-bg-primary);
+}
+
+.codex-titlebar {
+  -webkit-app-region: drag;
+  border-bottom: 1px solid transparent;
+}
+
+.codex-content-frame {
+  min-height: 0;
+  overflow: auto;
+}
+
+.codex-composer-frame {
+  padding: 0 24px 22px;
+}
