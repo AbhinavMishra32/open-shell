@@ -4,10 +4,23 @@ import "../lib/codex-ui/tokens/codex-theme.css";
 import "./app.css";
 
 const threads = [
-  { title: "Inspect Electron UI", meta: "reverse engineering", active: true },
-  { title: "Component knowledge base", meta: "notes and inventory" },
-  { title: "Desktop agent app", meta: "workspace" },
-  { title: "Browser sidebar", meta: "component target" }
+  { id: "thread-inspect-electron-ui", title: "Inspect Electron UI", meta: "reverse engineering", active: true },
+  { id: "thread-component-knowledge-base", title: "Component knowledge base", meta: "notes and inventory" },
+  { id: "thread-browser-sidebar", title: "Browser sidebar", meta: "component target" }
+];
+
+const projects = [
+  {
+    id: "project-desktop-agent-app",
+    label: "desktop-agent-app",
+    active: true,
+    threads: [{ id: "thread-copy-ui", title: "Copy Codex UI system", meta: "active", active: true }]
+  },
+  {
+    id: "project-application-agent",
+    label: "application-agent",
+    threads: [{ id: "thread-fix-dev-db", title: "Fix dev and DB errors", meta: "recent" }]
+  }
 ];
 
 const messages = [
@@ -25,7 +38,7 @@ const messages = [
 export function App() {
   return (
     <AppShell
-      sidebar={<Sidebar items={threads} />}
+      sidebar={<Sidebar items={threads} projects={projects} />}
       main={<ThreadSurface title="Inspect Electron UI" messages={messages} />}
       composer={<Composer placeholder="Ask Codex to build, inspect, or recreate a component..." />}
     />

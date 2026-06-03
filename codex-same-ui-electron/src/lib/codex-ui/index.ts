@@ -20,6 +20,7 @@ export {
   DropdownMenuTrigger,
 } from "./primitives/DropdownMenu";
 export { Sidebar } from "./sidebar/Sidebar";
-export type { SidebarItem } from "./sidebar/Sidebar";
+export type { SidebarItem, SidebarProject } from "./sidebar/Sidebar";
+export { appActionAttributeNames, appActionAttributes } from "./sidebar/appActionAttributes";
 export { ThreadSurface } from "./thread/ThreadSurface";
 export type { ThreadMessage } from "./thread/ThreadSurface";

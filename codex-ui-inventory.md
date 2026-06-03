@@ -44,6 +44,7 @@ Notes:
 | Rebuild app | Non-agent copy renderer | `codex-same-ui-electron/src/renderer` | high | Thin app consuming `src/lib/codex-ui` and copied upstream global styles. |
 | Rebuild app | Unminified upstream mirror | `codex-same-ui-electron/src/unminified/upstream` | high | Dependency-aware formatted copies of original renderer/component chunks. |
 | Rebuild app | Extraction script | `codex-same-ui-electron/scripts/extract-upstream-renderer.cjs` | high | Rebuilds formatted upstream mirror from original `app.asar`, including JS imports and CSS url dependencies. |
+| Rebuild app | Sidebar app-action attributes | `codex-same-ui-electron/src/lib/codex-ui/sidebar/appActionAttributes.ts` | high | Readable mirror of upstream `data-app-action-sidebar-*` names from `window-app-action-helpers-u9SI1RSH.js`. |
 | Renderer | Main app entry | `webview/assets/app-main-C3VNTc8v.js` | high | Imports most feature chunks and route modules. |
 | Renderer | Preloader | `webview/assets/app-preloader-DxFriehz.js` | medium | Likely startup state and bundle prefetch setup. |
 | Renderer | App session state | `webview/assets/app-session-D2rQeKGg.js` | medium | Session-level renderer state. |
@@ -193,3 +194,4 @@ Notes:
 | 2026-06-03 | Recovered exact sidebar material chain: Electron/macOS body transparent, `.app-shell-left-panel` uses `color-mix(in srgb, var(--color-token-editor-background) 55%, transparent)`, token resolves through `--vscode-editor-background` to light `#ededed66` / `gray-100 40%`, and blur uses upstream `--blur-md: 12px`. |
 | 2026-06-03 | Recovered primary BrowserWindow material options from minified main bundle: non-opaque macOS primary uses `backgroundColor: "#00000000"`, `vibrancy: "menu"`, `titleBarStyle: "hiddenInset"`, and traffic lights at `{ x: 16, y: 16 }`. |
 | 2026-06-03 | Began changing readable primitives to Radix-backed components: `Button` now supports Radix `Slot` via `asChild`, and `DropdownMenu.tsx` wraps `@radix-ui/react-dropdown-menu` while preserving Codex CSS contracts. |
+| 2026-06-03 | Added readable sidebar action contracts and applied the upstream sidebar medium blur in the copy app: `backdrop-filter: blur(var(--blur-md))` with `--blur-md: 12px`, inherited into the rounded edge pseudo-element. |

@@ -20,6 +20,8 @@ Sidebar transparency requirement:
 - `app-shell.css` keeps the main app pane opaque.
 - `Sidebar.tsx` marks the sidebar with `app-shell-left-panel`.
 - `sidebar.css` mirrors the upstream 55% transparent `color-token-editor-background` rule and edge `:after` extension.
+- `sidebar.css` also applies the upstream medium blur amount as `backdrop-filter: blur(var(--blur-md))`; `codex-theme.css` preserves `--blur-md: 12px`.
+- `sidebar/appActionAttributes.ts` preserves the upstream `data-app-action-sidebar-*` attributes used by sidebar project/thread automation and selection logic.
 
 Use `src/component-library` as the literal source/reference catalog:
 
