@@ -15,26 +15,50 @@ import {
   TerminalSurface,
   ThreadSurface,
 } from "@open-shell/ui";
+import type { SidebarItem, SidebarProject } from "@open-shell/ui";
 import "@open-shell/ui/styles.css";
 import "./app.css";
 
-const threads = [
-  { id: "thread-inspect-electron-ui", title: "Inspect Electron UI", meta: "reverse engineering", active: true },
-  { id: "thread-component-knowledge-base", title: "Component knowledge base", meta: "notes and inventory" },
-  { id: "thread-browser-sidebar", title: "Browser sidebar", meta: "component target" },
-];
+const threads: SidebarItem[] = [];
 
-const projects = [
+const projects: SidebarProject[] = [
   {
     id: "project-desktop-agent-app",
     label: "desktop-agent-app",
     active: true,
-    threads: [{ id: "thread-copy-ui", title: "Copy Codex UI system", meta: "active", active: true }],
+    threads: [{ id: "thread-inspect-electron-ui", title: "Inspect Electron UI", meta: "1m", active: true }],
   },
   {
     id: "project-application-agent",
     label: "application-agent",
-    threads: [{ id: "thread-fix-dev-db", title: "Fix dev and DB errors", meta: "recent" }],
+    threads: [{ id: "thread-fix-dev-db", title: "Fix dev and DB errors", meta: "1w" }],
+  },
+  {
+    id: "project-fill-agent",
+    label: "fill-agent",
+    muted: true,
+    threads: [
+      { id: "thread-fill-agent-browser-use", title: "okay scrap this. lets use co...", meta: "1w" },
+      { id: "thread-build-browser-extension", title: "Build agent browser extens...", meta: "1w" },
+    ],
+  },
+  {
+    id: "project-daytracker",
+    label: "daytracker",
+    muted: true,
+    threads: [{ id: "thread-screenpipe-daytracker", title: "Research Screenpipe day t...", meta: "2w" }],
+  },
+  {
+    id: "project-construct",
+    label: "construct",
+    threads: [
+      { id: "thread-construct-architecture", title: "Inspect Electron app archit...", meta: "10h" },
+      { id: "thread-dev-startup", title: "Fix dev startup failures", meta: "22h" },
+      { id: "thread-fullstack-intern", title: "Find remote full-stack inter...", meta: "1w" },
+      { id: "thread-dashboard-history", title: "Remove dashboard goal hi...", meta: "1mo" },
+      { id: "thread-top-bar", title: "Tighten top bar controls", meta: "2mo" },
+      { id: "thread-show-more", title: "Show more" },
+    ],
   },
 ];
 

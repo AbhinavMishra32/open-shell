@@ -1,6 +1,4 @@
-import { Button, IconButton, StatusDot } from "../primitives/Button";
 import type { ReactNode } from "react";
-import { CodexMark } from "../icons/CodexMark";
 import { appActionAttributes } from "./appActionAttributes";
 import "./sidebar.css";
 
@@ -11,6 +9,7 @@ export type SidebarItem = {
   kind?: "local" | "remote";
   meta?: string;
   pinned?: boolean;
+  time?: string;
   title: string;
 };
 
@@ -19,24 +18,32 @@ export type SidebarProject = {
   collapsed?: boolean;
   id: string;
   label: string;
+  muted?: boolean;
   threads?: SidebarItem[];
 };
 
-export function Sidebar({ items, projects = [] }: { items: SidebarItem[]; projects?: SidebarProject[] }) {
+export function Sidebar({
+  items,
+  onToggleSidebar,
+  projects = [],
+}: {
+  items: SidebarItem[];
+  onToggleSidebar?: () => void;
+  projects?: SidebarProject[];
+}) {
   return (
     <aside className="codex-sidebar app-shell-left-panel">
-      <div className="codex-sidebar-drag" />
-      <div className="codex-sidebar-header">
-        <div className="codex-sidebar-brand">
-          <CodexMark className="codex-sidebar-logo" />
-          <span>Codex</span>
-        </div>
-        <IconButton aria-label="New chat" variant="secondary">
-          +
-        </IconButton>
+      <div className="codex-sidebar-window-strip">
+        <button className="codex-sidebar-chrome-button" aria-label="Toggle sidebar" onClick={onToggleSidebar}>
+          <SidebarToggleIcon />
+        </button>
+        <button className="codex-sidebar-chrome-button" aria-label="Back">
+          <BackIcon />
+        </button>
+        <button className="codex-sidebar-chrome-button" aria-label="Forward" data-muted="true">
+          <ForwardIcon />
+        </button>
       </div>
-
-      <div className="codex-sidebar-search">Search threads and projects</div>
 
       <div className="codex-sidebar-primary" role="navigation" aria-label="Primary">
         <button className="codex-sidebar-nav-item">
@@ -74,23 +81,27 @@ export function Sidebar({ items, projects = [] }: { items: SidebarItem[]; projec
           </SidebarSection>
         ) : null}
 
-        <SidebarSection heading="Chats">
-          <nav className="codex-sidebar-list" aria-label="Chats">
-            {items.map((item) => (
-              <SidebarThreadRow key={item.id} item={item} />
-            ))}
-          </nav>
-        </SidebarSection>
+        {items.length > 0 ? (
+          <SidebarSection heading="Chats">
+            <nav className="codex-sidebar-list" aria-label="Chats">
+              {items.map((item) => (
+                <SidebarThreadRow key={item.id} item={item} />
+              ))}
+            </nav>
+          </SidebarSection>
+        ) : null}
       </div>
 
       <div className="codex-sidebar-footer">
-        <div className="codex-sidebar-runtime">
-          <StatusDot tone="green" />
-          <span>Library preview online</span>
-        </div>
-        <Button variant="ghost" size="small">
+        <button className="codex-sidebar-settings">
+          <span className="codex-sidebar-footer-icon" aria-hidden="true">
+            <GearIcon />
+          </span>
           Settings
-        </Button>
+        </button>
+        <button className="codex-sidebar-device" aria-label="Open mobile view">
+          <DeviceIcon />
+        </button>
       </div>
     </aside>
   );
@@ -112,6 +123,7 @@ function SidebarProjectRow({ project }: { project: SidebarProject }) {
     <div
       className="codex-sidebar-project"
       data-active={project.active === true ? "true" : "false"}
+      data-muted={project.muted === true ? "true" : "false"}
       {...appActionAttributes.sidebarProjectRow({
         collapsed: project.collapsed === true,
         label: project.label,
@@ -139,6 +151,8 @@ function SidebarProjectRow({ project }: { project: SidebarProject }) {
 }
 
 function SidebarThreadRow({ inset = false, item }: { inset?: boolean; item: SidebarItem }) {
+  const trailing = item.time ?? item.meta;
+
   return (
     <button
       className="codex-sidebar-item"
@@ -154,8 +168,35 @@ function SidebarThreadRow({ inset = false, item }: { inset?: boolean; item: Side
       })}
     >
       <span className="codex-sidebar-item-title">{item.title}</span>
-      {item.meta != null ? <span className="codex-sidebar-item-meta">{item.meta}</span> : null}
+      {trailing != null ? <span className="codex-sidebar-item-meta">{trailing}</span> : null}
     </button>
+  );
+}
+
+function SidebarToggleIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <rect x="3.25" y="3" width="13.5" height="14" rx="3" />
+      <path d="M8 3.5v13" />
+    </svg>
+  );
+}
+
+function BackIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path d="M12.75 4.5 7.25 10l5.5 5.5" />
+      <path d="M7.75 10h8" />
+    </svg>
+  );
+}
+
+function ForwardIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path d="m7.25 4.5 5.5 5.5-5.5 5.5" />
+      <path d="M12.25 10h-8" />
+    </svg>
   );
 }
 
@@ -204,6 +245,24 @@ function FolderIcon() {
   return (
     <svg viewBox="0 0 20 20" aria-hidden="true">
       <path d="M2.75 6.75A1.75 1.75 0 0 1 4.5 5h3l1.5 1.75h6.5a1.75 1.75 0 0 1 1.75 1.75v5A1.75 1.75 0 0 1 15.5 15.25h-11a1.75 1.75 0 0 1-1.75-1.75z" />
+    </svg>
+  );
+}
+
+function GearIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <circle cx="10" cy="10" r="2.75" />
+      <path d="M10.75 2.75h-1.5l-.55 2.1a5.9 5.9 0 0 0-1.2.5L5.65 4.25 4.25 5.65l1.1 1.85a5.9 5.9 0 0 0-.5 1.2l-2.1.55v1.5l2.1.55c.12.42.28.82.5 1.2l-1.1 1.85 1.4 1.4 1.85-1.1c.38.22.78.38 1.2.5l.55 2.1h1.5l.55-2.1a5.9 5.9 0 0 0 1.2-.5l1.85 1.1 1.4-1.4-1.1-1.85c.22-.38.38-.78.5-1.2l2.1-.55v-1.5l-2.1-.55a5.9 5.9 0 0 0-.5-1.2l1.1-1.85-1.4-1.4-1.85 1.1a5.9 5.9 0 0 0-1.2-.5z" />
+    </svg>
+  );
+}
+
+function DeviceIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <rect x="6.25" y="2.5" width="7.5" height="15" rx="1.75" />
+      <path d="M9 15h2" />
     </svg>
   );
 }

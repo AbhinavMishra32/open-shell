@@ -37,6 +37,7 @@ export function BottomPanel({
   tabs: BottomPanelTab[];
 }) {
   const activeTab = tabs.find((tab) => tab.active) ?? tabs[0];
+  const [activeTabId, setActiveTabId] = useState(activeTab?.id);
   const [panelHeight, setPanelHeight] = useState(() => clampBottomPanelHeight(height, mainContentHeight));
   const dragStateRef = useRef<{ pointerId: number; startHeight: number; startY: number } | null>(null);
 
@@ -44,7 +45,11 @@ export function BottomPanel({
     setPanelHeight((currentHeight) => clampBottomPanelHeight(currentHeight, mainContentHeight));
   }, [mainContentHeight]);
 
-  if (activeTab == null) {
+  useEffect(() => {
+    setActiveTabId(activeTab?.id);
+  }, [activeTab?.id]);
+
+  if (activeTab == null || activeTabId == null) {
     return null;
   }
 
@@ -86,7 +91,8 @@ export function BottomPanel({
       className="codex-bottom-panel"
       data-app-shell-focus-area="bottom-panel"
       style={{ "--app-shell-bottom-panel-height": `${panelHeight}px` } as CSSProperties}
-      value={activeTab.id}
+      value={activeTabId}
+      onValueChange={setActiveTabId}
     >
       <div
         className="codex-bottom-panel-resize-handle"
@@ -101,7 +107,13 @@ export function BottomPanel({
         <div className="codex-bottom-panel-tabbar">
           <Tabs.List className="codex-bottom-panel-tabs" aria-label="Bottom panel tabs">
             {tabs.map((tab) => (
-              <Tabs.Trigger key={tab.id} value={tab.id} className="codex-bottom-panel-tab" data-tab-id={tab.id}>
+              <Tabs.Trigger
+                key={tab.id}
+                value={tab.id}
+                className="codex-bottom-panel-tab"
+                data-tab-id={tab.id}
+                onClick={() => setActiveTabId(tab.id)}
+              >
                 {tab.icon != null ? <span className="codex-bottom-panel-tab-icon">{tab.icon}</span> : null}
                 <span className="codex-bottom-panel-tab-title">{tab.title}</span>
                 {tab.closable === true ? <span className="codex-bottom-panel-tab-close">×</span> : null}

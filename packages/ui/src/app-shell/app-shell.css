@@ -15,6 +15,48 @@
   box-shadow: -1px 0 0 var(--codex-border-subtle);
 }
 
+.codex-left-panel {
+  position: relative;
+  display: flex;
+  min-width: 240px;
+  max-width: 360px;
+  height: 100%;
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.codex-sidebar-resize-handle {
+  position: absolute;
+  z-index: 40;
+  top: 0;
+  right: -8px;
+  bottom: 0;
+  display: flex;
+  width: 16px;
+  touch-action: none;
+  cursor: col-resize;
+  user-select: none;
+}
+
+.codex-sidebar-resize-handle-line {
+  width: 1px;
+  height: 100%;
+  margin: auto;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--codex-text-primary) 25%, transparent),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity var(--transition-duration-basic) var(--cubic-enter);
+}
+
+.codex-sidebar-resize-handle:hover .codex-sidebar-resize-handle-line,
+.codex-sidebar-resize-handle:active .codex-sidebar-resize-handle-line {
+  opacity: 1;
+}
+
 .codex-app-header {
   -webkit-app-region: drag;
   position: relative;

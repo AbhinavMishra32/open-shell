@@ -1,4 +1,5 @@
-import type { ReactNode } from "react";
+import { cloneElement, isValidElement, useCallback, useState } from "react";
+import type { PointerEvent as ReactPointerEvent, ReactElement, ReactNode } from "react";
 import { IconButton, Pill } from "../primitives/Button";
 import {
   ContextMenu,
@@ -29,9 +30,57 @@ export function AppShell({
   rightPanel,
   sidebar,
 }: AppShellProps) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [sidebarWidth, setSidebarWidth] = useState(252);
+  const toggleSidebar = useCallback(() => {
+    setIsSidebarOpen((value) => !value);
+  }, []);
+  const sidebarElement =
+    isValidElement(sidebar) && typeof sidebar.type !== "string"
+      ? cloneElement(sidebar as ReactElement<{ onToggleSidebar?: () => void }>, { onToggleSidebar: toggleSidebar })
+      : sidebar;
+  const startSidebarResize = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      event.currentTarget.setPointerCapture(event.pointerId);
+      const startX = event.clientX;
+      const startWidth = sidebarWidth;
+
+      function move(pointerEvent: PointerEvent) {
+        const nextWidth = Math.max(0, Math.min(360, startWidth + pointerEvent.clientX - startX));
+        if (nextWidth < 240) {
+          setIsSidebarOpen(false);
+          return;
+        }
+        setIsSidebarOpen(true);
+        setSidebarWidth(nextWidth);
+      }
+
+      function stop() {
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", stop);
+      }
+
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", stop, { once: true });
+    },
+    [sidebarWidth],
+  );
+
   return (
     <div className="codex-app-shell">
-      {sidebar}
+      {isSidebarOpen ? (
+        <aside className="codex-left-panel" style={{ width: sidebarWidth }}>
+          {sidebarElement}
+          <div
+            className="codex-sidebar-resize-handle"
+            role="separator"
+            aria-orientation="vertical"
+            onPointerDown={startSidebarResize}
+          >
+            <div className="codex-sidebar-resize-handle-line" />
+          </div>
+        </aside>
+      ) : null}
       <main className="codex-app-main">
         <header className="codex-app-header" data-app-shell-header-edge-scroll="false">
           <div className="codex-app-header-context-surface" data-testid="app-shell-header-context-menu-surface">
@@ -62,6 +111,7 @@ export function AppShell({
             </div>
           </div>
           <div className="codex-app-header-actions">
+            {!isSidebarOpen ? <IconButton aria-label="Show sidebar" onClick={toggleSidebar}>▣</IconButton> : null}
             <IconButton aria-label="Keyboard shortcuts">⌘</IconButton>
             <IconButton aria-label="More">•••</IconButton>
           </div>
