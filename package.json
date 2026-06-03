@@ -22,5 +22,8 @@
     "@types/react-dom": "^19.2.3",
     "turbo": "^2.9.16",
     "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@radix-ui/react-context-menu": "^2.2.16"
   }
 }

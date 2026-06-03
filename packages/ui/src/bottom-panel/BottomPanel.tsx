@@ -1,5 +1,12 @@
 import * as Tabs from "@radix-ui/react-tabs";
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, PointerEvent, ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../primitives/DropdownMenu";
 import "./bottom-panel.css";
 
 export type BottomPanelTab = {
@@ -8,6 +15,7 @@ export type BottomPanelTab = {
   content: ReactNode;
   icon?: ReactNode;
   id: string;
+  shortcut?: string;
   title: string;
 };
 
@@ -19,25 +27,76 @@ export function clampBottomPanelHeight(height: number, mainContentHeight: number
 
 export function BottomPanel({
   height = DEFAULT_BOTTOM_PANEL_HEIGHT,
+  mainContentHeight = typeof window === "undefined" ? 720 : window.innerHeight,
+  onHeightChange,
   tabs,
 }: {
   height?: number;
+  mainContentHeight?: number;
+  onHeightChange?: (height: number) => void;
   tabs: BottomPanelTab[];
 }) {
   const activeTab = tabs.find((tab) => tab.active) ?? tabs[0];
+  const [panelHeight, setPanelHeight] = useState(() => clampBottomPanelHeight(height, mainContentHeight));
+  const dragStateRef = useRef<{ pointerId: number; startHeight: number; startY: number } | null>(null);
+
+  useEffect(() => {
+    setPanelHeight((currentHeight) => clampBottomPanelHeight(currentHeight, mainContentHeight));
+  }, [mainContentHeight]);
 
   if (activeTab == null) {
     return null;
+  }
+
+  function commitHeight(nextHeight: number) {
+    const clampedHeight = clampBottomPanelHeight(nextHeight, mainContentHeight);
+    setPanelHeight(clampedHeight);
+    onHeightChange?.(clampedHeight);
+  }
+
+  function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
+    event.preventDefault();
+    dragStateRef.current = {
+      pointerId: event.pointerId,
+      startHeight: panelHeight,
+      startY: event.clientY,
+    };
+    event.currentTarget.setPointerCapture(event.pointerId);
+    document.documentElement.dataset.codexBottomPanelResizing = "true";
+  }
+
+  function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
+    const dragState = dragStateRef.current;
+    if (dragState == null || dragState.pointerId !== event.pointerId) {
+      return;
+    }
+
+    commitHeight(dragState.startHeight + (dragState.startY - event.clientY));
+  }
+
+  function handlePointerUp(event: PointerEvent<HTMLDivElement>) {
+    if (dragStateRef.current?.pointerId === event.pointerId) {
+      dragStateRef.current = null;
+      document.documentElement.dataset.codexBottomPanelResizing = "false";
+    }
   }
 
   return (
     <Tabs.Root
       className="codex-bottom-panel"
       data-app-shell-focus-area="bottom-panel"
-      style={{ "--app-shell-bottom-panel-height": `${height}px` } as CSSProperties}
+      style={{ "--app-shell-bottom-panel-height": `${panelHeight}px` } as CSSProperties}
       value={activeTab.id}
     >
-      <div className="codex-bottom-panel-resize-handle" aria-hidden="true" />
+      <div
+        className="codex-bottom-panel-resize-handle"
+        aria-label="Resize bottom panel"
+        role="separator"
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+      />
       <div className="codex-bottom-panel-inner">
         <div className="codex-bottom-panel-tabbar">
           <Tabs.List className="codex-bottom-panel-tabs" aria-label="Bottom panel tabs">
@@ -50,8 +109,31 @@ export function BottomPanel({
             ))}
           </Tabs.List>
           <div className="codex-bottom-panel-actions">
-            <button className="codex-bottom-panel-action" type="button" aria-label="New terminal">
-              +
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="codex-bottom-panel-action codex-bottom-panel-add-action" type="button" aria-label="Open bottom panel launcher">
+                  +
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="start" className="codex-bottom-panel-launcher-menu" side="bottom">
+                <DropdownMenuItem>
+                  <span className="codex-bottom-panel-launcher-icon">▣</span>
+                  <span>Files</span>
+                  <span className="codex-bottom-panel-launcher-shortcut">⌘P</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <span className="codex-bottom-panel-launcher-icon">⊕</span>
+                  <span>Side chat</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <span className="codex-bottom-panel-launcher-icon">▹</span>
+                  <span>Terminal</span>
+                  <span className="codex-bottom-panel-launcher-shortcut">⌃`</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            <button className="codex-bottom-panel-action codex-bottom-panel-close-action" type="button" aria-label="Close bottom panel">
+              ×
             </button>
           </div>
         </div>

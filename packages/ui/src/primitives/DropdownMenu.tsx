@@ -82,12 +82,15 @@ DropdownMenuSeparator.displayName = "DropdownMenuSeparator";
 export const DropdownMenuSubTrigger = forwardRef<
   ElementRef<typeof DropdownMenuPrimitive.SubTrigger>,
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.SubTrigger>
->(({ className = "", ...props }, ref) => (
+>(({ children, className = "", ...props }, ref) => (
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
     className={`codex-dropdown-menu-item codex-dropdown-menu-sub-trigger ${className}`}
     {...props}
-  />
+  >
+    <span className="codex-dropdown-menu-sub-label">{children}</span>
+    <span className="codex-dropdown-menu-chevron">›</span>
+  </DropdownMenuPrimitive.SubTrigger>
 ));
 DropdownMenuSubTrigger.displayName = "DropdownMenuSubTrigger";
 

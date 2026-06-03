@@ -1,0 +1,85 @@
+.codex-context-menu-content {
+  z-index: 50;
+  display: flex;
+  min-width: 180px;
+  max-width: min(var(--radix-context-menu-content-available-width), calc(100vw - 16px));
+  max-height: min(var(--radix-context-menu-content-available-height), calc(100vh - 16px));
+  flex-direction: column;
+  overflow: auto;
+  border-radius: 12px;
+  padding: 4px;
+  background: color-mix(in srgb, var(--color-background-elevated-primary) 90%, transparent);
+  color: var(--codex-text-primary);
+  box-shadow: 0 14px 36px #00000024;
+  outline: none;
+  ring: 0.5px;
+  transform-origin: var(--radix-context-menu-content-transform-origin);
+  user-select: none;
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 0.5px solid var(--codex-border-subtle);
+}
+
+.codex-context-menu-item {
+  position: relative;
+  display: flex;
+  min-height: 32px;
+  align-items: center;
+  gap: 8px;
+  border-radius: 8px;
+  padding: 6px 8px;
+  color: var(--codex-text-primary);
+  cursor: default;
+  font-size: 14px;
+  line-height: 18px;
+  outline: none;
+}
+
+.codex-context-menu-item[data-highlighted] {
+  background: color-mix(in srgb, var(--codex-text-primary) 7%, transparent);
+}
+
+.codex-context-menu-item[data-disabled] {
+  color: var(--codex-text-tertiary);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.codex-context-menu-checkbox-item {
+  padding-left: 30px;
+}
+
+.codex-context-menu-item-indicator {
+  position: absolute;
+  left: 8px;
+  display: inline-grid;
+  width: 14px;
+  height: 14px;
+  place-items: center;
+  color: var(--codex-text-secondary);
+  font-size: 12px;
+}
+
+.codex-context-menu-sub-trigger {
+  justify-content: space-between;
+}
+
+.codex-context-menu-item-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.codex-context-menu-chevron {
+  margin-left: auto;
+  color: var(--codex-text-tertiary);
+  font-size: 22px;
+  line-height: 14px;
+}
+
+.codex-context-menu-separator {
+  height: 1px;
+  margin: 4px 8px;
+  background: var(--codex-border-subtle);
+}

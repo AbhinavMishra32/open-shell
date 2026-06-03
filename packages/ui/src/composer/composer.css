@@ -7,20 +7,14 @@
   box-shadow: var(--codex-shadow-float);
 }
 
-.codex-composer-topline {
-  display: flex;
-  gap: 6px;
-  padding: 10px 12px 0;
-}
-
 .codex-composer textarea {
   display: block;
   width: 100%;
-  min-height: 70px;
+  min-height: 86px;
   resize: none;
   border: 0;
   outline: 0;
-  padding: 12px 18px 8px;
+  padding: 18px 20px 8px;
   color: var(--codex-text-primary);
   background: transparent;
   font-size: 14px;
@@ -34,10 +28,95 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 7px;
+  padding: 8px 10px;
 }
 
 .codex-composer-tools {
   display: flex;
-  gap: 4px;
+  align-items: center;
+  gap: 8px;
+}
+
+.codex-composer-model-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.codex-composer-round-button,
+.codex-composer-mic {
+  display: inline-grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--codex-text-primary) 5%, transparent);
+  color: var(--codex-text-tertiary);
+  font-size: 23px;
+}
+
+.codex-composer-access-button,
+.codex-composer-model-button {
+  display: inline-flex;
+  min-height: 34px;
+  align-items: center;
+  gap: 8px;
+  border: 0;
+  border-radius: 999px;
+  padding: 0 8px;
+  background: transparent;
+  color: #e95412;
+  font-size: 15px;
+}
+
+.codex-composer-model-button {
+  color: var(--codex-text-primary);
+}
+
+.codex-composer-model-button span {
+  color: var(--codex-text-tertiary);
+}
+
+.codex-composer-shield {
+  display: inline-grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.codex-composer-chevron {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.codex-composer-plus-menu {
+  min-width: 255px;
+}
+
+.codex-composer-model-menu,
+.codex-composer-model-submenu {
+  min-width: 235px;
+}
+
+.codex-composer-menu-label {
+  padding: 7px 8px 5px;
+  color: var(--codex-text-tertiary);
+  font-size: 14px;
+}
+
+.codex-menu-icon {
+  display: inline-grid;
+  width: 20px;
+  place-items: center;
+  color: var(--codex-text-secondary);
+}
+
+.codex-menu-check {
+  margin-left: auto;
+  color: var(--codex-text-secondary);
 }

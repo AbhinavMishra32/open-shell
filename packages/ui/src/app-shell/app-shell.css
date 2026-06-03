@@ -7,58 +7,86 @@
 }
 
 .codex-app-main {
-  display: grid;
+  display: flex;
   min-width: 0;
   flex: 1;
-  grid-template-rows: var(--codex-titlebar-height) var(--codex-toolbar-height) minmax(0, 1fr) auto auto;
+  flex-direction: column;
   background: var(--codex-bg-primary);
   box-shadow: -1px 0 0 var(--codex-border-subtle);
 }
 
-.codex-titlebar {
+.codex-app-header {
   -webkit-app-region: drag;
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr auto;
-  align-items: end;
+  z-index: 30;
+  display: flex;
+  height: var(--codex-titlebar-height);
+  min-height: var(--codex-titlebar-height);
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  padding: 0 12px 5px 16px;
   border-bottom: 1px solid var(--codex-border-subtle);
-  background: color-mix(in srgb, var(--codex-bg-primary) 92%, var(--codex-bg-secondary));
+  padding: 0 14px 0 16px;
+  background: color-mix(in srgb, var(--codex-bg-primary) 94%, transparent);
+  user-select: none;
 }
 
-.codex-window-drag {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-}
-
-.codex-titlebar-tabs {
+.codex-app-header-context-surface {
   display: flex;
   min-width: 0;
-  gap: 4px;
+  flex: 1;
+  align-items: center;
+  gap: 14px;
+  overflow: hidden;
 }
 
-.codex-titlebar-tab {
+.codex-app-tab-strip {
   -webkit-app-region: no-drag;
+  display: flex;
+  height: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 1px;
+}
+
+.codex-app-tab {
+  -webkit-app-region: no-drag;
+  position: relative;
   display: inline-flex;
-  max-width: 230px;
-  height: 30px;
+  max-width: 245px;
+  height: 36px;
+  min-width: 0;
   align-items: center;
   gap: 7px;
-  border: 1px solid transparent;
-  border-radius: 9px;
-  padding: 0 10px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 11px;
+  padding: 0 11px;
   color: var(--codex-text-tertiary);
   background: transparent;
-  font-size: 13px;
+  cursor: default;
+  font-size: 14px;
+  line-height: 20px;
 }
 
-.codex-titlebar-tab[data-active="true"] {
-  border-color: var(--codex-border-subtle);
-  background: var(--codex-bg-elevated);
+.codex-app-tab:hover {
+  background: color-mix(in srgb, var(--codex-text-primary) 5%, transparent);
+}
+
+.codex-app-tab[data-active="true"] {
+  background: var(--codex-bg-primary);
   color: var(--codex-text-primary);
-  box-shadow: var(--codex-shadow-card);
+  box-shadow:
+    inset 0 0 0 1px var(--codex-border-subtle),
+    0 1px 2px #0000000a;
+}
+
+.codex-app-tab-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .codex-tab-dot {
@@ -68,40 +96,51 @@
   background: var(--codex-accent);
 }
 
-.codex-titlebar-actions,
-.codex-toolbar-actions {
+.codex-app-header-actions {
   -webkit-app-region: no-drag;
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.codex-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  border-bottom: 1px solid var(--codex-border-subtle);
-  padding: 0 14px 0 18px;
-  background: var(--codex-bg-primary);
-}
-
-.codex-toolbar-title {
-  display: flex;
-  min-width: 0;
-  align-items: center;
-  gap: 8px;
-  color: var(--codex-text-secondary);
-  font-size: 13px;
-}
-
 .codex-workspace {
   display: grid;
+  flex: 1;
   min-height: 0;
   grid-template-columns: minmax(0, 1fr) 292px;
 }
 
+.codex-main-content-viewport {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  min-width: 0;
+  flex-direction: column;
+}
+
+.codex-main-content-frame {
+  position: relative;
+  display: flex;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  border-top: 1px solid transparent;
+}
+
+.codex-app-shell-main-content-top-fade {
+  pointer-events: none;
+  position: absolute;
+  inset: 0 0 auto;
+  z-index: 20;
+  height: 16px;
+  background: linear-gradient(to bottom, var(--codex-bg-primary), transparent);
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+
 .codex-content-frame {
   min-height: 0;
+  flex: 1;
   overflow: auto;
   background:
     linear-gradient(var(--codex-bg-primary), transparent 160px),
@@ -153,7 +192,7 @@
 
 .codex-composer-frame {
   border-top: 1px solid transparent;
-  padding: 0 24px 18px;
+  padding: 0 24px 20px;
   background: linear-gradient(transparent, var(--codex-bg-primary) 36%);
 }
 

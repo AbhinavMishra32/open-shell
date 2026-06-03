@@ -4,11 +4,11 @@
   max-width: min(var(--radix-dropdown-menu-content-available-width), calc(100vw - 16px));
   max-height: min(var(--radix-dropdown-menu-content-available-height), calc(100vh - 16px));
   overflow: auto;
-  border: 1px solid var(--codex-border-subtle);
   border-radius: 12px;
   padding: 4px;
-  background: color-mix(in srgb, var(--color-background-elevated-primary) 92%, transparent);
-  box-shadow: 0 12px 32px #00000024;
+  border: 0.5px solid var(--codex-border-subtle);
+  background: color-mix(in srgb, var(--color-background-elevated-primary) 90%, transparent);
+  box-shadow: 0 14px 36px #00000024;
   color: var(--codex-text-primary);
   outline: none;
   transform-origin: var(--radix-dropdown-menu-content-transform-origin);
@@ -19,14 +19,14 @@
 .codex-dropdown-menu-item {
   position: relative;
   display: flex;
-  min-height: 30px;
+  min-height: 32px;
   align-items: center;
   gap: 8px;
   border-radius: 8px;
-  padding: 5px 8px;
+  padding: 6px 8px;
   color: var(--codex-text-primary);
   cursor: default;
-  font-size: 13px;
+  font-size: 14px;
   line-height: 18px;
   outline: none;
   user-select: none;
@@ -57,4 +57,22 @@
 .codex-dropdown-menu-checkbox-item,
 .codex-dropdown-menu-radio-item {
   padding-left: 28px;
+}
+
+.codex-dropdown-menu-sub-trigger {
+  justify-content: space-between;
+}
+
+.codex-dropdown-menu-sub-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.codex-dropdown-menu-chevron {
+  margin-left: auto;
+  color: var(--codex-text-tertiary);
+  font-size: 22px;
+  line-height: 14px;
 }

@@ -7,6 +7,20 @@ export type { FileTreeItem } from "./file-tree/FileTree";
 export { CodexMark } from "./icons/CodexMark";
 export { Button, IconButton, Pill, StatusDot } from "./primitives/Button";
 export {
+  ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuGroup,
+  ContextMenuItem,
+  ContextMenuPortal,
+  ContextMenuRadioGroup,
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "./primitives/ContextMenu";
+export {
   Dialog,
   DialogBody,
   DialogClose,

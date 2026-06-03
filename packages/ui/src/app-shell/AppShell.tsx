@@ -1,53 +1,84 @@
 import type { ReactNode } from "react";
-import { Button, IconButton, Pill, StatusDot } from "../primitives/Button";
+import { IconButton, Pill } from "../primitives/Button";
+import {
+  ContextMenu,
+  ContextMenuContent,
+  ContextMenuItem,
+  ContextMenuSeparator,
+  ContextMenuTrigger,
+} from "../primitives/ContextMenu";
 import "./app-shell.css";
 
 type AppShellProps = {
   bottomPanel?: ReactNode;
   composer: ReactNode;
+  headerTabs?: Array<{ active?: boolean; dirty?: boolean; id: string; title: string }>;
   main: ReactNode;
   rightPanel?: ReactNode;
   sidebar: ReactNode;
 };
 
-export function AppShell({ bottomPanel, composer, main, rightPanel, sidebar }: AppShellProps) {
+export function AppShell({
+  bottomPanel,
+  composer,
+  headerTabs = [
+    { active: true, dirty: true, id: "inspect-electron-ui", title: "Inspect Electron UI" },
+    { id: "component-knowledge-base", title: "Component knowledge-base" },
+  ],
+  main,
+  rightPanel,
+  sidebar,
+}: AppShellProps) {
   return (
     <div className="codex-app-shell">
       {sidebar}
       <main className="codex-app-main">
-        <div className="codex-titlebar">
-          <div className="codex-window-drag" />
-          <div className="codex-titlebar-tabs">
-            <button className="codex-titlebar-tab" data-active="true">
-              <span className="codex-tab-dot" />
-              Inspect Electron UI
-            </button>
-            <button className="codex-titlebar-tab">Component knowledge-base</button>
+        <header className="codex-app-header" data-app-shell-header-edge-scroll="false">
+          <div className="codex-app-header-context-surface" data-testid="app-shell-header-context-menu-surface">
+            <div className="codex-app-tab-strip" data-app-shell-tab-strip-controller="main">
+              {headerTabs.map((tab, index) => (
+                <ContextMenu key={tab.id}>
+                  <ContextMenuTrigger asChild>
+                    <button
+                      className="codex-app-tab"
+                      data-active={tab.active === true ? "true" : undefined}
+                      data-app-shell-tab-controller="main"
+                      data-tab-id={tab.id}
+                      type="button"
+                    >
+                      {tab.dirty === true ? <span className="codex-tab-dot" /> : null}
+                      <span className="codex-app-tab-title">{tab.title}</span>
+                    </button>
+                  </ContextMenuTrigger>
+                  <ContextMenuContent alignOffset={index === 0 ? 0 : -10}>
+                    <ContextMenuItem>Close tab</ContextMenuItem>
+                    <ContextMenuItem>Close other tabs</ContextMenuItem>
+                    <ContextMenuItem>Copy link</ContextMenuItem>
+                    <ContextMenuSeparator />
+                    <ContextMenuItem>Move tab to new window</ContextMenuItem>
+                  </ContextMenuContent>
+                </ContextMenu>
+              ))}
+            </div>
           </div>
-          <div className="codex-titlebar-actions">
-            <IconButton aria-label="Toggle sidebar">⌘</IconButton>
+          <div className="codex-app-header-actions">
+            <IconButton aria-label="Keyboard shortcuts">⌘</IconButton>
             <IconButton aria-label="More">•••</IconButton>
           </div>
-        </div>
-
-        <div className="codex-toolbar">
-          <div className="codex-toolbar-title">
-            <StatusDot tone="green" />
-            <span>desktop-agent-app</span>
-            <Pill>local</Pill>
-          </div>
-          <div className="codex-toolbar-actions">
-            <Button size="small" variant="secondary">
-              Refresh
-            </Button>
-            <Button size="small" variant="ghost">
-              Share
-            </Button>
-          </div>
-        </div>
+        </header>
 
         <section className="codex-workspace">
-          <section className="codex-content-frame">{main}</section>
+          <section className="codex-main-content-viewport" data-app-shell-main-content-layout="main">
+            <div className="codex-main-content-frame">
+              <div
+                aria-hidden="true"
+                className="codex-app-shell-main-content-top-fade"
+                data-app-shell-main-content-top-fade="false"
+              />
+              <section className="codex-content-frame">{main}</section>
+              <section className="codex-composer-frame">{composer}</section>
+            </div>
+          </section>
           <aside className="codex-right-panel">
             {rightPanel ?? (
               <>
@@ -71,8 +102,6 @@ export function AppShell({ bottomPanel, composer, main, rightPanel, sidebar }: A
         </section>
 
         {bottomPanel}
-
-        <section className="codex-composer-frame">{composer}</section>
       </main>
     </div>
   );
