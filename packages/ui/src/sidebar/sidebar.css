@@ -10,6 +10,10 @@
   color: var(--codex-text-primary);
 }
 
+.codex-left-panel {
+  min-width: 300px;
+}
+
 [data-codex-window-type="electron"]:not([data-codex-os="win32"]) .app-shell-left-panel {
   background: var(--color-token-editor-background);
   -webkit-backdrop-filter: blur(var(--blur-md));
@@ -40,56 +44,10 @@
   }
 }
 
-.codex-sidebar-window-strip {
-  display: flex;
-  height: 62px;
-  flex: 0 0 62px;
-  align-items: center;
-  gap: 14px;
-  padding: 18px 14px 0 151px;
-  -webkit-app-region: drag;
-}
-
-.codex-sidebar-chrome-button {
-  display: grid;
-  width: 28px;
-  height: 28px;
-  flex: 0 0 28px;
-  place-items: center;
-  border: 0;
-  border-radius: 999px;
-  padding: 0;
-  color: color-mix(in srgb, var(--codex-text-secondary) 76%, transparent);
-  background: transparent;
-  -webkit-app-region: no-drag;
-  transition:
-    background-color var(--transition-duration-basic) var(--cubic-enter),
-    color var(--transition-duration-basic) var(--cubic-enter);
-}
-
-.codex-sidebar-chrome-button[data-muted="true"] {
-  color: color-mix(in srgb, var(--codex-text-tertiary) 58%, transparent);
-}
-
-.codex-sidebar-chrome-button:hover {
-  background: color-mix(in srgb, var(--codex-text-primary) 7%, transparent);
-  color: var(--codex-text-primary);
-}
-
-.codex-sidebar-chrome-button svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.55;
-}
-
 .codex-sidebar-primary {
   display: grid;
   gap: 9px;
-  padding: 13px 12px 24px 32px;
+  padding: 75px 16px 24px 32px;
 }
 
 .codex-sidebar-nav-item {
@@ -142,7 +100,7 @@
   flex-direction: column;
   gap: 0;
   overflow: auto;
-  padding: 0 8px 10px;
+  padding: 0 10px 10px;
 }
 
 .codex-sidebar-section {
@@ -157,7 +115,7 @@
   height: 34px;
   align-items: center;
   border: 0;
-  padding: 0 24px;
+  padding: 0 22px;
   color: var(--codex-text-tertiary);
   background: transparent;
   text-align: left;
@@ -194,7 +152,7 @@
   gap: 24px;
   border: 0;
   border-radius: var(--radius-lg);
-  padding: 0 8px;
+  padding: 0 10px;
   color: color-mix(in srgb, var(--codex-text-secondary) 95%, transparent);
   background: transparent;
   font-size: 14px;
@@ -266,6 +224,20 @@
   line-height: 22px;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.codex-sidebar-item-meta[data-kind="shortcut"] {
+  display: inline-flex;
+  height: 20px;
+  min-width: 32px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0 7px;
+  background: color-mix(in srgb, var(--codex-text-primary) 7%, transparent);
+  color: color-mix(in srgb, var(--codex-text-secondary) 88%, transparent);
+  font-size: 13px;
+  line-height: 18px;
 }
 
 .codex-sidebar-footer {

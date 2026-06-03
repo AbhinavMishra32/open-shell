@@ -1,9 +1,66 @@
 .codex-app-shell {
+  position: relative;
   display: flex;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   background: transparent;
+}
+
+.codex-shell-chrome-controls {
+  -webkit-app-region: drag;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 80;
+  display: flex;
+  height: var(--codex-titlebar-height);
+  align-items: center;
+  gap: 8px;
+  padding: 0 0 0 96px;
+  pointer-events: none;
+}
+
+.codex-shell-chrome-button {
+  -webkit-app-region: no-drag;
+  display: grid;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  place-items: center;
+  border: 0;
+  border-radius: 999px;
+  padding: 0;
+  color: color-mix(in srgb, var(--codex-text-secondary) 76%, transparent);
+  background: transparent;
+  pointer-events: auto;
+  transition:
+    background-color var(--transition-duration-basic) var(--cubic-enter),
+    color var(--transition-duration-basic) var(--cubic-enter);
+}
+
+.codex-shell-chrome-button[data-muted="true"] {
+  color: color-mix(in srgb, var(--codex-text-tertiary) 58%, transparent);
+}
+
+.codex-shell-chrome-button:hover {
+  background: color-mix(in srgb, var(--codex-text-primary) 7%, transparent);
+  color: var(--codex-text-primary);
+}
+
+.codex-shell-chrome-button svg {
+  width: 18px;
+  height: 18px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.55;
+}
+
+.codex-shell-chrome-button:first-child svg {
+  fill: currentColor;
+  stroke: none;
 }
 
 .codex-app-main {
@@ -74,6 +131,29 @@
   user-select: none;
 }
 
+.codex-app-shell[data-sidebar-open="false"] .codex-app-header {
+  padding-left: 232px;
+}
+
+.codex-app-shell[data-sidebar-open="false"] .codex-app-tab:not([data-active="true"]) {
+  display: none;
+}
+
+.codex-app-shell[data-sidebar-open="false"] .codex-app-tab[data-active="true"] {
+  height: 32px;
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
+  color: var(--codex-text-primary);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.codex-app-shell[data-sidebar-open="false"] .codex-tab-dot {
+  display: none;
+}
+
 .codex-app-header-context-surface {
   display: flex;
   min-width: 0;
@@ -142,7 +222,92 @@
   -webkit-app-region: no-drag;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+}
+
+.codex-header-agent-button,
+.codex-header-tool-button {
+  display: inline-grid;
+  place-items: center;
+  border: 0;
+  color: color-mix(in srgb, var(--codex-text-secondary) 78%, transparent);
+  background: transparent;
+  transition:
+    background-color var(--transition-duration-basic) var(--cubic-enter),
+    box-shadow var(--transition-duration-basic) var(--cubic-enter),
+    color var(--transition-duration-basic) var(--cubic-enter);
+}
+
+.codex-header-agent-button {
+  grid-auto-flow: column;
+  grid-auto-columns: max-content;
+  gap: 8px;
+  height: 34px;
+  border-radius: 13px;
+  padding: 0 10px 0 8px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--codex-border-subtle) 78%, transparent);
+}
+
+.codex-header-agent-icon {
+  display: grid;
+  width: 20px;
+  height: 20px;
+  place-items: center;
+  border-radius: 5px;
+  background:
+    linear-gradient(140deg, #0a1a33, #0b43c8 70%),
+    #0b43c8;
+  color: #fff;
+  box-shadow:
+    inset 0 0 0 1px color-mix(in srgb, #fff 26%, transparent),
+    0 1px 2px #00000024;
+}
+
+.codex-header-agent-mark {
+  width: 14px;
+  height: 14px;
+}
+
+.codex-header-agent-button:hover,
+.codex-header-tool-button:hover,
+.codex-header-tool-button[data-active="true"] {
+  background: color-mix(in srgb, var(--codex-text-primary) 7%, transparent);
+  color: var(--codex-text-primary);
+}
+
+.codex-header-tool-button {
+  width: 34px;
+  height: 34px;
+  border-radius: 13px;
+}
+
+.codex-header-tool-button[data-active="true"] {
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--codex-border-subtle) 76%, transparent);
+}
+
+.codex-header-tool-button-plain {
+  width: 28px;
+  border-radius: 999px;
+}
+
+.codex-header-agent-button svg,
+.codex-header-tool-button svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.55;
+}
+
+.codex-header-tool-button-plain svg {
+  fill: currentColor;
+  stroke: none;
+}
+
+.codex-header-agent-menu {
+  min-width: 170px;
 }
 
 .codex-workspace {
@@ -150,6 +315,10 @@
   flex: 1;
   min-height: 0;
   grid-template-columns: minmax(0, 1fr) 292px;
+}
+
+.codex-workspace[data-right-panel-open="false"] {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .codex-main-content-viewport {

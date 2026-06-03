@@ -24,27 +24,13 @@ export type SidebarProject = {
 
 export function Sidebar({
   items,
-  onToggleSidebar,
   projects = [],
 }: {
   items: SidebarItem[];
-  onToggleSidebar?: () => void;
   projects?: SidebarProject[];
 }) {
   return (
     <aside className="codex-sidebar app-shell-left-panel">
-      <div className="codex-sidebar-window-strip">
-        <button className="codex-sidebar-chrome-button" aria-label="Toggle sidebar" onClick={onToggleSidebar}>
-          <SidebarToggleIcon />
-        </button>
-        <button className="codex-sidebar-chrome-button" aria-label="Back">
-          <BackIcon />
-        </button>
-        <button className="codex-sidebar-chrome-button" aria-label="Forward" data-muted="true">
-          <ForwardIcon />
-        </button>
-      </div>
-
       <div className="codex-sidebar-primary" role="navigation" aria-label="Primary">
         <button className="codex-sidebar-nav-item">
           <span className="codex-sidebar-nav-icon" aria-hidden="true">
@@ -152,6 +138,7 @@ function SidebarProjectRow({ project }: { project: SidebarProject }) {
 
 function SidebarThreadRow({ inset = false, item }: { inset?: boolean; item: SidebarItem }) {
   const trailing = item.time ?? item.meta;
+  const trailingKind = trailing?.startsWith("⌘") ? "shortcut" : "time";
 
   return (
     <button
@@ -168,35 +155,12 @@ function SidebarThreadRow({ inset = false, item }: { inset?: boolean; item: Side
       })}
     >
       <span className="codex-sidebar-item-title">{item.title}</span>
-      {trailing != null ? <span className="codex-sidebar-item-meta">{trailing}</span> : null}
+      {trailing != null ? (
+        <span className="codex-sidebar-item-meta" data-kind={trailingKind}>
+          {trailing}
+        </span>
+      ) : null}
     </button>
-  );
-}
-
-function SidebarToggleIcon() {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true">
-      <rect x="3.25" y="3" width="13.5" height="14" rx="3" />
-      <path d="M8 3.5v13" />
-    </svg>
-  );
-}
-
-function BackIcon() {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true">
-      <path d="M12.75 4.5 7.25 10l5.5 5.5" />
-      <path d="M7.75 10h8" />
-    </svg>
-  );
-}
-
-function ForwardIcon() {
-  return (
-    <svg viewBox="0 0 20 20" aria-hidden="true">
-      <path d="m7.25 4.5 5.5 5.5-5.5 5.5" />
-      <path d="M12.25 10h-8" />
-    </svg>
   );
 }
 
