@@ -1,11 +1,16 @@
 .DS_Store
+node_modules/
+dist/
+.turbo/
+*.log
+
 app.app/
 app-main-CYccuswF.css
 index.html
 main-BJ6Uf5yA.js
 
-codex-same-ui-electron/node_modules/
-codex-same-ui-electron/dist/
-codex-same-ui-electron/.runtime/
-codex-same-ui-electron/.upstream-cache/
-codex-same-ui-electron/.tmp-inspect-asar/
+research/codex-internals/node_modules/
+research/codex-internals/dist/
+research/codex-internals/.runtime/
+research/codex-internals/.upstream-cache/
+research/codex-internals/.tmp-inspect-asar/

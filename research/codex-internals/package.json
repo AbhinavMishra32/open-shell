@@ -1,5 +1,5 @@
 {
-  "name": "codex-same-ui-electron",
+  "name": "@open-shell/codex-internals",
   "productName": "Codex Same UI",
   "version": "0.1.0",
   "private": true,

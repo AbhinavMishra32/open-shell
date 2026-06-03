@@ -1,0 +1,26 @@
+{
+  "name": "open-shell",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "npm@11.6.1",
+  "description": "A research-driven Electron component system for modern agentic desktop apps.",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "build": "turbo run build",
+    "dev": "turbo run dev --filter=@open-shell/electron-example",
+    "start": "npm run start -w @open-shell/electron-example",
+    "start:example": "npm run start -w @open-shell/electron-example",
+    "typecheck": "turbo run typecheck",
+    "research:refresh": "npm run refresh:components --prefix research/codex-internals",
+    "research:start": "npm run start --prefix research/codex-internals"
+  },
+  "devDependencies": {
+    "@types/react": "^19.2.16",
+    "@types/react-dom": "^19.2.3",
+    "turbo": "^2.9.16",
+    "typescript": "^5.9.3"
+  }
+}
