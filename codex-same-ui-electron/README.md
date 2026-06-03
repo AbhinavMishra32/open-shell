@@ -6,9 +6,9 @@ The project has two tracks:
 
 - `start` runs the upstream Codex Electron main process from `../app.app/Contents/Resources/app.asar` with a local repaired runtime copy. This is the real architecture/reference path.
 - `start:exact` runs an Electron shell that loads only the original renderer from `../app.app/Contents/Resources/app.asar`. This is useful for renderer experiments, but it does not provide the full host services.
-- `start:library` runs the handmade component preview. This is not the source of truth.
-- `extract:ui` creates a readable source mirror under `src/unminified/upstream` by extracting and formatting the original renderer/component chunks.
-- `extract:components` creates a literal upstream component-library closure under `src/component-library`.
+- `start:library` runs the component-library preview. It still contains some handmade scaffolding, but it now imports copied upstream styles and primitives from `src/component-library`.
+- `extract:ui` creates a readable dependency-aware source mirror under `src/unminified/upstream` by extracting and formatting the original renderer/component chunks.
+- `extract:components` creates a literal upstream component-library closure under `src/component-library`, plus a catalog and system docs.
 
 The goal is to keep the runnable UI tied to the original app while the component library is extracted literally first, then gradually wrapped/reconstructed at the same source boundaries.
 
@@ -16,15 +16,22 @@ The goal is to keep the runnable UI tied to the original app while the component
 
 ```sh
 npm install
-npm run extract:ui
-npm run extract:components
-npm run start
+npm run refresh:components
+npm run start:library
 ```
+
+Current extraction scale:
+
+- `src/unminified/upstream`: 753 upstream renderer files
+- `src/component-library`: 579 copied upstream assets
+- `src/component-library/component-system.json`: generated catalog with 507 detected exported modules
 
 ## Structure
 
 - `src/main`: Electron bootstrap for the side-by-side app.
 - `src/component-library`: literal upstream component-library extraction with system wrappers.
+- `src/component-library/component-system.json`: generated component-system data file.
+- `src/component-library/COMPONENT_SYSTEM.md`: generated component-system knowledge base.
 - `src/unminified/upstream`: formatted original renderer files.
 - `src/unminified/component-system`: readable architecture notes.
 - `src/lib/codex-ui`: handmade preview components, not the source of truth.

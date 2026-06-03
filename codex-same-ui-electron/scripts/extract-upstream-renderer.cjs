@@ -79,6 +79,10 @@ const explicitFiles = new Set([
   "webview/assets/react-dom-CvzHKZGB.js"
 ]);
 
+const relativeImportPattern =
+  /(?:import|export)\s*(?:[^'"]*?\s*from\s*)?["'](\.\/[^"']+)["']|import\(["'](\.\/[^"']+)["']\)/g;
+const cssUrlPattern = /url\((?:"|')?(\.\/[^"')]+)(?:"|')?\)/g;
+
 function listFiles(root) {
   const results = [];
   const walk = (dir) => {
@@ -97,6 +101,44 @@ function isSelected(relativePath) {
   if (!relativePath.startsWith("webview/assets/")) return false;
   const name = path.basename(relativePath);
   return importantPrefixes.some((prefix) => name.startsWith(prefix));
+}
+
+function normalizeRelativeDependency(relativePath, specifier) {
+  const dependency = path.posix.normalize(
+    path.posix.join(path.posix.dirname(relativePath), specifier.replace(/^\.\//, ""))
+  );
+  return dependency;
+}
+
+function discoverDependencyClosure(initialFiles) {
+  const selected = new Set(initialFiles);
+  const queue = [...initialFiles];
+
+  while (queue.length > 0) {
+    const relativePath = queue.shift();
+    const sourcePath = path.join(cacheRoot, relativePath);
+    if (!fs.existsSync(sourcePath)) continue;
+
+    const ext = path.extname(relativePath);
+    if (ext !== ".js" && ext !== ".css") continue;
+
+    const source = fs.readFileSync(sourcePath, "utf8");
+    const patterns = ext === ".css" ? [cssUrlPattern] : [relativeImportPattern, cssUrlPattern];
+    for (const pattern of patterns) {
+      pattern.lastIndex = 0;
+      for (const match of source.matchAll(pattern)) {
+        const specifier = match[1] || match[2];
+        if (!specifier) continue;
+        const dependency = normalizeRelativeDependency(relativePath, specifier);
+        if (fs.existsSync(path.join(cacheRoot, dependency)) && !selected.has(dependency)) {
+          selected.add(dependency);
+          queue.push(dependency);
+        }
+      }
+    }
+  }
+
+  return [...selected].sort();
 }
 
 async function formatText(source, parser) {
@@ -146,7 +188,7 @@ async function main() {
   if (force) fs.rmSync(outputRoot, { recursive: true, force: true });
   fs.mkdirSync(outputRoot, { recursive: true });
 
-  const selected = listFiles(cacheRoot).filter(isSelected).sort();
+  const selected = discoverDependencyClosure(listFiles(cacheRoot).filter(isSelected).sort());
   const manifest = [];
 
   for (const relativePath of selected) {

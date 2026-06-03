@@ -35,31 +35,34 @@ The first rebuild app lives inside this same folder:
 `codex-same-ui-electron`
 
 It has two jobs:
-- run our reconstructed Electron UI from a readable component library
+- run the original Codex Electron main process for exact behavioral/log comparison
+- run our reconstructed Electron UI from a readable component library preview
 - optionally run the original renderer from `app.app/Contents/Resources/app.asar` for exact visual comparison
 - hold formatted, unminified source mirrors under `src/unminified/upstream`
 
 This means future component work can start from the literal upstream bundle code, formatted into readable files, then gradually move into proper reconstructed source modules.
 
-Current runnable source path:
-- `codex-same-ui-electron/src/lib/codex-ui`
+Real upstream launcher:
+- `npm run start`
 
 Literal component-library extraction path:
 - `codex-same-ui-electron/src/component-library`
 
-Current renderer path:
+Component-library preview renderer path:
 - `codex-same-ui-electron/src/renderer`
 
 Reference-only exact mode:
 - `npm run start:exact`
 
-Reconstructed component-library app:
-- `npm run start`
+Reconstructed component-library preview:
+- `npm run start:library`
 
 Important distinction:
 - `src/unminified/upstream` is the formatted upstream bundle mirror.
 - `src/component-library/original/assets` is the literal copied component-library closure, preserving upstream relative imports.
-- `src/component-library/*/index.js` contains system wrappers for shell, primitives, sidebar, thread, composer, markdown, settings, and browser sidebar.
+- `src/component-library/styles/index.js` loads copied upstream global renderer CSS and feature CSS.
+- `src/component-library/*/index.js` contains system wrappers for styles, shell, primitives, sidebar, thread, composer, markdown, settings, and browser sidebar.
+- `src/component-library/component-system.json` is the data catalog for copied systems, entry files, dependency closures, and detected export aliases.
 - `src/lib/codex-ui` is only the experimental readable/manual preview layer and should not be treated as the source of truth.
 - New apps that want the same Codex UI should start from `src/component-library`, not the handmade preview.
 
@@ -157,11 +160,18 @@ Reconstructed source now started at:
 - `codex-same-ui-electron/src/lib/codex-ui/composer/Composer.tsx`
 
 Literal upstream shared component extraction now lives at:
+- `codex-same-ui-electron/src/component-library/styles/index.js`
 - `codex-same-ui-electron/src/component-library/primitives/index.js`
 - `codex-same-ui-electron/src/component-library/primitives/button.js`
 - `codex-same-ui-electron/src/component-library/composer/index.js`
 - `codex-same-ui-electron/src/component-library/thread/index.js`
 - `codex-same-ui-electron/src/component-library/sidebar/index.js`
+
+Current literal extraction stats:
+- `src/unminified/upstream` contains 753 renderer files after dependency-aware refresh.
+- `src/component-library` contains a 579-asset copied component closure.
+- `src/component-library/component-system.json` currently detects exports in 507 copied JS modules.
+- `src/renderer/App.tsx` imports copied upstream styles and the upstream Button primitive as the first dogfood path.
 
 ## 4. Shell Behavior Rules
 

@@ -39,9 +39,11 @@ Notes:
 | Rebuild app | Component-system source root | `codex-same-ui-electron/src/lib/codex-ui` | high | New readable UI library built from the extracted upstream visual/component system. |
 | Rebuild app | Literal component-library root | `codex-same-ui-electron/src/component-library` | high | Generated library closure containing literal upstream modules plus system wrappers. |
 | Rebuild app | Component-library extractor | `codex-same-ui-electron/scripts/extract-component-library.cjs` | high | Copies dependency closures from the upstream mirror into `src/component-library`. |
+| Rebuild app | Component-library catalog | `codex-same-ui-electron/src/component-library/component-system.json` | high | Generated data catalog with copied systems, wrappers, entry files, closure sizes, and detected export aliases. |
+| Rebuild app | Component-library styles surface | `codex-same-ui-electron/src/component-library/styles/index.js` | high | Imports copied upstream global renderer CSS and feature CSS for new app reuse. |
 | Rebuild app | Component-system renderer | `codex-same-ui-electron/src/renderer` | high | Thin app consuming only `src/lib/codex-ui` components. |
-| Rebuild app | Unminified upstream mirror | `codex-same-ui-electron/src/unminified/upstream` | high | Formatted copies of selected original renderer/component chunks. |
-| Rebuild app | Extraction script | `codex-same-ui-electron/scripts/extract-upstream-renderer.cjs` | high | Rebuilds formatted upstream mirror from original `app.asar`. |
+| Rebuild app | Unminified upstream mirror | `codex-same-ui-electron/src/unminified/upstream` | high | Dependency-aware formatted copies of original renderer/component chunks. |
+| Rebuild app | Extraction script | `codex-same-ui-electron/scripts/extract-upstream-renderer.cjs` | high | Rebuilds formatted upstream mirror from original `app.asar`, including JS imports and CSS url dependencies. |
 | Renderer | Main app entry | `webview/assets/app-main-C3VNTc8v.js` | high | Imports most feature chunks and route modules. |
 | Renderer | Preloader | `webview/assets/app-preloader-DxFriehz.js` | medium | Likely startup state and bundle prefetch setup. |
 | Renderer | App session state | `webview/assets/app-session-D2rQeKGg.js` | medium | Session-level renderer state. |
@@ -183,3 +185,6 @@ Notes:
 | 2026-06-03 | Pivoted from exact renderer boot to reconstructed component-system app because exact upstream renderer waits on original host services. |
 | 2026-06-03 | Added first readable library slice under `codex-same-ui-electron/src/lib/codex-ui` and wired Electron normal mode to consume it. |
 | 2026-06-03 | Added literal component-library extraction system under `codex-same-ui-electron/src/component-library`, with 231 copied upstream assets and wrappers for shell, primitives, sidebar, thread, composer, markdown, settings, and browser sidebar. |
+| 2026-06-03 | Upgraded upstream extraction to dependency-aware mode: `refresh:ui` now extracts 753 renderer files by following JS imports and CSS `url(...)` assets. |
+| 2026-06-03 | Upgraded literal component-library extraction to copy 579 upstream assets, including CSS/font dependencies, emit `component-system.json`, emit `COMPONENT_SYSTEM.md`, and expose a `styles` wrapper. |
+| 2026-06-03 | The preview renderer now imports copied upstream global styles and the copied upstream Button primitive, proving the app can consume the literal component-library layer. |

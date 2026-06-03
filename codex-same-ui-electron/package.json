@@ -13,7 +13,8 @@
     "start:exact": "CODEX_SAME_UI_EXACT=1 electron .",
     "extract:ui": "node scripts/extract-upstream-renderer.cjs",
     "extract:components": "node scripts/extract-component-library.cjs",
-    "refresh:ui": "node scripts/extract-upstream-renderer.cjs --force"
+    "refresh:ui": "node scripts/extract-upstream-renderer.cjs --force",
+    "refresh:components": "npm run refresh:ui && npm run extract:components"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.1.1",

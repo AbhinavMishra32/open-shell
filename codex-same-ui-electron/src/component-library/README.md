@@ -21,6 +21,9 @@ npm run extract:components
 ```
 
 Current extraction summary:
-- generatedAt: 2026-06-03T07:15:48.220Z
-- copiedAssetCount: 231
-- systems: shell, primitives, sidebar, thread, composer, markdown, settings, browserSidebar
+- generatedAt: 2026-06-03T07:26:14.252Z
+- copiedAssetCount: 579
+- exportCatalogAssetCount: 507
+- systems: styles, shell, primitives, sidebar, thread, composer, markdown, settings, browserSidebar
+
+Important: this is a literal formatted-bundle extraction, not hand-written clone code. The next layer is alias recovery: use `component-system.json` to map stable wrapper names onto upstream minified export names while preserving the copied implementation.
