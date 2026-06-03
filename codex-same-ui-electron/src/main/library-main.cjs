@@ -32,6 +32,20 @@ function createWindow() {
     return { action: "deny" };
   });
 
+  win.webContents.on("console-message", (_event, level, message, line, sourceId) => {
+    console.log(`[renderer:${level}] ${message} (${sourceId}:${line})`);
+  });
+
+  win.webContents.on("did-fail-load", (_event, errorCode, errorDescription, validatedURL) => {
+    console.error(`[renderer:did-fail-load] ${errorCode} ${errorDescription} ${validatedURL}`);
+  });
+
+  win.webContents.session.webRequest.onErrorOccurred((details) => {
+    if (["script", "stylesheet", "xhr", "fetch"].includes(details.resourceType)) {
+      console.error(`[renderer:request-error] ${details.error} ${details.method} ${details.url}`);
+    }
+  });
+
   if (!fs.existsSync(rendererIndex)) {
     throw new Error("Renderer build missing. Run npm run build first.");
   }

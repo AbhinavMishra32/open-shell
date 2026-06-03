@@ -6,7 +6,8 @@
   "description": "Side-by-side Electron app for mirroring the Codex desktop UI component system.",
   "main": "src/main/main.cjs",
   "scripts": {
-    "start": "npm run build && electron .",
+    "start": "node scripts/start-upstream-main.cjs",
+    "start:library": "npm run build && electron .",
     "dev": "vite --host 127.0.0.1",
     "build": "vite build",
     "start:exact": "CODEX_SAME_UI_EXACT=1 electron .",
