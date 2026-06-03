@@ -45,6 +45,9 @@ Notes:
 | Rebuild app | Unminified upstream mirror | `codex-same-ui-electron/src/unminified/upstream` | high | Dependency-aware formatted copies of original renderer/component chunks. |
 | Rebuild app | Extraction script | `codex-same-ui-electron/scripts/extract-upstream-renderer.cjs` | high | Rebuilds formatted upstream mirror from original `app.asar`, including JS imports and CSS url dependencies. |
 | Rebuild app | Sidebar app-action attributes | `codex-same-ui-electron/src/lib/codex-ui/sidebar/appActionAttributes.ts` | high | Readable mirror of upstream `data-app-action-sidebar-*` names from `window-app-action-helpers-u9SI1RSH.js`. |
+| Rebuild app | Readable dialog primitive | `codex-same-ui-electron/src/lib/codex-ui/primitives/Dialog.tsx` | high | Radix-backed readable port of `dialog-layout-CCvvb1Vc.js`, including overlay, sizes, close button, and measured-height transition. |
+| Rebuild app | Readable bottom panel | `codex-same-ui-electron/src/lib/codex-ui/bottom-panel/BottomPanel.tsx` | high | Radix Tabs-backed port of the app-shell bottom panel slot with upstream height clamp constants and terminal surface. |
+| Rebuild app | Readable file tree | `codex-same-ui-electron/src/lib/codex-ui/file-tree/FileTree.tsx` | high | Readable DOM/CSS port of the upstream `file-tree-search-input-DWq_lg9v.js` data-attribute contract and core icon sprite. |
 | Renderer | Main app entry | `webview/assets/app-main-C3VNTc8v.js` | high | Imports most feature chunks and route modules. |
 | Renderer | Preloader | `webview/assets/app-preloader-DxFriehz.js` | medium | Likely startup state and bundle prefetch setup. |
 | Renderer | App session state | `webview/assets/app-session-D2rQeKGg.js` | medium | Session-level renderer state. |
@@ -125,6 +128,7 @@ Notes:
 | --- | --- | --- | --- | --- |
 | UI kit | Buttons | `button-Xd4Hy1MO.js` | high | Shared button primitives. |
 | UI kit | Dialog layout | `dialog-layout-CCvvb1Vc.js` | high | Shared dialog framing. |
+| UI kit | Popover | `dist-DBoRrpWS.js` | high | Radix-style popover primitive used for floating panels. |
 | UI kit | Dropdown | `dropdown-CHaZfyxI.js` | high | Shared Radix-style dropdown primitives; exports `DropdownMenu*`, `Root`, `Trigger`, `Content`, `Item`, `CheckboxItem`, `RadioItem`, `Sub`, etc. |
 | UI kit | Tooltip | `tooltip-BhXPONlb.js` | high | Shared tooltip component. |
 | UI kit | Checkbox | `checkbox-Bz6PC7ig.js` | high | Shared checkbox component. |
@@ -195,3 +199,4 @@ Notes:
 | 2026-06-03 | Recovered primary BrowserWindow material options from minified main bundle: non-opaque macOS primary uses `backgroundColor: "#00000000"`, `vibrancy: "menu"`, `titleBarStyle: "hiddenInset"`, and traffic lights at `{ x: 16, y: 16 }`. |
 | 2026-06-03 | Began changing readable primitives to Radix-backed components: `Button` now supports Radix `Slot` via `asChild`, and `DropdownMenu.tsx` wraps `@radix-ui/react-dropdown-menu` while preserving Codex CSS contracts. |
 | 2026-06-03 | Added readable sidebar action contracts and applied the upstream sidebar medium blur in the copy app: `backdrop-filter: blur(var(--blur-md))` with `--blur-md: 12px`, inherited into the rounded edge pseudo-element. |
+| 2026-06-03 | Ported three more shared UI systems into `src/lib/codex-ui`: Radix-backed Codex dialog/popup primitive from `dialog-layout-CCvvb1Vc.js`, bottom terminal/tabs panel from `app-shell-D7yvB1FT.js`, and a first filesystem tree port from `file-tree-search-input-DWq_lg9v.js`. |

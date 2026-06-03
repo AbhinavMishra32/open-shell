@@ -1,7 +1,26 @@
 export { AppShell } from "./app-shell/AppShell";
+export { BottomPanel, TerminalSurface, clampBottomPanelHeight } from "./bottom-panel/BottomPanel";
+export type { BottomPanelTab } from "./bottom-panel/BottomPanel";
 export { Composer } from "./composer/Composer";
+export { FileTree } from "./file-tree/FileTree";
+export type { FileTreeItem } from "./file-tree/FileTree";
 export { CodexMark } from "./icons/CodexMark";
 export { Button, IconButton, Pill, StatusDot } from "./primitives/Button";
+export {
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogSection,
+  DialogTitle,
+  DialogTrigger,
+} from "./primitives/Dialog";
+export type { CodexDialogContentProps, DialogSize } from "./primitives/Dialog";
 export {
   DropdownMenu,
   DropdownMenuCheckboxItem,

@@ -10,6 +10,9 @@ Use this layer for the copy app:
 - `Sidebar` for navigation, project/thread rows, and footer status
 - `ThreadSurface` for static conversation/workspace content
 - `Composer` for the Codex prompt dock
+- `BottomPanel` and `TerminalSurface` for the app-shell bottom panel and terminal tab system
+- `FileTree` for the filesystem tree DOM contract and core icon sprite
+- `Dialog` and `DialogContent` for the shared popup/dialog primitive
 - `Button`, `IconButton`, `Pill`, and `StatusDot` for shared controls
 - `codex-theme.css` for Codex-like tokens and upstream-compatible CSS aliases
 
@@ -22,6 +25,12 @@ Sidebar transparency requirement:
 - `sidebar.css` mirrors the upstream 55% transparent `color-token-editor-background` rule and edge `:after` extension.
 - `sidebar.css` also applies the upstream medium blur amount as `backdrop-filter: blur(var(--blur-md))`; `codex-theme.css` preserves `--blur-md: 12px`.
 - `sidebar/appActionAttributes.ts` preserves the upstream `data-app-action-sidebar-*` attributes used by sidebar project/thread automation and selection logic.
+
+Readable port evidence:
+
+- `primitives/Dialog.tsx` ports Codex dialog wrapper behavior from `dialog-layout-CCvvb1Vc.js` onto `@radix-ui/react-dialog`.
+- `bottom-panel/BottomPanel.tsx` ports app-shell bottom panel constants from `app-shell-D7yvB1FT.js`: default `280`, min `160`, max half of main area.
+- `file-tree/FileTree.tsx` ports the upstream filesystem tree data attributes and base icon sprite from `file-tree-search-input-DWq_lg9v.js`.
 
 Use `src/component-library` as the literal source/reference catalog:
 

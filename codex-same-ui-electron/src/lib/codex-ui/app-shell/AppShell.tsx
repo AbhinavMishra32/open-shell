@@ -3,13 +3,14 @@ import { Button, IconButton, Pill, StatusDot } from "../primitives/Button";
 import "./app-shell.css";
 
 type AppShellProps = {
+  bottomPanel?: ReactNode;
   composer: ReactNode;
   main: ReactNode;
   rightPanel?: ReactNode;
   sidebar: ReactNode;
 };
 
-export function AppShell({ composer, main, rightPanel, sidebar }: AppShellProps) {
+export function AppShell({ bottomPanel, composer, main, rightPanel, sidebar }: AppShellProps) {
   return (
     <div className="codex-app-shell">
       {sidebar}
@@ -68,6 +69,8 @@ export function AppShell({ composer, main, rightPanel, sidebar }: AppShellProps)
             )}
           </aside>
         </section>
+
+        {bottomPanel}
 
         <section className="codex-composer-frame">{composer}</section>
       </main>

@@ -10,7 +10,7 @@
   display: grid;
   min-width: 0;
   flex: 1;
-  grid-template-rows: var(--codex-titlebar-height) var(--codex-toolbar-height) minmax(0, 1fr) auto;
+  grid-template-rows: var(--codex-titlebar-height) var(--codex-toolbar-height) minmax(0, 1fr) auto auto;
   background: var(--codex-bg-primary);
   box-shadow: -1px 0 0 var(--codex-border-subtle);
 }

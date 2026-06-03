@@ -2,6 +2,15 @@
   animation: codex-shell-enter 180ms ease-out both;
 }
 
+.codex-renderer-stack {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding-bottom: 24px;
+}
+
 @keyframes codex-shell-enter {
   from {
     opacity: 0;

@@ -157,6 +157,9 @@ This layer is what makes the UI feel coherent.
 Reconstructed source now started at:
 - `codex-same-ui-electron/src/lib/codex-ui/tokens/codex-theme.css`
 - `codex-same-ui-electron/src/lib/codex-ui/primitives/Button.tsx`
+- `codex-same-ui-electron/src/lib/codex-ui/primitives/Dialog.tsx`
+- `codex-same-ui-electron/src/lib/codex-ui/bottom-panel/BottomPanel.tsx`
+- `codex-same-ui-electron/src/lib/codex-ui/file-tree/FileTree.tsx`
 - `codex-same-ui-electron/src/lib/codex-ui/icons/CodexMark.tsx`
 - `codex-same-ui-electron/src/lib/codex-ui/sidebar/Sidebar.tsx`
 - `codex-same-ui-electron/src/lib/codex-ui/thread/ThreadSurface.tsx`
@@ -192,6 +195,31 @@ Direct evidence:
 Rule for future primitives:
 - Prefer Radix wrappers for dropdowns, dialogs, tooltips, scroll areas, switches, popovers, tabs, and slots.
 - Preserve Codex class contracts and CSS tokens while replacing handwritten behavior with Radix behavior.
+
+Current readable Radix-backed ports:
+- `Button.tsx`: supports Radix `Slot` via `asChild`.
+- `DropdownMenu.tsx`: wraps `@radix-ui/react-dropdown-menu` and keeps Codex dropdown CSS contracts.
+- `Dialog.tsx`: wraps `@radix-ui/react-dialog` and ports the Codex dialog wrapper from `dialog-layout-CCvvb1Vc.js`.
+- `BottomPanel.tsx`: wraps `@radix-ui/react-tabs` for bottom panel tab switching while preserving app-shell bottom-panel constants.
+
+Dialog evidence from `dialog-layout-CCvvb1Vc.js`:
+- Overlay class is `codex-dialog-overlay` with Electron overlay background `#00000022`.
+- Content base class is `codex-dialog left-1/2 top-1/2 z-50 -translate-x-1/2 -translate-y-1/2 outline-none`.
+- Surface uses rounded `3xl`, subtle ring/border, `shadow-lg`, and `backdrop-blur-xl`.
+- Size map is `narrow=380px`, `feature=400px`, `compact=420px`, `default=520px`, `wide=600px`, `xwide=680px`, `xxwide=800px`, `editor=600px x 720px`.
+- Non-editor content measures inner height with `ResizeObserver`, writes `--dialog-content-height`, and sets `data-dialog-height-ready="true"` for height transition.
+
+Bottom panel evidence from `app-shell-D7yvB1FT.js`:
+- Default bottom panel height is `280`.
+- Bottom panel height persistence key is `app-shell:bottom-panel-height`.
+- Clamp rule is minimum `160`, maximum `mainContentHeight * 0.5`.
+- Bottom panel focus area is marked with `data-app-shell-focus-area="bottom-panel"`.
+- Exported upstream slots include `BottomPanel`, `BottomPanelTabs`, `BottomPanelTabsEmptyState`, `BottomPanelTabListAfter`, `BottomPanelTabListAfterSticky`, and `BottomPanelOutlet`.
+
+Filesystem tree evidence from `file-tree-search-input-DWq_lg9v.js`:
+- The real system is a virtualized tree with `data-file-tree-virtualized-root`, `data-file-tree-virtualized-scroll`, `data-file-tree-virtualized-list`, sticky rows, and search input attributes.
+- The upstream icon sprite defines `file-tree-icon-chevron`, `file-tree-icon-dot`, `file-tree-icon-file`, `file-tree-icon-lock`, and `file-tree-icon-ellipsis`.
+- The readable `FileTree.tsx` keeps those data attributes and icons so future behavior ports can attach to the same DOM contract.
 
 ### 3.4.2 Electron Sidebar Transparency And Blur
 
