@@ -10,10 +10,6 @@
   color: var(--codex-text-primary);
 }
 
-.codex-left-panel {
-  min-width: 300px;
-}
-
 [data-codex-window-type="electron"]:not([data-codex-os="win32"]) .app-shell-left-panel {
   background: var(--color-token-editor-background);
   -webkit-backdrop-filter: blur(var(--blur-md));

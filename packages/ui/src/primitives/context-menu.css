@@ -4,12 +4,12 @@
   z-index: 50;
   display: flex;
   margin: 1px;
-  min-width: 180px;
+  min-width: 172px;
   max-width: min(var(--radix-context-menu-content-available-width), calc(100vw - 16px));
   max-height: min(var(--radix-context-menu-content-available-height), calc(100vh - 16px));
   flex-direction: column;
   overflow: auto;
-  border-radius: 12px;
+  border-radius: 11px;
   padding: 4px;
   background: color-mix(in srgb, var(--color-token-dropdown-background) 90%, transparent);
   color: var(--codex-text-primary);
@@ -47,14 +47,14 @@
 .codex-context-menu-item {
   position: relative;
   display: flex;
-  min-height: 32px;
+  min-height: 30px;
   align-items: center;
   gap: 8px;
   border-radius: 8px;
-  padding: 6px 8px;
+  padding: 5px 8px;
   color: var(--codex-text-primary);
   cursor: default;
-  font-size: 14px;
+  font-size: 13.5px;
   line-height: 18px;
   outline: none;
 }
@@ -70,15 +70,15 @@
 }
 
 .codex-context-menu-checkbox-item {
-  padding-left: 30px;
+  padding-left: 27px;
 }
 
 .codex-context-menu-item-indicator {
   position: absolute;
   left: 8px;
   display: inline-grid;
-  width: 14px;
-  height: 14px;
+  width: 13px;
+  height: 13px;
   place-items: center;
   color: var(--codex-text-secondary);
   font-size: 12px;
@@ -98,7 +98,7 @@
 .codex-context-menu-chevron {
   margin-left: auto;
   color: var(--codex-text-tertiary);
-  font-size: 22px;
+  font-size: 20px;
   line-height: 14px;
 }
 
