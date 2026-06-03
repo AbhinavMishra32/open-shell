@@ -12,6 +12,7 @@
     "build": "vite build",
     "start:exact": "CODEX_SAME_UI_EXACT=1 electron .",
     "extract:ui": "node scripts/extract-upstream-renderer.cjs",
+    "extract:components": "node scripts/extract-component-library.cjs",
     "refresh:ui": "node scripts/extract-upstream-renderer.cjs --force"
   },
   "dependencies": {

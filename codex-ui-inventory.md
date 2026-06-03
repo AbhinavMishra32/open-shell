@@ -37,6 +37,8 @@ Notes:
 | Rebuild app | Reconstructed renderer wrapper | `codex-same-ui-electron/src/main/library-main.cjs` | high | Loads the readable component-system renderer from `dist/renderer`. |
 | Rebuild app | Main-mode selector | `codex-same-ui-electron/src/main/main.cjs` | high | Normal mode runs reconstructed UI; `CODEX_SAME_UI_EXACT=1` runs exact upstream reference. |
 | Rebuild app | Component-system source root | `codex-same-ui-electron/src/lib/codex-ui` | high | New readable UI library built from the extracted upstream visual/component system. |
+| Rebuild app | Literal component-library root | `codex-same-ui-electron/src/component-library` | high | Generated library closure containing literal upstream modules plus system wrappers. |
+| Rebuild app | Component-library extractor | `codex-same-ui-electron/scripts/extract-component-library.cjs` | high | Copies dependency closures from the upstream mirror into `src/component-library`. |
 | Rebuild app | Component-system renderer | `codex-same-ui-electron/src/renderer` | high | Thin app consuming only `src/lib/codex-ui` components. |
 | Rebuild app | Unminified upstream mirror | `codex-same-ui-electron/src/unminified/upstream` | high | Formatted copies of selected original renderer/component chunks. |
 | Rebuild app | Extraction script | `codex-same-ui-electron/scripts/extract-upstream-renderer.cjs` | high | Rebuilds formatted upstream mirror from original `app.asar`. |
@@ -180,3 +182,4 @@ Notes:
 | 2026-06-03 | Found major feature families: home, thread, settings, plugins, browser sidebar, browser use, composer, and artifacts. |
 | 2026-06-03 | Pivoted from exact renderer boot to reconstructed component-system app because exact upstream renderer waits on original host services. |
 | 2026-06-03 | Added first readable library slice under `codex-same-ui-electron/src/lib/codex-ui` and wired Electron normal mode to consume it. |
+| 2026-06-03 | Added literal component-library extraction system under `codex-same-ui-electron/src/component-library`, with 231 copied upstream assets and wrappers for shell, primitives, sidebar, thread, composer, markdown, settings, and browser sidebar. |

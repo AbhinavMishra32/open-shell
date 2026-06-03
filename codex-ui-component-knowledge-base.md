@@ -44,6 +44,9 @@ This means future component work can start from the literal upstream bundle code
 Current runnable source path:
 - `codex-same-ui-electron/src/lib/codex-ui`
 
+Literal component-library extraction path:
+- `codex-same-ui-electron/src/component-library`
+
 Current renderer path:
 - `codex-same-ui-electron/src/renderer`
 
@@ -55,8 +58,10 @@ Reconstructed component-library app:
 
 Important distinction:
 - `src/unminified/upstream` is the formatted upstream bundle mirror.
-- `src/lib/codex-ui` is our readable component system.
-- The app should import from `src/lib/codex-ui`, not directly from the upstream bundle mirror.
+- `src/component-library/original/assets` is the literal copied component-library closure, preserving upstream relative imports.
+- `src/component-library/*/index.js` contains system wrappers for shell, primitives, sidebar, thread, composer, markdown, settings, and browser sidebar.
+- `src/lib/codex-ui` is only the experimental readable/manual preview layer and should not be treated as the source of truth.
+- New apps that want the same Codex UI should start from `src/component-library`, not the handmade preview.
 
 ## 3. Core Architecture Model
 
@@ -92,6 +97,11 @@ Shell is the top-level composition system.
 Reconstructed source now started at:
 - `codex-same-ui-electron/src/lib/codex-ui/app-shell/AppShell.tsx`
 - `codex-same-ui-electron/src/lib/codex-ui/app-shell/app-shell.css`
+
+Literal upstream shell extraction now lives at:
+- `codex-same-ui-electron/src/component-library/shell/index.js`
+- `codex-same-ui-electron/src/component-library/original/assets/app-shell-D7yvB1FT.js`
+- `codex-same-ui-electron/src/component-library/original/assets/app-shell-DJDX7Pvr.css`
 
 Important exported primitives from `app-shell-D7yvB1FT.js`:
 - `Root`
@@ -145,6 +155,13 @@ Reconstructed source now started at:
 - `codex-same-ui-electron/src/lib/codex-ui/sidebar/Sidebar.tsx`
 - `codex-same-ui-electron/src/lib/codex-ui/thread/ThreadSurface.tsx`
 - `codex-same-ui-electron/src/lib/codex-ui/composer/Composer.tsx`
+
+Literal upstream shared component extraction now lives at:
+- `codex-same-ui-electron/src/component-library/primitives/index.js`
+- `codex-same-ui-electron/src/component-library/primitives/button.js`
+- `codex-same-ui-electron/src/component-library/composer/index.js`
+- `codex-same-ui-electron/src/component-library/thread/index.js`
+- `codex-same-ui-electron/src/component-library/sidebar/index.js`
 
 ## 4. Shell Behavior Rules
 
