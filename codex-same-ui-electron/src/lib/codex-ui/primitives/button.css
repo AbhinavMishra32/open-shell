@@ -1,0 +1,46 @@
+.codex-button {
+  display: inline-flex;
+  height: 32px;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid transparent;
+  border-radius: var(--codex-radius-md);
+  padding: 0 10px;
+  color: var(--codex-text-primary);
+  background: transparent;
+  cursor: default;
+  user-select: none;
+  transition:
+    background 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease,
+    transform 120ms ease;
+}
+
+.codex-button:hover {
+  background: var(--codex-bg-tertiary);
+}
+
+.codex-button:active {
+  transform: translateY(1px);
+}
+
+.codex-button-solid {
+  background: var(--codex-text-primary);
+  color: var(--codex-bg-primary);
+}
+
+.codex-button-solid:hover {
+  background: color-mix(in srgb, var(--codex-text-primary) 86%, transparent);
+}
+
+.codex-button-soft {
+  background: var(--codex-accent-soft);
+  color: var(--codex-accent);
+}
+
+.codex-button-icon {
+  display: inline-grid;
+  place-items: center;
+}
