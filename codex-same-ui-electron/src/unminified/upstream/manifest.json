@@ -1,0 +1,1274 @@
+{
+  "generatedAt": "2026-06-03T06:38:55.647Z",
+  "originalAsar": "/Users/abhinavmishra/solin/general/desktop-agent-app/app.app/Contents/Resources/app.asar",
+  "files": [
+    {
+      "path": "webview/assets/app-D0g8sCle.png",
+      "mode": "copied"
+    },
+    {
+      "path": "webview/assets/app-DkIMIvEQ.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-connect-oauth-Bb1UV73Z.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-connect-oauth-callback-page-BXf32znG.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-intl-signal-DF17N7z2.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-main-C3VNTc8v.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-main-CYccuswF.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/app-prefetch-impl-CvoY4gd-.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-preloader-DxFriehz.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-server-connection-state-4EIwSVVr.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-server-dynamic-tools-DyLmetOo.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-server-manager-hooks-BJ2CaNwA.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-server-manager-signals-BOGyjFm3.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-server-notification-debug-signals-CU_7W0gO.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-shell-D7yvB1FT.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-shell-DJDX7Pvr.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/app-shell-bottom-panel-scroll-sync-DpO90Rtb.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-shell-state-B5MFb4Nm.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-shell-tab-controller-B0DXekEJ.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/app-window-wJqe84fR.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/appgen-access-state-messages-BWrvnZzw.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/appgen-page-CBD_Cf3e.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/appgen-settings-page-BsDWqqxt.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/appgen-share-dialog-CLo_KH7g.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/appgen-share-dialog-Ge28ni4Z.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/appgen-url-BQfPV2YP.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/apps-DBd5dYzG.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/apps-availability-DXn00-1-.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/apps-queries-CBUjthvi.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/appshot-availability-CHEIX-Tb.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/appshot-demo-DcV9m9GT.mp4",
+      "mode": "copied"
+    },
+    {
+      "path": "webview/assets/appshot-logo-3TzJxFyH.png",
+      "mode": "copied"
+    },
+    {
+      "path": "webview/assets/appshot-logo-CeEBps72.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/appshot-window-CaPvMnhe.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/appshots-settings-BYGXNgQ6.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/artifact-annotation-comment-C2F4c25r.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/artifact-preview-header-Bg8DeK2Z.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/artifact-preview-status-BxpvagZC.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/artifact-tab-content.electron-Vn4-HdYU.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/at-mention-list-BcS9-UNX.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/at-mention-list-CDZ8CUgv.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/at-mention-list-acW2mHgN.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/automation-Dplvps4A.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/automation-dialog-BMND2721.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/automation-queries-t-Z2G1SI.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/automation-schedule-Cko2eDIZ.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/automation-shared-CE2phzlI.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/automations-page-BrL1FcZT.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/avatar-DauA8urB.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/avatar-mascot-button-CnbIqNGL.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/avatar-overlay-analytics-CE-OXRnw.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/avatar-overlay-open-state-signal-CzEMNIU4.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/avatar-overlay-page-DIPmzcv9.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/badge-mYHx4F5K.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/banner-CXqIwxfh.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-sidebar-availability-BQYQqnR4.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-sidebar-comment-light-dismiss-CYswclfQ.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/browser-sidebar-comment-light-dismiss-DC1fddSh.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-sidebar-comment-mode-coachmark-state-CTAg4ImJ.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-sidebar-hidden-background-webview-host-DJggvvO5.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-sidebar-hidden-browser-use-webview-host-cDslpITj.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-sidebar-manager-CDP80WMh.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-sidebar-open-source-C-CpsoHA.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-sidebar-retained-webview-DS1n6LTx.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-sidebar-state-CjNKE43Q.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-sidebar-webview-D1L6cqaW.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-use-B6ZJM-x3.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-use-elevated-risk-learn-more-url-BX8qqKLf.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-use-origin-state-queries-BnMJOXVT.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-use-settings-But0mGtK.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/browser-use-settings-DFdkNngj.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/button-Xd4Hy1MO.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/chat-BEJ7qgOG.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/checkbox-Bz6PC7ig.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/chunk-Bj-mKKzh.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/composer-CUO1FiyC.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/composer-CmqBNpOg.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/composer-external-footer-DUWRQbuZ.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/composer-footer-BmInDjPq.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/composer-footer-CY-87K58.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/composer-footer-branch-switcher-r30ZpEaG.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/composer-top-menu-chrome-4snk27KP.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/composer-top-menu-chrome-EBEHrbNH.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/composer-view-state-MMPs5p5E.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/connected-apps-Dck9Rcbz.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/context-menu-DRia187f.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/dialog-layout-CCvvb1Vc.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/dialog-layout-sS9Dm_y9.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/diff-CCaFb5HW.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/diff-k3tCwfDS.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/diff-stats-RCuB___W.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/diff-summary-5dhAN1Ll.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/diff-unified-BT9wY89m.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/diff-unified-D4NO3G6Q.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/diff-view-mode-DMAtdFuV.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/dock-XFXqsb8h.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/dropdown-9F1MU8ql.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/dropdown-CHaZfyxI.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/feedback-form-dialog-CD7y99P3.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/file-diff-DyKTlUkx.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/file-kind-kthFJxRp.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/file-preview-page-B96rR_-C.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/file-tree-search-input-DWq_lg9v.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/focus-composer-Ddi8tz3g.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/general-settings-DobuGNrH.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/general-settings-mIQGMvCv.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/general-settings.search-BiUmOZih.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/git-branch-picker-dropdown-content-DlBK0AqT.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/git-branch-picker-dropdown-content-WKj7VFjE.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/git-branch-switcher-CJGCYmSz.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/git-commit-9y_AzOom.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/git-current-branch-query-VkU7ix9i.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/git-rebase-W8z1S5vo.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/git-settings-B6-P81o6.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/git-settings.search-xgi-PwVn.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/git-submodule-paths-query-Dnl21TBm.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/header-BXcEnZFZ.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/header-CLF2qRWi.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/history-TBKhiAS8.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/home-ambient-suggestions-content-BogN_tzB.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/home-announcements-CZby518t.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/home-announcements-CaTIsHSA.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/home-conversation-starters-CWOHtkmb.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/home-onboarding-assistant-tutorial-card-C4M23dCX.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/home-prefill-artifact-preview-CumKOM4s.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/home-project-recent-chats-BTeTSlhG.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/home-project-recent-chats-signals-Dxk-H0At.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/home-row-layout-Bg0vpkRi.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/home-use-cases-data-BTkR-NhE.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hooks-settings-CDWLXYuK.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hooks-settings-copy-DsWrJ1mr.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hooks-settings-model-BH1RI05v.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hooks-settings-navigation-B3XW31bU.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hooks-settings-queries-BpMbCsRw.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hooks-settings-route-DvJStOm_.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hotkey-window-detail-layout-DoFzcFI5.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hotkey-window-home-page-6ltQVNWj.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hotkey-window-home-page-BgOaJpRf.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/hotkey-window-new-thread-page-BHR2JNch.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hotkey-window-state-D7VneH_9.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hotkey-window-thread-page-ZFn2LlLU.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/hotkey-window-worktree-init-page-BOSLmw2m.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/index-BvOebZ0M.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/inline-mention-style-CHAdZkbq.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/inline-mentions-DQmOb30B.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/inline-mentions-HEbHrk4s.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/jsx-runtime-CiQ1k8xo.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/local-conversation-background-terminals-model-_ei78dP_.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/local-conversation-page-DadE4Ob6.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/local-conversation-stream-role-product-event-1pgVZO13.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/local-conversation-thread-B44VLaLQ.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/local-conversation-thread-CRSaT3IN.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/local-conversation-title-signals-CLvppuE1.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/markdown-CHFpyp1o.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/markdown-CrzXVJOX.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/markdown-fw3eJobG.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/markdown-surface-DsmgfpJy.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/mcp-BYvjg9M2.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/mcp-capability-client-C9eWeicf.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/mcp-capability-file-viewer-frame-KIfIgFwl.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/mcp-capability-signals-3iWufNgx.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/mcp-capability-thread-side-panel-tab-Ckg1_bcE.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/mcp-capability-view-frame-Cpz9Or0y.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/mcp-capability-view-page-B6klocyn.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/mcp-settings-BsEsZrXL.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/mcp-settings.search-BopWZeCE.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/mcp-tool-item-content-utils-DTAnyTVK.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/modal-controller-state-CEBUx8JQ.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/onboarding-login-content-DhtcviP9.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/onboarding-page-Cia_8FB5.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/onboarding-roles-Ci9LuMkN.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/onboarding-shell-B5Vl8B3_.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/onboarding-state-C29ET4Cr.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugin-config-edits-DJ9rwaYl.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugin-detail-page-BS2Xbdl4.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugin-detail-page-BgWpAfVe.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugin-detail-queries-nEDuNCez.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugin-detail-route-utils-iTC2P3ZW.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugin-install-store-BWRSuKkC.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugin-prefill-prompt-Cs8725Fp.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugin-uninstall-dialog-CorSIkNg.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugins-availability-C9cwO-r4.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugins-page-DoKhPslE.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/plugins-page-Dv463rwQ.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugins-page-selectors-BwztNtE5.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/plugins-settings-IHczu4th.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/profile-C7lLsbWs.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/profile-DOxOBCjz.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/profile-dropdown-B5Th4dr2.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/profile-queries-CdFCWyeF.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/profile-visibility-CPWM8_Hy.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/prompt-editor-BuS6Xjko.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/prompt-editor-DSJXB4gM.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/react-dom-CvzHKZGB.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/remote-connection-visibility-CDSfTp_2.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/remote-connections-onboarding-signals-CCXGWvm2.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/remote-connections-page-DaPsuCan.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/remote-connections-settings-mrv9fxOy.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/remote-control-authorization-dialog-artwork-BDkdoGfj.png",
+      "mode": "copied"
+    },
+    {
+      "path": "webview/assets/remote-conversation-page-DcAjgubb.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/remote-host-globe-icon-BlkSn_h5.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/remote-middleware-DGkB28Oq.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/remote-projects-nghNpfPT.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/remote-text-edit-session-2F_u7iAB.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/remote-text-edit-session-CW-aJKLZ.css",
+      "mode": "formatted-css"
+    },
+    {
+      "path": "webview/assets/sectioned-page-PQXxwZGg.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/settings-back-route-C96fxstM.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/settings-content-layout-sdUwAG0A.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/settings-empty-state-AHLxAQVX.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/settings-group-BO3RZzLk.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/settings-host-context-MFy9perG.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/settings-host-dropdown-Bwsh4AMW.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/settings-page-qEZ4h3P3.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/settings-row-DOKTjAF6.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/settings-sections-BUO2MNq2.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/settings-shared-BibDzP9i.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/settings.cog-CJF3NOGk.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/sidebar-project-group-signals-h0Ffvrar.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/sidebar-project-groups-DkFEKpNF.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/sidebar-signals-B0JkGccK.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/sidebar-task-pr-chip-signals-B_U8b94R.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/sidebar-thread-list-signals-B88Sg0Wa.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/src-CYrn1fYL.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/tabs-ji6s-l3m.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-actions-DlCTuMux.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-app-shell-chrome-BjerXYKb.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-app-shell-chrome-COp6s10f.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-context-DeLLpkJz.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-context-inputs-BUuWvrJW.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-detail-level-DlbE7gvF.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-env-icon-vcKSxad2.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-handoff-composer-block-state-CMMXim8r.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-handoff-store-VUgc-kO5.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-layout-Dkr9s56u.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-page-bottom-panel-state-TF1g3u_g.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-page-header-C6IOSyDb.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-panel-state-CYOPuORF.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-resource-card-C7ERWGgK.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-scroll-layout-CaagbXVM.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-side-panel-tabs-BiJ44OOM.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-side-panel-tabs-CHBOpLXU.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/thread-virtualizer-9COdWn5E.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/toast-signal-By11REe1.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/tooltip-BhXPONlb.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/tooltip-dismiss-1FVw8OQP.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-active-conversation-id-CYU-XhL_.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-app-connect-flow-CttNRQpa.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-app-server-connection-state-CF840jph.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-ascii-engine-BUObtFzM.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-auth-DXLjX3T4.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-autocomplete-overlay-placement-CckudQJp.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-automation-history-items-DWDS5XtY.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-avatar-options-B21XKZBs.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-codex-home-zmo5hiIG.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-codex-pricing-url-BucpTKgk.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-codex-worktrees-DNG0FQTa.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-collaboration-mode-B_dtgury.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-command-hotkey-Bb4sCa2j.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-composer-controller-EmBnHezU.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-connected-remote-connections-fvh51TCi.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-debounced-value-DkRRYvDv.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-debug-panel-Bg93waE_.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-diff-annotations-B2xys7Oq.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-diff-comment-sources-MfRVxgk-.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-enter-behavior-GPNP3DE9.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-environment-BKad65U8.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-fast-mode-personalized-estimate-9FndoGms.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-floating-window-pointer-interactivity-CLTZMlHp.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-git-config-value-COaBlpXL.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-git-current-branch-FSV7TBsw.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-git-default-branch-CGx2UfAz.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-git-recent-branches-BVI2Upqc.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-git-synced-branch-BF2TTIWp.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-global-state-DeR7WgiQ.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-home-directory-fhl-Q5x2.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-hotkey-Bv35cwCo.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-hotkey-window-detail-layout-B2rCbEeC.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-hotkey-window-dismiss-on-escape-nrALO3J_.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-is-background-subagents-enabled-gllCQ3lL.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-is-copilot-api-available-4vxhZax2.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-is-dark-DM2fOM7F.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-is-plugins-enabled-DudZfU21.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-is-pull-request-merge-helper-enabled-BE3VvxzC.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-is-remote-host-CF_VnSMh.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-is-thread-realtime-enabled-DAFjXHsA.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-measured-text-collapse-CmQL8SIA.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-merged-ref-6q7NGZyX.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-model-settings-ctdtUCGA.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-native-apps.electron-C3QfwGvh.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-navigate-to-local-conversation-CcgGoA8u.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-nux-BGP4qJYt.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-os-info-COk5WlgW.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-permissions-mode-B3LhKITz.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-personality-DENdA8Ll.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-platform-BkwBnkgx.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-plugin-install-flow-C0YRtVkW.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-plugins-BKOuT9XR.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-rate-limit-C_VkNfTr.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-recommended-skills-C0-7frYf.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-recording-waveform-C_CvNvXL.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-reduced-motion-BsrTWbI1.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-register-command-UoA_Jn9F.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-resize-observer-CbHbkQNx.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-resolved-theme-variant-CbBTynE2.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-service-tier-settings-DFXPADNF.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-skills-DK2PGa-B.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-stable-callback-B56R_Ee2.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-start-new-conversation-DpDFMiHM.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-target-apps-C0VG7gLn.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-usage-settings-access-Gs3ypAPc.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-webview-execution-target-sX9Opn_D.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-window-controls-safe-area-X2AodDul.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-workspace-file-search-LP41BByR.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/use-workspace-users-Do1vG9A7.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/window-app-action-helpers-u9SI1RSH.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/assets/window-zoom-context-CSPQZGcc.js",
+      "mode": "formatted-js"
+    },
+    {
+      "path": "webview/index.html",
+      "mode": "formatted-html"
+    }
+  ]
+}
