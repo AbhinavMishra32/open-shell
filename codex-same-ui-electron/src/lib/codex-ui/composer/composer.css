@@ -1,0 +1,36 @@
+.codex-composer {
+  width: min(840px, 100%);
+  margin: 0 auto;
+  border: 1px solid var(--codex-border-strong);
+  border-radius: 22px;
+  background: var(--codex-bg-elevated);
+  box-shadow: var(--codex-shadow-float);
+}
+
+.codex-composer textarea {
+  display: block;
+  width: 100%;
+  min-height: 82px;
+  resize: none;
+  border: 0;
+  outline: 0;
+  padding: 16px 18px 8px;
+  color: var(--codex-text-primary);
+  background: transparent;
+}
+
+.codex-composer textarea::placeholder {
+  color: var(--codex-text-tertiary);
+}
+
+.codex-composer-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.codex-composer-tools {
+  display: flex;
+  gap: 4px;
+}
