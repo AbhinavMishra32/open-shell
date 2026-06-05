@@ -8,6 +8,10 @@
   border-right: 1px solid color-mix(in srgb, var(--codex-border-subtle) 70%, transparent);
   background: transparent;
   color: var(--codex-text-primary);
+  --codex-sidebar-outer-rail: 32px;
+  --codex-sidebar-list-rail: 16px;
+  --codex-sidebar-row-x: var(--padding-row-x);
+  --codex-sidebar-title-inset: 64px;
 }
 
 [data-codex-window-type="electron"]:not([data-codex-os="win32"]) .app-shell-left-panel {
@@ -44,17 +48,17 @@
   display: grid;
   gap: 0;
   flex-shrink: 0;
-  padding: 28px var(--padding-row-x) 24px;
+  padding: 31px 16px 24px var(--codex-sidebar-outer-rail);
 }
 
 .codex-sidebar-nav-item {
   display: flex;
   height: var(--height-token-nav-row);
   align-items: center;
-  gap: 16px;
+  gap: 24px;
   border: 0;
   border-radius: var(--radius-lg);
-  padding: var(--padding-row-y) var(--padding-row-x);
+  padding: var(--padding-row-y) var(--codex-sidebar-row-x);
   color: var(--codex-text-primary);
   background: transparent;
   cursor: default;
@@ -98,7 +102,7 @@
   flex-direction: column;
   gap: 0;
   overflow: auto;
-  padding: 0 var(--padding-row-x) 10px;
+  padding: 0 10px 10px var(--codex-sidebar-list-rail);
 }
 
 .codex-sidebar-section {
@@ -113,7 +117,7 @@
   height: var(--height-token-nav-row);
   align-items: center;
   border: 0;
-  padding: var(--padding-row-y) var(--padding-row-x);
+  padding: var(--padding-row-y) var(--codex-sidebar-row-x);
   color: var(--codex-text-tertiary);
   background: transparent;
   cursor: default;
@@ -148,10 +152,11 @@
   width: 100%;
   height: var(--height-token-nav-row);
   align-items: center;
-  gap: 16px;
+  gap: 24px;
   border: 0;
   border-radius: var(--radius-lg);
-  padding: var(--padding-row-y) var(--padding-row-x);
+  padding: var(--padding-row-y) var(--codex-sidebar-row-x) var(--padding-row-y)
+    var(--codex-sidebar-list-rail);
   color: color-mix(in srgb, var(--codex-text-secondary) 95%, transparent);
   background: transparent;
   cursor: default;
@@ -191,7 +196,8 @@
   column-gap: 4px;
   border: 0;
   border-radius: var(--radius-lg);
-  padding: var(--padding-row-y) var(--padding-row-x) var(--padding-row-y) 44px;
+  padding: var(--padding-row-y) var(--codex-sidebar-row-x) var(--padding-row-y)
+    var(--codex-sidebar-title-inset);
   color: var(--codex-text-primary);
   background: transparent;
   cursor: default;
@@ -202,7 +208,7 @@
 }
 
 .codex-sidebar-item[data-inset="true"] {
-  padding-left: 44px;
+  padding-left: var(--codex-sidebar-title-inset);
 }
 
 .codex-sidebar-item:hover,
