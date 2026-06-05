@@ -13,6 +13,10 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "../primitives/DropdownMenu";
 import "./app-shell.css";
@@ -125,27 +129,33 @@ export function AppShell({
           <div className="codex-app-header-context-surface" data-testid="app-shell-header-context-menu-surface">
             <div className="codex-app-tab-strip" data-app-shell-tab-strip-controller="main">
               {headerTabs.map((tab, index) => (
-                <ContextMenu key={tab.id}>
-                  <ContextMenuTrigger asChild>
-                    <button
-                      className="codex-app-tab"
-                      data-active={tab.active === true ? "true" : undefined}
-                      data-app-shell-tab-controller="main"
-                      data-tab-id={tab.id}
-                      type="button"
-                    >
-                      {tab.dirty === true ? <span className="codex-tab-dot" /> : null}
-                      <span className="codex-app-tab-title">{tab.title}</span>
-                    </button>
-                  </ContextMenuTrigger>
-                  <ContextMenuContent alignOffset={index === 0 ? 0 : -10}>
-                    <ContextMenuItem>Close tab</ContextMenuItem>
-                    <ContextMenuItem>Close other tabs</ContextMenuItem>
-                    <ContextMenuItem>Copy link</ContextMenuItem>
-                    <ContextMenuSeparator />
-                    <ContextMenuItem>Move tab to new window</ContextMenuItem>
-                  </ContextMenuContent>
-                </ContextMenu>
+                <div
+                  className="codex-app-tab-controller"
+                  data-app-shell-tab-controller="main"
+                  data-tab-id={tab.id}
+                  key={tab.id}
+                >
+                  <ContextMenu>
+                    <ContextMenuTrigger asChild>
+                      <button
+                        className="codex-app-tab"
+                        data-active={tab.active === true ? "true" : undefined}
+                        type="button"
+                      >
+                        {tab.dirty === true ? <span className="codex-tab-dot" /> : null}
+                        <span className="codex-app-tab-title">{tab.title}</span>
+                      </button>
+                    </ContextMenuTrigger>
+                    <ContextMenuContent alignOffset={index === 0 ? 0 : -10}>
+                      <ContextMenuItem>Close tab</ContextMenuItem>
+                      <ContextMenuItem>Close other tabs</ContextMenuItem>
+                      <ContextMenuItem>Copy link</ContextMenuItem>
+                      <ContextMenuSeparator />
+                      <ContextMenuItem>Move tab to new window</ContextMenuItem>
+                    </ContextMenuContent>
+                  </ContextMenu>
+                  {tab.active === true ? <ThreadTabActions /> : null}
+                </div>
               ))}
             </div>
           </div>
@@ -193,6 +203,71 @@ export function AppShell({
         ) : null}
       </main>
     </div>
+  );
+}
+
+function ThreadTabActions() {
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button className="codex-app-tab-actions-button" type="button" aria-label="Chat actions">
+          <MoreIcon />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="start" sideOffset={6} className="codex-thread-actions-menu">
+        <DropdownMenuItem>
+          <PinIcon />
+          <span>Pin chat</span>
+          <span className="codex-menu-shortcut">⌥⌘P</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <RenameIcon />
+          <span>Rename chat</span>
+          <span className="codex-menu-shortcut">⌥⌘R</span>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <ArchiveIcon />
+          <span>Archive chat</span>
+          <span className="codex-menu-shortcut">⇧⌘A</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <OpenSideChatIcon />
+          <span>Open side chat</span>
+        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <CopyIcon />
+            <span>Copy</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuItem>Copy working directory</DropdownMenuItem>
+            <DropdownMenuItem>Copy session ID</DropdownMenuItem>
+            <DropdownMenuItem>Copy deeplink</DropdownMenuItem>
+            <DropdownMenuItem>Copy as Markdown</DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <ForkIcon />
+            <span>Fork</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <DropdownMenuItem>Fork into local</DropdownMenuItem>
+            <DropdownMenuItem>Fork into new worktree</DropdownMenuItem>
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DropdownMenuItem>
+          <AutomationIcon />
+          <span>Add automation…</span>
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem>
+          <OpenWindowIcon />
+          <span>Open in new window</span>
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
@@ -369,6 +444,85 @@ function MoreIcon() {
       <circle cx="4.5" cy="10" r="1.25" fill="currentColor" />
       <circle cx="10" cy="10" r="1.25" fill="currentColor" />
       <circle cx="15.5" cy="10" r="1.25" fill="currentColor" />
+    </svg>
+  );
+}
+
+function PinIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path d="M7.25 11.75 3.75 15.25" />
+      <path d="m8 4.25 7.75 7.75" />
+      <path d="m5.75 6.5 2.75-2.75 5.75 5.75-2.75 2.75" />
+      <path d="M6.5 11.5 4.75 9.75l4-4 3.5 3.5-4 4Z" />
+    </svg>
+  );
+}
+
+function RenameIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path d="m4.25 13.75 1 2.5 2.5-1L15.5 7.5a1.75 1.75 0 0 0-2.5-2.45Z" />
+      <path d="m11.75 5.75 2.5 2.5" />
+    </svg>
+  );
+}
+
+function ArchiveIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path d="M3.75 6.5h12.5" />
+      <path d="M5 6.5v9.25h10V6.5" />
+      <path d="M4.5 3.75h11l.75 2.75H3.75Z" />
+      <path d="M8 9.5h4" />
+    </svg>
+  );
+}
+
+function OpenSideChatIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <circle cx="10" cy="10" r="7.25" />
+      <path d="M6.25 10h7.5" />
+      <path d="M10 6.25v7.5" />
+    </svg>
+  );
+}
+
+function CopyIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <rect x="6.25" y="4.25" width="10" height="10" rx="2" />
+      <path d="M13.75 14.75v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h1" />
+    </svg>
+  );
+}
+
+function ForkIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <circle cx="6" cy="4.75" r="1.75" />
+      <circle cx="14" cy="4.75" r="1.75" />
+      <circle cx="10" cy="15.25" r="1.75" />
+      <path d="M6 6.5v3.25A3.25 3.25 0 0 0 9.25 13h1.5A3.25 3.25 0 0 0 14 9.75V6.5" />
+    </svg>
+  );
+}
+
+function AutomationIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <circle cx="10" cy="10" r="7.25" />
+      <path d="M10 5.75v4.75l3.25 2" />
+    </svg>
+  );
+}
+
+function OpenWindowIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <rect x="4" y="5" width="10.5" height="10.5" rx="2" />
+      <path d="M9.25 4h5.5a1.25 1.25 0 0 1 1.25 1.25v5.5" />
     </svg>
   );
 }

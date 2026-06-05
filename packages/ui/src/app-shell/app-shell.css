@@ -273,26 +273,36 @@
   height: 100%;
   min-width: 0;
   align-items: center;
-  gap: 1px;
+  gap: 2px;
+}
+
+.codex-app-tab-controller {
+  position: relative;
+  display: flex;
+  max-width: 206px;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2px;
+  contain: content;
 }
 
 .codex-app-tab {
   -webkit-app-region: no-drag;
   position: relative;
   display: inline-flex;
-  max-width: 245px;
+  max-width: 160px;
   height: 36px;
   min-width: 0;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
   overflow: hidden;
   border: 0;
-  border-radius: 11px;
-  padding: 0 11px;
+  border-radius: 13px;
+  padding: 0 12px;
   color: var(--codex-text-tertiary);
   background: transparent;
   cursor: default;
-  font-size: 14px;
+  font-size: 15px;
   line-height: 20px;
 }
 
@@ -320,6 +330,52 @@
   height: 7px;
   border-radius: 999px;
   background: var(--codex-accent);
+}
+
+.codex-app-tab-actions-button {
+  -webkit-app-region: no-drag;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  place-items: center;
+  border: 0;
+  border-radius: 13px;
+  padding: 0;
+  background: color-mix(in srgb, var(--codex-text-primary) 7%, transparent);
+  color: var(--codex-text-secondary);
+  cursor: default;
+  transition:
+    background-color var(--transition-duration-basic) var(--cubic-enter),
+    color var(--transition-duration-basic) var(--cubic-enter);
+}
+
+.codex-app-tab-actions-button:hover,
+.codex-app-tab-actions-button[data-state="open"] {
+  background: color-mix(in srgb, var(--codex-text-primary) 10%, transparent);
+  color: var(--codex-text-primary);
+}
+
+.codex-app-tab-actions-button svg {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+.codex-thread-actions-menu {
+  min-width: 238px;
+}
+
+.codex-thread-actions-menu .codex-dropdown-menu-item {
+  min-height: 32px;
+  padding: 6px 8px;
+  font-size: 14px;
+}
+
+.codex-menu-shortcut {
+  margin-left: auto;
+  color: var(--codex-text-tertiary);
+  font-size: 12px;
+  letter-spacing: -0.02em;
 }
 
 .codex-app-header-actions {

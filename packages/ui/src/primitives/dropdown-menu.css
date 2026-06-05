@@ -61,6 +61,18 @@
   user-select: none;
 }
 
+.codex-dropdown-menu-item > svg,
+.codex-dropdown-menu-sub-label > svg {
+  width: 17px;
+  height: 17px;
+  flex: 0 0 auto;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.65;
+}
+
 .codex-dropdown-menu-item[data-highlighted] {
   background: var(--color-token-list-hover-background);
 }
@@ -93,7 +105,10 @@
 }
 
 .codex-dropdown-menu-sub-label {
+  display: flex;
   min-width: 0;
+  align-items: center;
+  gap: 8px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
