@@ -8,10 +8,10 @@
   border-right: 1px solid color-mix(in srgb, var(--codex-border-subtle) 70%, transparent);
   background: transparent;
   color: var(--codex-text-primary);
-  --codex-sidebar-outer-rail: 32px;
-  --codex-sidebar-list-rail: 16px;
+  --codex-sidebar-outer-rail: 16px;
+  --codex-sidebar-list-rail: 8px;
   --codex-sidebar-row-x: var(--padding-row-x);
-  --codex-sidebar-title-inset: 44px;
+  --codex-sidebar-title-inset: 32px;
 }
 
 [data-codex-window-type="electron"]:not([data-codex-os="win32"]) .app-shell-left-panel {
@@ -48,7 +48,7 @@
   display: grid;
   gap: 0;
   flex-shrink: 0;
-  padding: 31px 16px 24px var(--codex-sidebar-outer-rail);
+  padding: 11px 16px 24px var(--codex-sidebar-outer-rail);
 }
 
 .codex-sidebar-nav-item {
