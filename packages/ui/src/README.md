@@ -12,6 +12,7 @@ Use this layer for the copy app:
 - `Composer` for the Codex prompt dock
 - `BottomPanel` and `TerminalSurface` for the app-shell bottom panel and terminal tab system
 - `FileTree` for the filesystem tree DOM contract and core icon sprite
+- `FileBrowserPanel` for the right-side file/editor panel using the shared `FileTree`
 - `Dialog` and `DialogContent` for the shared popup/dialog primitive
 - `Button`, `IconButton`, `Pill`, and `StatusDot` for shared controls
 - `codex-theme.css` for Codex-like tokens and upstream-compatible CSS aliases
@@ -30,7 +31,10 @@ Readable port evidence:
 
 - `primitives/Dialog.tsx` ports Codex dialog wrapper behavior from `dialog-layout-CCvvb1Vc.js` onto `@radix-ui/react-dialog`.
 - `bottom-panel/BottomPanel.tsx` ports app-shell bottom panel constants from `app-shell-D7yvB1FT.js`: default `280`, min `160`, max half of main area.
-- `file-tree/FileTree.tsx` ports the upstream filesystem tree data attributes and base icon sprite from `file-tree-search-input-DWq_lg9v.js`.
+- `file-tree/FileTree.tsx` ports the upstream filesystem tree data attributes, flex row lanes, selected state, `Filter files…` search wrapper, and base icon sprite from `file-tree-search-input-DWq_lg9v.js`.
+- `file-browser/FileBrowserPanel.tsx` ports the right-panel file browser shape from `RightPanelOutlet`/`RightPanelTabs` usage in `thread-app-shell-chrome-BjerXYKb.js`.
+- `app-shell/AppShell.tsx` ports the header tab-controller shape from `app-shell-D7yvB1FT.js` and the thread overflow action set from `thread-actions-DlCTuMux.js` / `local-conversation-thread-CRSaT3IN.js`.
+- `thread/ThreadSurface.tsx` ports the readable static version of the Codex conversation rhythm: assistant activity rows, user bubble, and edited-files review card.
 
 Use `research/codex-internals/src/component-library` as the literal source/reference catalog:
 

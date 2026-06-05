@@ -103,6 +103,8 @@ Shell is the top-level composition system.
 Reconstructed source now started at:
 - `codex-same-ui-electron/src/lib/codex-ui/app-shell/AppShell.tsx`
 - `codex-same-ui-electron/src/lib/codex-ui/app-shell/app-shell.css`
+- `packages/ui/src/app-shell/AppShell.tsx`
+- `packages/ui/src/app-shell/app-shell.css`
 
 Literal upstream shell extraction now lives at:
 - `codex-same-ui-electron/src/component-library/shell/index.js`
@@ -220,8 +222,47 @@ Filesystem tree evidence from `file-tree-search-input-DWq_lg9v.js`:
 - The real system is a virtualized tree with `data-file-tree-virtualized-root`, `data-file-tree-virtualized-scroll`, `data-file-tree-virtualized-list`, sticky rows, and search input attributes.
 - The upstream icon sprite defines `file-tree-icon-chevron`, `file-tree-icon-dot`, `file-tree-icon-file`, `file-tree-icon-lock`, and `file-tree-icon-ellipsis`.
 - The readable `FileTree.tsx` keeps those data attributes and icons so future behavior ports can attach to the same DOM contract.
+- The search control uses label text `Filter files`, placeholder `Filter files…`, and a rounded icon/input wrapper from `file-tree-search-input-DWq_lg9v.js`.
+- Current readable ports:
+  - `packages/ui/src/file-tree/FileTree.tsx`
+  - `packages/ui/src/file-tree/file-tree.css`
+  - `packages/ui/src/file-browser/FileBrowserPanel.tsx`
+  - `packages/ui/src/file-browser/file-browser-panel.css`
 
-### 3.4.2 Electron Sidebar Transparency And Blur
+### 3.4.2 Header, Thread Actions, And Right Panel Slots
+
+Topbar evidence:
+- `app-shell-D7yvB1FT.js` renders the shell header as an app-shell-owned `Header`, with `data-testid="app-shell-header-context-menu-surface"`, tab controller wrappers, and start/end action slots.
+- The tab wrapper uses `data-app-shell-tab-controller` and `data-tab-id`.
+- `local-conversation-thread-CRSaT3IN.js` builds the thread overflow menu with `align: "start"` and `contentWidth: "menu"`.
+
+Thread overflow menu evidence:
+- `thread-actions-DlCTuMux.js` defines `Rename chat`, `Archive chat`, `Add automation…`, `Copy working directory`, `Copy session ID`, `Copy deeplink`, `Copy as Markdown`, `Fork into local`, `Fork into same worktree`, `Fork into new worktree`, and `Open in new window`.
+- `local-conversation-background-terminals-model-_ei78dP_.js` defines `Pin chat`.
+- `local-conversation-thread-CRSaT3IN.js` adds `Open side chat`, `Copy` as a flyout submenu, `Fork` as a flyout submenu, and `Open in new window`.
+
+Current readable ports:
+- `packages/ui/src/app-shell/AppShell.tsx` renders a Codex-shaped active tab controller plus adjacent `Chat actions` ellipsis dropdown.
+- `packages/ui/src/primitives/DropdownMenu.tsx` is the Radix-backed menu primitive used by the topbar and composer/menu surfaces.
+- `packages/ui/src/primitives/dropdown-menu.css` owns shared menu animation, icon lanes, shortcut lanes, and flyout alignment.
+
+Right panel evidence:
+- `app-shell-D7yvB1FT.js` exposes `RightPanel`, `RightPanelTabs`, `RightPanelTabsEmptyState`, `RightPanelTabListAfter`, `RightPanelTabListAfterSticky`, and `RightPanelOutlet`.
+- `thread-app-shell-chrome-BjerXYKb.js` mounts `RightPanelOutlet` with `RightPanelTabs` and references an open-file side-panel action that opens a workspace file tree.
+- Current readable example uses `packages/ui/src/file-browser/FileBrowserPanel.tsx` in the `AppShell` `rightPanel` slot while preserving the future choosable-tab direction.
+
+### 3.4.3 Conversation Thread Surface
+
+Thread-page evidence:
+- `local-conversation-page-DadE4Ob6.js` owns local conversation page composition, latest-turn preview, summary panel header actions, and in-progress/turn layout.
+- `local-conversation-thread-CRSaT3IN.js` owns local thread action menus, conversation markdown copying, fork/open-side-chat actions, and the dense thread flow.
+- `local-conversation-thread-B44VLaLQ.css` is the primary conversation-thread stylesheet in the extracted bundle.
+
+Current readable ports:
+- `packages/ui/src/thread/ThreadSurface.tsx` renders the title/meta header, prompt brief card, assistant activity rows, right-aligned user bubble, and edited-files review card.
+- `packages/ui/src/thread/thread-surface.css` owns thread width, message rhythm, user bubble, and review-card rows.
+
+### 3.4.4 Electron Sidebar Transparency And Blur
 
 The left sidebar effect is not a baked gradient. It is a native transparent/material Electron surface plus CSS alpha and blur.
 
