@@ -11,7 +11,7 @@
   --codex-sidebar-outer-rail: 32px;
   --codex-sidebar-list-rail: 16px;
   --codex-sidebar-row-x: var(--padding-row-x);
-  --codex-sidebar-title-inset: 64px;
+  --codex-sidebar-title-inset: 44px;
 }
 
 [data-codex-window-type="electron"]:not([data-codex-os="win32"]) .app-shell-left-panel {
@@ -55,7 +55,7 @@
   display: flex;
   height: var(--height-token-nav-row);
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   border: 0;
   border-radius: var(--radius-lg);
   padding: var(--padding-row-y) var(--codex-sidebar-row-x);
@@ -152,7 +152,7 @@
   width: 100%;
   height: var(--height-token-nav-row);
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   border: 0;
   border-radius: var(--radius-lg);
   padding: var(--padding-row-y) var(--codex-sidebar-row-x) var(--padding-row-y)
