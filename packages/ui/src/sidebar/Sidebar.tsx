@@ -30,7 +30,7 @@ export function Sidebar({
   projects?: SidebarProject[];
 }) {
   return (
-    <aside className="codex-sidebar app-shell-left-panel">
+    <aside className="codex-sidebar">
       <div className="codex-sidebar-primary" role="navigation" aria-label="Primary">
         <button className="codex-sidebar-nav-item">
           <span className="codex-sidebar-nav-icon" aria-hidden="true">

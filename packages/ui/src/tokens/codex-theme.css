@@ -33,6 +33,7 @@
   --cubic-enter: cubic-bezier(0.19, 1, 0.22, 1);
   --cubic-exit-snappy: cubic-bezier(0.65, 0, 0.4, 1);
   --transition-duration-basic: 0.15s;
+  --transition-duration-relaxed: 0.3s;
   --gray-0: #fff;
   --gray-50: #f9f9f9;
   --gray-100: #ededed;
@@ -65,6 +66,13 @@
   --color-token-border: var(--codex-border-subtle);
   --color-token-dropdown-background: var(--color-background-elevated-primary-opaque);
   --color-token-list-hover-background: color-mix(in srgb, var(--codex-text-primary) 7%, transparent);
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-base--line-height: 1.5;
+  --padding-row-y: calc(var(--spacing) * 1.25);
+  --padding-row-x: calc(var(--spacing) * 2);
+  --height-token-nav-row: calc(var(--text-base) * 1.5 + var(--padding-row-y) * 2);
+  --radius-lg: 10px;
 }
 
 @supports (color: color-mix(in lab, red, red)) {

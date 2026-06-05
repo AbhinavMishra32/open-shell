@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { PointerEvent as ReactPointerEvent, ReactNode } from "react";
+import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from "react";
 import { CodexMark } from "../icons/CodexMark";
 import { Pill } from "../primitives/Button";
 import {
@@ -39,6 +39,7 @@ export function AppShell({
 }: AppShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [sidebarWidth, setSidebarWidth] = useState(300);
+  const [isSidebarResizing, setIsSidebarResizing] = useState(false);
   const [isInspectorOpen, setIsInspectorOpen] = useState(true);
   const [isBottomPanelOpen, setIsBottomPanelOpen] = useState(bottomPanel != null);
   const toggleSidebar = useCallback(() => {
@@ -47,11 +48,12 @@ export function AppShell({
   const startSidebarResize = useCallback(
     (event: ReactPointerEvent<HTMLDivElement>) => {
       event.currentTarget.setPointerCapture(event.pointerId);
+      setIsSidebarResizing(true);
       const startX = event.clientX;
       const startWidth = sidebarWidth;
 
       function move(pointerEvent: PointerEvent) {
-        const nextWidth = Math.max(0, Math.min(360, startWidth + pointerEvent.clientX - startX));
+        const nextWidth = Math.max(0, Math.min(520, startWidth + pointerEvent.clientX - startX));
         if (nextWidth < 240) {
           setIsSidebarOpen(false);
           return;
@@ -61,6 +63,7 @@ export function AppShell({
       }
 
       function stop() {
+        setIsSidebarResizing(false);
         window.removeEventListener("pointermove", move);
         window.removeEventListener("pointerup", stop);
       }
@@ -72,21 +75,28 @@ export function AppShell({
   );
 
   return (
-    <div className="codex-app-shell" data-sidebar-open={isSidebarOpen ? "true" : "false"}>
+    <div
+      className="codex-app-shell"
+      data-sidebar-open={isSidebarOpen ? "true" : "false"}
+      style={{ "--codex-left-panel-width": `${sidebarWidth}px` } as CSSProperties}
+    >
       <ShellChromeControls isSidebarOpen={isSidebarOpen} onToggleSidebar={toggleSidebar} />
-      {isSidebarOpen ? (
-        <aside className="codex-left-panel" style={{ width: sidebarWidth }}>
-          {sidebar}
-          <div
-            className="codex-sidebar-resize-handle"
-            role="separator"
-            aria-orientation="vertical"
-            onPointerDown={startSidebarResize}
-          >
-            <div className="codex-sidebar-resize-handle-line" />
-          </div>
-        </aside>
-      ) : null}
+      <aside
+        className="codex-left-panel app-shell-left-panel"
+        data-open={isSidebarOpen ? "true" : "false"}
+        data-resizing={isSidebarResizing ? "true" : "false"}
+      >
+        <div className="codex-left-panel-inner">{sidebar}</div>
+        <div
+          className="codex-sidebar-resize-handle"
+          role="separator"
+          aria-orientation="vertical"
+          aria-disabled={!isSidebarOpen}
+          onPointerDown={isSidebarOpen ? startSidebarResize : undefined}
+        >
+          <div className="codex-sidebar-resize-handle-line" />
+        </div>
+      </aside>
       <main className="codex-app-main">
         <header className="codex-app-header" data-app-shell-header-edge-scroll="false">
           <div className="codex-app-header-context-surface" data-testid="app-shell-header-context-menu-surface">

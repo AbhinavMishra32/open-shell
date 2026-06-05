@@ -6,7 +6,7 @@
   height: 100%;
   flex-direction: column;
   border-right: 1px solid color-mix(in srgb, var(--codex-border-subtle) 70%, transparent);
-  background: var(--color-token-editor-background);
+  background: transparent;
   color: var(--codex-text-primary);
 }
 
@@ -42,50 +42,52 @@
 
 .codex-sidebar-primary {
   display: grid;
-  gap: 9px;
-  padding: 75px 16px 24px 32px;
+  gap: 0;
+  flex-shrink: 0;
+  padding: 28px var(--padding-row-x) 24px;
 }
 
 .codex-sidebar-nav-item {
   display: flex;
-  height: 28px;
+  height: var(--height-token-nav-row);
   align-items: center;
-  gap: 18px;
+  gap: 16px;
   border: 0;
   border-radius: var(--radius-lg);
-  padding: 0;
+  padding: var(--padding-row-y) var(--padding-row-x);
   color: var(--codex-text-primary);
   background: transparent;
-  font-size: 14px;
+  cursor: default;
+  font-size: var(--text-base);
   font-weight: 400;
-  line-height: 24px;
+  line-height: 20px;
   text-align: left;
 }
 
 .codex-sidebar-nav-icon,
 .codex-sidebar-project-icon {
   display: inline-grid;
-  width: 18px;
-  height: 18px;
-  flex: 0 0 18px;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
   place-items: center;
-  color: color-mix(in srgb, var(--codex-text-primary) 84%, transparent);
+  color: color-mix(in srgb, var(--codex-text-primary) 78%, transparent);
 }
 
 .codex-sidebar-nav-icon svg,
 .codex-sidebar-project-icon svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-width: 1.55;
+  stroke-width: 1.5;
 }
 
 .codex-sidebar-nav-item[data-active="true"],
 .codex-sidebar-nav-item:hover {
-  background: color-mix(in srgb, var(--codex-bg-primary) 36%, transparent);
+  background: var(--color-token-list-hover-background);
   color: var(--codex-text-primary);
 }
 
@@ -96,7 +98,7 @@
   flex-direction: column;
   gap: 0;
   overflow: auto;
-  padding: 0 10px 10px;
+  padding: 0 var(--padding-row-x) 10px;
 }
 
 .codex-sidebar-section {
@@ -108,21 +110,22 @@
 
 .codex-sidebar-section-header {
   display: flex;
-  height: 34px;
+  height: var(--height-token-nav-row);
   align-items: center;
   border: 0;
-  padding: 0 22px;
+  padding: var(--padding-row-y) var(--padding-row-x);
   color: var(--codex-text-tertiary);
   background: transparent;
+  cursor: default;
   text-align: left;
 }
 
 .codex-sidebar-section-label {
   overflow: hidden;
   color: color-mix(in srgb, var(--codex-text-tertiary) 88%, transparent);
-  font-size: 14px;
+  font-size: var(--text-base);
   font-weight: 400;
-  line-height: 24px;
+  line-height: 20px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -136,24 +139,25 @@
 
 .codex-sidebar-project {
   display: grid;
-  gap: 2px;
-  margin-bottom: 8px;
+  gap: 0;
+  margin-bottom: 6px;
 }
 
 .codex-sidebar-project-select {
   display: flex;
   width: 100%;
-  height: 28px;
+  height: var(--height-token-nav-row);
   align-items: center;
-  gap: 24px;
+  gap: 16px;
   border: 0;
   border-radius: var(--radius-lg);
-  padding: 0 10px;
+  padding: var(--padding-row-y) var(--padding-row-x);
   color: color-mix(in srgb, var(--codex-text-secondary) 95%, transparent);
   background: transparent;
-  font-size: 14px;
+  cursor: default;
+  font-size: var(--text-base);
   font-weight: 400;
-  line-height: 24px;
+  line-height: 20px;
   text-align: left;
 }
 
@@ -174,35 +178,36 @@
 
 .codex-sidebar-project-list {
   display: grid;
-  gap: 2px;
+  gap: 0;
   padding: 0;
 }
 
 .codex-sidebar-item {
   display: grid;
   width: 100%;
-  height: 34px;
+  height: var(--height-token-nav-row);
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  column-gap: 10px;
+  column-gap: 4px;
   border: 0;
-  border-radius: 10px;
-  padding: 0 10px 0 64px;
+  border-radius: var(--radius-lg);
+  padding: var(--padding-row-y) var(--padding-row-x) var(--padding-row-y) 44px;
   color: var(--codex-text-primary);
   background: transparent;
-  font-size: 14px;
+  cursor: default;
+  font-size: var(--text-base);
   font-weight: 400;
-  line-height: 22px;
+  line-height: 20px;
   text-align: left;
 }
 
 .codex-sidebar-item[data-inset="true"] {
-  padding-left: 64px;
+  padding-left: 44px;
 }
 
 .codex-sidebar-item:hover,
 .codex-sidebar-item[data-active="true"] {
-  background: color-mix(in srgb, var(--codex-bg-primary) 54%, transparent);
+  background: var(--color-token-list-hover-background);
   color: var(--codex-text-primary);
 }
 
@@ -216,8 +221,8 @@
 .codex-sidebar-item-meta {
   overflow: hidden;
   color: color-mix(in srgb, var(--codex-text-tertiary) 86%, transparent);
-  font-size: 13.5px;
-  line-height: 22px;
+  font-size: var(--text-base);
+  line-height: 20px;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
@@ -238,11 +243,11 @@
 
 .codex-sidebar-footer {
   display: flex;
-  height: 54px;
-  flex: 0 0 54px;
+  height: 56px;
+  flex: 0 0 56px;
   align-items: center;
   justify-content: space-between;
-  padding: 0 18px;
+  padding: 0 18px 0 20px;
   background: transparent;
 }
 
@@ -257,18 +262,18 @@
 }
 
 .codex-sidebar-settings {
-  gap: 14px;
-  font-size: 14px;
+  gap: 16px;
+  font-size: var(--text-base);
   font-weight: 400;
-  line-height: 24px;
+  line-height: 20px;
 }
 
 .codex-sidebar-footer-icon,
 .codex-sidebar-device {
   display: inline-grid;
-  width: 18px;
-  height: 18px;
-  flex: 0 0 18px;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
   place-items: center;
 }
 
@@ -278,8 +283,8 @@
 
 .codex-sidebar-footer-icon svg,
 .codex-sidebar-device svg {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
