@@ -4,6 +4,8 @@ export type { BottomPanelTab } from "./bottom-panel/BottomPanel";
 export { Composer } from "./composer/Composer";
 export { FileTree } from "./file-tree/FileTree";
 export type { FileTreeItem } from "./file-tree/FileTree";
+export { FileBrowserPanel } from "./file-browser/FileBrowserPanel";
+export type { FileBrowserPanelProps } from "./file-browser/FileBrowserPanel";
 export { CodexMark } from "./icons/CodexMark";
 export { Button, IconButton, Pill, StatusDot } from "./primitives/Button";
 export {

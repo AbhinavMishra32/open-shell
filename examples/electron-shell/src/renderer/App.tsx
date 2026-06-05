@@ -10,6 +10,7 @@ import {
   DialogHeader,
   DialogSection,
   DialogTrigger,
+  FileBrowserPanel,
   FileTree,
   Sidebar,
   TerminalSurface,
@@ -102,7 +103,7 @@ const fileTreeItems = [
           { name: "electron-shell", path: "examples/electron-shell/src/renderer", type: "directory" as const },
         ],
       },
-      { name: "package.json", path: "package.json", gitStatus: "modified" as const },
+      { name: "package.json", path: "package.json", gitStatus: "modified" as const, selected: true },
     ],
   },
 ];
@@ -137,6 +138,7 @@ export function App() {
         </div>
       }
       composer={<Composer placeholder="Ask Codex to build, inspect, or recreate a component..." />}
+      rightPanel={<FileBrowserPanel fileTree={fileTreeItems} />}
       bottomPanel={
         <BottomPanel
           tabs={[
