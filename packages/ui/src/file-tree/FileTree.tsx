@@ -9,6 +9,7 @@ export type FileTreeItem = {
   locked?: boolean;
   name: string;
   path: string;
+  selected?: boolean;
   type?: "file" | "directory";
 };
 
@@ -34,7 +35,18 @@ export function FileTree({
       >
         {search ? (
           <div data-file-tree-search-container="true">
-            <input data-file-tree-search-input="true" placeholder="Search..." aria-label="Search files" />
+            <label className="codex-file-tree-search-label" htmlFor="codex-file-tree-search">
+              Filter files
+            </label>
+            <div className="codex-file-tree-search-field">
+              <SearchIcon />
+              <input
+                id="codex-file-tree-search"
+                data-file-tree-search-input="true"
+                placeholder="Filter files…"
+                aria-label="Filter files"
+              />
+            </div>
           </div>
         ) : null}
         <div data-file-tree-virtualized-scroll="true">
@@ -65,6 +77,8 @@ function FileTreeRow({ item, level }: { item: FileTreeItem; level: number }) {
         role="treeitem"
         aria-expanded={isDirectory ? "true" : undefined}
         aria-level={level}
+        data-item-selected={item.selected ? "true" : undefined}
+        data-item-type={isDirectory ? "directory" : "file"}
         type="button"
         style={{ "--tree-depth": String(level - 1) } as CSSProperties}
       >
@@ -76,8 +90,8 @@ function FileTreeRow({ item, level }: { item: FileTreeItem; level: number }) {
         <span data-item-section="content">{item.name}</span>
         <span data-item-section="decoration">
           {item.decoration}
-          {item.gitStatus != null ? <GitDot status={item.gitStatus} /> : null}
         </span>
+        <span data-item-section="git">{item.gitStatus != null ? <GitDot status={item.gitStatus} /> : null}</span>
         <span data-item-section="action">
           <svg data-icon-name="file-tree-icon-ellipsis" aria-hidden="true">
             <use href="#file-tree-icon-ellipsis" />
@@ -119,6 +133,21 @@ function getIconToken(name: string, isDirectory: boolean) {
     return "markdown";
   }
   return "default";
+}
+
+function SearchIcon() {
+  return (
+    <svg className="codex-file-tree-search-icon" viewBox="0 0 20 20" aria-hidden="true">
+      <path
+        d="M8.75 3.75a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm4.1 7.1 3.15 3.15"
+        fill="none"
+        stroke="currentColor"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.7"
+      />
+    </svg>
+  );
 }
 
 function FileTreeIconSprite() {
