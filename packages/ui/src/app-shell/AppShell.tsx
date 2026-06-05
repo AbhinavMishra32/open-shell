@@ -42,6 +42,24 @@ export function AppShell({
   const [isSidebarResizing, setIsSidebarResizing] = useState(false);
   const [isInspectorOpen, setIsInspectorOpen] = useState(true);
   const [isBottomPanelOpen, setIsBottomPanelOpen] = useState(bottomPanel != null);
+  const resolvedRightPanel = rightPanel ?? (
+    <>
+      <div className="codex-panel-header">
+        <span>Inspector</span>
+        <Pill>copied UI</Pill>
+      </div>
+      <div className="codex-panel-card">
+        <span className="codex-panel-label">Component source</span>
+        <strong>src/component-library</strong>
+        <p>Literal upstream assets are cataloged and wrapped for the readable app shell.</p>
+      </div>
+      <div className="codex-panel-card">
+        <span className="codex-panel-label">Mode</span>
+        <strong>Non-agent preview</strong>
+        <p>Static app behavior, same visual system target.</p>
+      </div>
+    </>
+  );
   const toggleSidebar = useCallback(() => {
     setIsSidebarOpen((value) => !value);
   }, []);
@@ -81,6 +99,11 @@ export function AppShell({
       style={{ "--codex-left-panel-width": `${sidebarWidth}px` } as CSSProperties}
     >
       <ShellChromeControls isSidebarOpen={isSidebarOpen} onToggleSidebar={toggleSidebar} />
+      {!isSidebarOpen ? (
+        <button className="codex-sidebar-reopen-button" type="button" aria-label="Show sidebar" onClick={toggleSidebar}>
+          <SidebarToggleIcon />
+        </button>
+      ) : null}
       <aside
         className="codex-left-panel app-shell-left-panel"
         data-open={isSidebarOpen ? "true" : "false"}
@@ -146,31 +169,28 @@ export function AppShell({
               <section className="codex-composer-frame">{composer}</section>
             </div>
           </section>
-          {isInspectorOpen ? (
-            <aside className="codex-right-panel">
-              {rightPanel ?? (
-                <>
-                  <div className="codex-panel-header">
-                    <span>Inspector</span>
-                    <Pill>copied UI</Pill>
-                  </div>
-                  <div className="codex-panel-card">
-                    <span className="codex-panel-label">Component source</span>
-                    <strong>src/component-library</strong>
-                    <p>Literal upstream assets are cataloged and wrapped for the readable app shell.</p>
-                  </div>
-                  <div className="codex-panel-card">
-                    <span className="codex-panel-label">Mode</span>
-                    <strong>Non-agent preview</strong>
-                    <p>Static app behavior, same visual system target.</p>
-                  </div>
-                </>
-              )}
-            </aside>
-          ) : null}
+          <aside
+            className="codex-right-panel-slot"
+            data-open={isInspectorOpen ? "true" : "false"}
+            data-app-shell-focus-area="right-panel"
+          >
+            <div className="codex-right-panel">
+              {resolvedRightPanel}
+            </div>
+          </aside>
         </section>
 
-        {isBottomPanelOpen ? bottomPanel : null}
+        {bottomPanel != null ? (
+          <section
+            className="codex-bottom-panel-slot"
+            data-open={isBottomPanelOpen ? "true" : "false"}
+            data-app-shell-focus-area="bottom-panel"
+          >
+            <div className="codex-bottom-panel-slot-inner">
+              {bottomPanel}
+            </div>
+          </section>
+        ) : null}
       </main>
     </div>
   );
@@ -240,9 +260,13 @@ function ShellChromeControls({
 }) {
   return (
     <div className="codex-shell-chrome-controls">
-      <button className="codex-shell-chrome-button" aria-label={isSidebarOpen ? "Hide sidebar" : "Show sidebar"} onClick={onToggleSidebar}>
-        <SidebarToggleIcon />
-      </button>
+      {isSidebarOpen ? (
+        <button className="codex-shell-chrome-button" aria-label="Hide sidebar" onClick={onToggleSidebar}>
+          <SidebarToggleIcon />
+        </button>
+      ) : (
+        <span className="codex-shell-chrome-spacer" aria-hidden="true" />
+      )}
       <button className="codex-shell-chrome-button" aria-label="Back">
         <BackIcon />
       </button>
