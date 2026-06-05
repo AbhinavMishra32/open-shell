@@ -53,6 +53,7 @@
 
 .codex-sidebar-nav-item {
   display: flex;
+  width: 100%;
   height: var(--height-token-nav-row);
   align-items: center;
   gap: 16px;
@@ -114,6 +115,7 @@
 
 .codex-sidebar-section-header {
   display: flex;
+  width: 100%;
   height: var(--height-token-nav-row);
   align-items: center;
   border: 0;
