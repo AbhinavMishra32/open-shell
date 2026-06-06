@@ -35,6 +35,7 @@ export type FileTreeItem = {
   decoration?: ReactNode;
   gitStatus?: "added" | "modified" | "deleted" | "renamed";
   id?: string;
+  icon?: ReactNode;
   locked?: boolean;
   name: string;
   path: string;
@@ -316,6 +317,7 @@ function mapFileTreeItemToNode(item: FileTreeItem): TreeNode {
   return {
     id: item.id ?? item.path,
     label: item.name,
+    icon: item.icon,
     children: item.children?.map(mapFileTreeItemToNode),
     data: {
       decoration: item.decoration,
