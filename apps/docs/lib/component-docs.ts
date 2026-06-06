@@ -33,25 +33,41 @@ export const componentDocs: ComponentDoc[] = [
       { name: "bottomPanel", type: "ReactNode", description: "Optional terminal/files slot that animates from the bottom edge." },
       {
         name: "headerTabs",
-        type: "Array<{ active?: boolean; dirty?: boolean; id: string; title: string }>",
-        description: "Topbar thread/editor tabs.",
+        type: "AppShellTabItem[]",
+        description: "Optional topbar tab model. Use renderHeaderTab/renderHeaderTabActions/renderHeaderTabMenu for full control.",
       },
+      {
+        name: "headerActions",
+        type: "ReactNode | (state: AppShellState) => ReactNode",
+        description: "Right-side chrome controls owned by the consuming app.",
+      },
+      {
+        name: "chromeControls",
+        type: "ReactNode | (state: AppShellState) => ReactNode",
+        description: "Mac/native titlebar-adjacent controls owned by the consuming app.",
+      },
+      { name: "defaultSidebarWidth", type: "number", description: "Initial sidebar width in pixels.", defaultValue: "300" },
+      { name: "sidebarMinWidth", type: "number", description: "Width below which drag-resize collapses the sidebar.", defaultValue: "240" },
+      { name: "sidebarMaxWidth", type: "number", description: "Maximum sidebar width in pixels.", defaultValue: "520" },
     ],
     related: ["sidebar", "composer", "bottom-panel", "file-browser-panel"],
     slug: "app-shell",
     slots: [
-      { name: "sidebar", description: "Owns navigation and project/thread discovery." },
+      { name: "sidebar", description: "Left rail slot. The app owns navigation content, icons, and labels." },
       { name: "main", description: "Scrolling core content area." },
       { name: "composer", description: "Input surface that stays visually attached to the active task." },
       { name: "rightPanel", description: "Inspector or file panel that can collapse independently." },
       { name: "bottomPanel", description: "Resizable lower panel for terminal, files, and auxiliary tools." },
+      { name: "headerActions", description: "Custom app controls such as layout toggles, app pickers, and overflow menus." },
     ],
     sourcePath: "packages/ui/src/app-shell/AppShell.tsx",
     title: "AppShell",
     usage: `import { AppShell, Sidebar, Composer, ThreadSurface } from "@open-shell/ui";
 
 <AppShell
-  sidebar={<Sidebar items={threads} projects={projects} />}
+  headerTabs={tabs}
+  headerActions={(shell) => <Toolbar onToggleInspector={shell.toggleRightPanel} />}
+  sidebar={<Sidebar primaryItems={navItems} items={threads} projects={projects} footer={<AccountMenu />} />}
   main={<ThreadSurface title="Launch review" messages={messages} />}
   composer={<Composer placeholder="Ask the agent to inspect the product..." />}
   rightPanel={<Inspector />}
@@ -61,24 +77,28 @@ export const componentDocs: ComponentDoc[] = [
   {
     category: "Navigation",
     description:
-      "A dense translucent project/thread sidebar with primary actions, project grouping, active thread affordances, shortcuts, and footer controls.",
+      "A dense translucent desktop sidebar scaffold with caller-owned primary actions, project grouping, row rendering, and footer controls.",
     importName: "Sidebar",
     props: [
       { name: "projects", type: "SidebarProject[]", description: "Project groups and nested active/recent thread rows.", defaultValue: "[]" },
       { name: "items", type: "SidebarItem[]", description: "Standalone chat rows outside a project group." },
+      { name: "primaryItems", type: "SidebarNavItem[]", description: "Caller-provided top navigation actions with custom labels and icons.", defaultValue: "[]" },
+      { name: "footer", type: "ReactNode", description: "Caller-provided footer controls." },
+      { name: "renderItem", type: "(item, options) => ReactNode", description: "Custom row renderer for item/thread rows." },
     ],
     related: ["app-shell", "button"],
     slug: "sidebar",
     slots: [
-      { name: "primary actions", description: "New chat, Search, Plugins, Automations." },
+      { name: "primary actions", description: "Caller-provided buttons, links, commands, or custom rows." },
       { name: "projects", description: "Folder rows and nested threads." },
-      { name: "footer", description: "Settings and device affordances." },
+      { name: "footer", description: "Caller-provided account, settings, status, or workspace controls." },
     ],
     sourcePath: "packages/ui/src/sidebar/Sidebar.tsx",
     title: "Sidebar",
     usage: `import { Sidebar } from "@open-shell/ui";
 
 <Sidebar
+  primaryItems={navItems}
   projects={[
     {
       id: "desktop-agent-app",
@@ -87,6 +107,7 @@ export const componentDocs: ComponentDoc[] = [
     },
   ]}
   items={[{ id: "notes", title: "Component knowledge base", meta: "notes" }]}
+  footer={<WorkspaceFooter />}
 />`,
   },
   {
@@ -148,18 +169,20 @@ export const componentDocs: ComponentDoc[] = [
     importName: "FileBrowserPanel",
     props: [
       { name: "fileTree", type: "FileTreeItem[]", description: "Tree model rendered in the right file navigator." },
-      { name: "fileName", type: "string", description: "Active file tab title.", defaultValue: "package.json" },
+      { name: "fileName", type: "string", description: "Active file tab title." },
       { name: "breadcrumbs", type: "string[]", description: "Breadcrumb labels for the open file path." },
       { name: "code", type: "string", description: "Displayed code content." },
-      { name: "language", type: "string", description: "Language token for styling.", defaultValue: "json" },
+      { name: "editor", type: "ReactNode", description: "Custom editor/viewer slot. Overrides the default pre/code surface." },
+      { name: "toolbar", type: "ReactNode", description: "Custom toolbar slot. Overrides breadcrumbs/path actions." },
+      { name: "sidePanel", type: "ReactNode", description: "Custom side panel slot. Overrides the default FileTree panel." },
     ],
     related: ["file-tree", "app-shell"],
     slug: "file-browser-panel",
     slots: [
-      { name: "topbar", description: "Open file tab and window panel controls." },
-      { name: "toolbar", description: "Breadcrumbs and open-app actions." },
-      { name: "code", description: "Scrollable code viewport." },
-      { name: "tree", description: "Right-side file navigator." },
+      { name: "tabs", description: "Caller-owned file tabs." },
+      { name: "toolbar", description: "Caller-owned breadcrumbs, path controls, and file actions." },
+      { name: "editor", description: "Code editor, preview, diff, or any custom viewer." },
+      { name: "sidePanel", description: "Right-side file navigator, outline, symbols, or custom rail." },
     ],
     sourcePath: "packages/ui/src/file-browser/FileBrowserPanel.tsx",
     title: "FileBrowserPanel",
