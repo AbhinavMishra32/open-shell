@@ -1,7 +1,9 @@
+"use client";
+
 import React, { useCallback, useMemo, useState } from "react";
-import type { CSSProperties, ReactNode } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import type { ReactNode } from "react";
 import { ChevronRight, File, Folder, FolderOpen } from "lucide-react";
+import { AnimatePresence, motion } from "framer-motion";
 import "./file-tree.css";
 
 export type TreeNode = {
@@ -42,7 +44,6 @@ export type FileTreeItem = {
 
 type FileTreeNodeMeta = {
   decoration?: ReactNode;
-  gitStatus?: FileTreeItem["gitStatus"];
   locked?: boolean;
 };
 
@@ -53,12 +54,12 @@ export type FileTreeProps = Omit<TreeViewProps, "data"> & {
   searchAriaLabel?: string;
   searchLabel?: string;
   searchPlaceholder?: string;
+  surface?: "plain" | "contained";
   variant?: "default" | "sidebar";
 };
 
-export function FileTree({
-  data = [],
-  items,
+export function TreeView({
+  data,
   className,
   onNodeClick,
   onNodeExpand,
@@ -71,19 +72,7 @@ export function FileTree({
   onSelectionChange,
   indent = 20,
   animateExpand = true,
-  search = true,
-  searchAriaLabel = "Filter files",
-  searchLabel = "Filter files",
-  searchPlaceholder = "Filter files...",
-  variant = "default",
-}: FileTreeProps) {
-  const normalizedData = useMemo(() => {
-    if (data.length > 0) {
-      return data;
-    }
-    return (items ?? []).map(mapFileTreeItemToNode);
-  }, [data, items]);
-
+}: TreeViewProps) {
   const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set(defaultExpandedIds));
   const [internalSelectedIds, setInternalSelectedIds] = useState<string[]>(selectedIds);
 
@@ -117,17 +106,9 @@ export function FileTree({
         newSelection = currentSelectedIds.includes(nodeId) ? [] : [nodeId];
       }
 
-      isControlled
-        ? onSelectionChange?.(newSelection)
-        : setInternalSelectedIds(newSelection);
+      isControlled ? onSelectionChange?.(newSelection) : setInternalSelectedIds(newSelection);
     },
-    [
-      selectable,
-      multiSelect,
-      currentSelectedIds,
-      isControlled,
-      onSelectionChange,
-    ],
+    [selectable, multiSelect, currentSelectedIds, isControlled, onSelectionChange],
   );
 
   const renderNode = (
@@ -154,16 +135,19 @@ export function FileTree({
       );
 
     return (
-      <div key={node.id} className="codex-treeview-branch">
+      <div key={node.id} className="codex-treeview-branch select-none">
         <motion.div
           className={cn(
             "codex-treeview-node",
-            isSelected && "codex-treeview-node-selected",
-            selectable && "codex-treeview-node-selectable",
-            hasChildren && "codex-treeview-node-directory",
+            "transition-all duration-200 relative group rounded-md mx-1",
+            "hover:bg-accent/50",
+            isSelected && "bg-accent/80 codex-treeview-node-selected",
+            selectable && "hover:border-accent-foreground/10",
+            className,
           )}
           style={{ paddingLeft: level * indent + 8 }}
           onClick={(e) => {
+            e.stopPropagation();
             if (hasChildren) toggleExpanded(node.id);
             handleSelection(node.id, e.ctrlKey || e.metaKey);
             onNodeClick?.(node);
@@ -210,9 +194,7 @@ export function FileTree({
             animate={{ rotate: hasChildren && isExpanded ? 90 : 0 }}
             transition={{ duration: 0.2, ease: "easeInOut" }}
           >
-            {hasChildren && (
-              <ChevronRight className="codex-treeview-chevron" />
-            )}
+            {hasChildren && <ChevronRight className="codex-treeview-chevron" />}
           </motion.div>
 
           {showIcons && (
@@ -227,7 +209,6 @@ export function FileTree({
 
           <span className="codex-treeview-label">{node.label}</span>
           {meta.decoration ? <span className="codex-treeview-decoration">{meta.decoration}</span> : null}
-          {meta.gitStatus ? <span className="codex-file-tree-git-dot" data-git-status={meta.gitStatus}>{meta.gitStatus.slice(0, 1).toUpperCase()}</span> : null}
         </motion.div>
 
         <AnimatePresence>
@@ -252,12 +233,7 @@ export function FileTree({
                 }}
               >
                 {node.children!.map((child, index) =>
-                  renderNode(
-                    child,
-                    level + 1,
-                    index === node.children!.length - 1,
-                    currentPath,
-                  ),
+                  renderNode(child, level + 1, index === node.children!.length - 1, currentPath),
                 )}
               </motion.div>
             </motion.div>
@@ -268,8 +244,47 @@ export function FileTree({
   };
 
   return (
+    <motion.div
+      className={cn("codex-treeview-surface", className)}
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
+      <div className="codex-treeview-surface-inner">
+        {data.map((node, index) => renderNode(node, 0, index === data.length - 1))}
+      </div>
+    </motion.div>
+  );
+}
+
+export function FileTree({
+  data,
+  items,
+  search = true,
+  searchAriaLabel = "Filter files",
+  searchLabel = "Filter files",
+  searchPlaceholder = "Filter files...",
+  surface = "plain",
+  variant = "default",
+  className,
+  ...treeProps
+}: FileTreeProps) {
+  const normalizedData = useMemo(() => {
+    if (data != null) {
+      return data;
+    }
+    return (items ?? []).map(mapFileTreeItemToNode);
+  }, [data, items]);
+
+  return (
     <div
-      className={cn("codex-file-tree", "codex-treeview-shell", variant === "sidebar" && "codex-treeview-shell-sidebar", className)}
+      className={cn(
+        "codex-file-tree",
+        "codex-treeview-shell",
+        variant === "sidebar" && "codex-treeview-shell-sidebar",
+        surface === "contained" && "codex-treeview-shell-contained",
+        className,
+      )}
       data-file-tree-variant={variant}
     >
       <div className="codex-file-tree-root" role="tree" tabIndex={-1}>
@@ -290,18 +305,7 @@ export function FileTree({
           </div>
         ) : null}
         <div data-file-tree-virtualized-scroll="true">
-          <motion.div
-            className="codex-treeview-surface"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: "easeOut" }}
-          >
-            <div className="codex-treeview-surface-inner">
-              {normalizedData.map((node, index) =>
-                renderNode(node, 0, index === normalizedData.length - 1),
-              )}
-            </div>
-          </motion.div>
+          <TreeView data={normalizedData} {...treeProps} />
         </div>
       </div>
     </div>
@@ -315,7 +319,6 @@ function mapFileTreeItemToNode(item: FileTreeItem): TreeNode {
     children: item.children?.map(mapFileTreeItemToNode),
     data: {
       decoration: item.decoration,
-      gitStatus: item.gitStatus,
       locked: item.locked,
     } satisfies FileTreeNodeMeta,
   };
