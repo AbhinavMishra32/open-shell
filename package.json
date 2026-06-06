@@ -5,12 +5,16 @@
   "packageManager": "npm@11.6.1",
   "description": "A research-driven Electron component system for modern agentic desktop apps.",
   "workspaces": [
+    "apps/*",
     "packages/*",
     "examples/*"
   ],
   "scripts": {
     "build": "turbo run build",
     "dev": "turbo run dev --filter=@open-shell/electron-example",
+    "docs:build": "npm run build -w @open-shell/docs",
+    "docs:dev": "npm run dev -w @open-shell/docs",
+    "docs:start": "npm run start -w @open-shell/docs",
     "start": "npm run start -w @open-shell/electron-example",
     "start:example": "npm run start -w @open-shell/electron-example",
     "typecheck": "turbo run typecheck",
