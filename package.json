@@ -15,6 +15,7 @@
     "docs:build": "npm run build -w @open-shell/docs",
     "docs:dev": "npm run dev -w @open-shell/docs",
     "docs:start": "npm run start -w @open-shell/docs",
+    "install:ui": "node scripts/install-open-shell-ui.mjs",
     "start": "npm run start -w @open-shell/electron-example",
     "start:example": "npm run start -w @open-shell/electron-example",
     "typecheck": "turbo run typecheck",
