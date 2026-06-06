@@ -108,13 +108,42 @@ const fileTreeItems = [
   },
 ];
 
+const previewCode = `{
+  "name": "@open-shell/ui",
+  "version": "0.1.0",
+  "description": "Native-looking shell primitives for modern desktop apps.",
+  "exports": {
+    ".": "./dist/index.js",
+    "./styles.css": "./dist/styles.css"
+  }
+}`;
+
 export function App() {
   return (
     <AppShell
-      sidebar={<Sidebar items={threads} projects={projects} />}
+      headerTabs={[
+        { active: true, dirty: true, id: "inspect-electron-ui", title: "Inspect Electron UI" },
+        { id: "component-system", title: "Component system" },
+      ]}
+      headerActions={(shell) => (
+        <>
+          <button className="codex-header-tool-button" type="button" onClick={shell.toggleBottomPanel} aria-label="Toggle bottom panel">
+            _
+          </button>
+          <button className="codex-header-tool-button" type="button" onClick={shell.toggleRightPanel} aria-label="Toggle right panel">
+            []
+          </button>
+          <button className="codex-header-tool-button codex-header-tool-button-plain" type="button" aria-label="More actions">
+            ...
+          </button>
+        </>
+      )}
+      sidebar={
+        <Sidebar items={threads} projects={projects} />
+      }
       main={
         <div className="codex-renderer-stack">
-          <ThreadSurface title="Inspect Electron UI" messages={messages} />
+          <ThreadSurface title="Inspect Electron UI" subtitle="Component-system reconstruction" messages={messages} />
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="secondary">Open Codex popup primitive</Button>
@@ -138,7 +167,15 @@ export function App() {
         </div>
       }
       composer={<Composer placeholder="Ask Codex to build, inspect, or recreate a component..." />}
-      rightPanel={<FileBrowserPanel fileTree={fileTreeItems} />}
+      rightPanel={
+        <FileBrowserPanel
+          breadcrumbs={["open-shell", "packages", "ui", "package.json"]}
+          code={previewCode}
+          fileName="package.json"
+          fileTree={fileTreeItems}
+          language="json"
+        />
+      }
       bottomPanel={
         <BottomPanel
           tabs={[

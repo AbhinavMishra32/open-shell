@@ -15,20 +15,41 @@ export type FileTreeItem = {
 
 export function FileTree({
   coloredIcons = true,
+  className,
+  gitLane = true,
   items,
+  searchAriaLabel = "Filter files",
+  searchLabel = "Filter files",
+  searchPlaceholder = "Filter files...",
   search = true,
+  showActions = true,
+  style,
+  variant = "default",
 }: {
   coloredIcons?: boolean;
+  className?: string;
+  gitLane?: boolean;
   items: FileTreeItem[];
   search?: boolean;
+  searchAriaLabel?: string;
+  searchLabel?: string;
+  searchPlaceholder?: string;
+  showActions?: boolean;
+  style?: CSSProperties;
+  variant?: "default" | "sidebar";
 }) {
   return (
-    <div className="codex-file-tree" data-file-tree-colored-icons={coloredIcons ? "true" : undefined}>
+    <div
+      className={["codex-file-tree", className].filter(Boolean).join(" ")}
+      data-file-tree-colored-icons={coloredIcons ? "true" : undefined}
+      data-file-tree-variant={variant}
+      style={style}
+    >
       <FileTreeIconSprite />
       <div
         className="codex-file-tree-root"
-        data-file-tree-has-context-menu-action-lane="true"
-        data-file-tree-has-git-lane="true"
+        data-file-tree-has-context-menu-action-lane={showActions ? "true" : "false"}
+        data-file-tree-has-git-lane={gitLane ? "true" : "false"}
         data-file-tree-virtualized-root="true"
         role="tree"
         tabIndex={-1}
@@ -36,15 +57,15 @@ export function FileTree({
         {search ? (
           <div data-file-tree-search-container="true">
             <label className="codex-file-tree-search-label" htmlFor="codex-file-tree-search">
-              Filter files
+              {searchLabel}
             </label>
             <div className="codex-file-tree-search-field">
               <SearchIcon />
               <input
                 id="codex-file-tree-search"
                 data-file-tree-search-input="true"
-                placeholder="Filter files…"
-                aria-label="Filter files"
+                placeholder={searchPlaceholder}
+                aria-label={searchAriaLabel}
               />
             </div>
           </div>
@@ -52,7 +73,7 @@ export function FileTree({
         <div data-file-tree-virtualized-scroll="true">
           <div data-file-tree-virtualized-list="true">
             {items.map((item) => (
-              <FileTreeRow key={item.path} item={item} level={1} />
+              <FileTreeRow gitLane={gitLane} key={item.path} item={item} level={1} showActions={showActions} />
             ))}
           </div>
         </div>
@@ -61,7 +82,17 @@ export function FileTree({
   );
 }
 
-function FileTreeRow({ item, level }: { item: FileTreeItem; level: number }) {
+function FileTreeRow({
+  gitLane,
+  item,
+  level,
+  showActions,
+}: {
+  gitLane: boolean;
+  item: FileTreeItem;
+  level: number;
+  showActions: boolean;
+}) {
   const isDirectory = item.type === "directory" || item.children != null;
   const iconName = isDirectory ? "file-tree-icon-chevron" : item.locked === true ? "file-tree-icon-lock" : "file-tree-icon-file";
   const iconToken = getIconToken(item.name, isDirectory);
@@ -91,15 +122,19 @@ function FileTreeRow({ item, level }: { item: FileTreeItem; level: number }) {
         <span data-item-section="decoration">
           {item.decoration}
         </span>
-        <span data-item-section="git">{item.gitStatus != null ? <GitDot status={item.gitStatus} /> : null}</span>
-        <span data-item-section="action">
-          <svg data-icon-name="file-tree-icon-ellipsis" aria-hidden="true">
-            <use href="#file-tree-icon-ellipsis" />
-          </svg>
-        </span>
+        {gitLane ? <span data-item-section="git">{item.gitStatus != null ? <GitDot status={item.gitStatus} /> : null}</span> : null}
+        {showActions ? (
+          <span data-item-section="action">
+            <svg data-icon-name="file-tree-icon-ellipsis" aria-hidden="true">
+              <use href="#file-tree-icon-ellipsis" />
+            </svg>
+          </span>
+        ) : null}
       </button>
       {isDirectory
-        ? item.children?.map((child) => <FileTreeRow key={child.path} item={child} level={level + 1} />)
+        ? item.children?.map((child) => (
+            <FileTreeRow gitLane={gitLane} key={child.path} item={child} level={level + 1} showActions={showActions} />
+          ))
         : null}
     </>
   );

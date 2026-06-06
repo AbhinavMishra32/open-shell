@@ -21,7 +21,7 @@ export default function SlotsPage() {
           code={`type AppShellSlots = {
   sidebar: ReactNode;      // navigation, projects, threads
   main: ReactNode;         // conversation or editor
-  composer: ReactNode;     // active task input
+  composer?: ReactNode;    // optional active task input
   rightPanel?: ReactNode;  // inspector, file tree, review, side chat
   bottomPanel?: ReactNode; // terminal, files, logs, diagnostics
 };`}
@@ -37,7 +37,7 @@ export default function SlotsPage() {
           </div>
           <SlotRow name="sidebar" copy="Discovery: projects, active chats, global commands, and settings." />
           <SlotRow name="main" copy="Primary state: conversation, file diff, editor, browser, or task view." />
-          <SlotRow name="composer" copy="Intent capture: model, permission, tools, attachments, and submit." />
+          <SlotRow name="composer" copy="Optional intent capture: model, permission, tools, attachments, and submit." />
           <SlotRow name="rightPanel" copy="Context: file tree, inspector, review pane, side chat, or debugger." />
           <SlotRow name="bottomPanel" copy="Execution: terminal, files, logs, shell output, and diagnostics." />
         </div>
@@ -48,7 +48,7 @@ export default function SlotsPage() {
         <p>
           Agent products frequently need to surface work context without losing the current conversation. The slot
           contract makes panels predictable: a terminal should animate from the bottom, a file tree should feel like a
-          right rail, and a composer should stay connected to the active workspace.
+          right rail, and any optional composer should stay connected to the active workspace.
         </p>
       </section>
     </article>

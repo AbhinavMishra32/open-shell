@@ -29,7 +29,7 @@ export type AppShellState = {
 export type AppShellProps = {
   bottomPanel?: ReactNode;
   chromeControls?: ReactNode | ((state: AppShellState) => ReactNode);
-  composer: ReactNode;
+  composer?: ReactNode;
   collapsedSidebarTrigger?: ReactNode | ((state: AppShellState) => ReactNode);
   defaultBottomPanelOpen?: boolean;
   defaultRightPanelOpen?: boolean;
@@ -191,7 +191,7 @@ export function AppShell({
                 data-app-shell-main-content-top-fade="false"
               />
               <AppShellContent>{main}</AppShellContent>
-              <AppShellComposer>{composer}</AppShellComposer>
+              {composer != null ? <AppShellComposer>{composer}</AppShellComposer> : null}
             </div>
           </section>
           {rightPanel != null ? (

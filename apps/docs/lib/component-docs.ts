@@ -28,7 +28,7 @@ export const componentDocs: ComponentDoc[] = [
     props: [
       { name: "sidebar", type: "ReactNode", description: "Left rail content. Usually a Sidebar instance." },
       { name: "main", type: "ReactNode", description: "Primary conversation, editor, or task surface." },
-      { name: "composer", type: "ReactNode", description: "Bottom input surface anchored inside the main viewport." },
+      { name: "composer", type: "ReactNode", description: "Optional bottom input surface anchored inside the main viewport." },
       { name: "rightPanel", type: "ReactNode", description: "Optional inspector, file tree, review, or side-chat slot." },
       { name: "bottomPanel", type: "ReactNode", description: "Optional terminal/files slot that animates from the bottom edge." },
       {
@@ -55,7 +55,7 @@ export const componentDocs: ComponentDoc[] = [
     slots: [
       { name: "sidebar", description: "Left rail slot. The app owns navigation content, icons, and labels." },
       { name: "main", description: "Scrolling core content area." },
-      { name: "composer", description: "Input surface that stays visually attached to the active task." },
+      { name: "composer", description: "Optional prompt, command, status, or control surface owned by the app." },
       { name: "rightPanel", description: "Inspector or file panel that can collapse independently." },
       { name: "bottomPanel", description: "Resizable lower panel for terminal, files, and auxiliary tools." },
       { name: "headerActions", description: "Custom app controls such as layout toggles, app pickers, and overflow menus." },
@@ -203,6 +203,9 @@ export const componentDocs: ComponentDoc[] = [
       { name: "items", type: "FileTreeItem[]", description: "Nested directory/file model." },
       { name: "search", type: "boolean", description: "Show the filter input.", defaultValue: "true" },
       { name: "coloredIcons", type: "boolean", description: "Enable extension color tokens.", defaultValue: "true" },
+      { name: "variant", type: '"default" | "sidebar"', description: "Use sidebar for compact transparent left-rail rendering.", defaultValue: "default" },
+      { name: "gitLane", type: "boolean", description: "Show the git status lane.", defaultValue: "true" },
+      { name: "showActions", type: "boolean", description: "Show the trailing action lane.", defaultValue: "true" },
     ],
     related: ["file-browser-panel"],
     slug: "file-tree",
@@ -217,6 +220,9 @@ export const componentDocs: ComponentDoc[] = [
     usage: `import { FileTree } from "@open-shell/ui";
 
 <FileTree
+  variant="sidebar"
+  gitLane={false}
+  showActions={false}
   items={[
     { name: "packages", path: "packages", type: "directory", children: [
       { name: "ui", path: "packages/ui", type: "directory" },

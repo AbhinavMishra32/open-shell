@@ -33,6 +33,7 @@ import {
   IconButton,
   Pill,
   Sidebar,
+  SidebarSection,
   StatusDot,
   TerminalSurface,
   ThreadSurface,
@@ -103,6 +104,12 @@ const fileTree: FileTreeItem[] = [
   { name: "package.json", path: "package.json" },
 ];
 
+const previewCode = `{
+  "name": "@open-shell/ui",
+  "description": "Desktop shell primitives with caller-owned content.",
+  "components": ["AppShell", "Sidebar", "FileTree", "Composer"]
+}`;
+
 export function ComponentPreview({ slug }: { slug: string }) {
   return <div className="docs-live-preview">{renderPreview(slug)}</div>;
 }
@@ -113,10 +120,38 @@ function renderPreview(slug: string) {
       return (
         <div className="docs-shell-demo">
           <AppShell
-            sidebar={<Sidebar items={[]} projects={projects} />}
-            main={<ThreadSurface messages={messages} title="Inspect Electron UI" />}
+            headerTabs={[
+              { active: true, dirty: true, id: "inspect-electron-ui", title: "Inspect Electron UI" },
+              { id: "component-system", title: "Component system" },
+            ]}
+            headerActions={(shell) => (
+              <>
+                <button className="codex-header-tool-button" type="button" onClick={shell.toggleBottomPanel} aria-label="Toggle bottom panel">
+                  _
+                </button>
+                <button className="codex-header-tool-button" type="button" onClick={shell.toggleRightPanel} aria-label="Toggle right panel">
+                  []
+                </button>
+              </>
+            )}
+            sidebar={
+              <Sidebar items={[]} projects={projects}>
+                <SidebarSection heading="Files">
+                  <FileTree gitLane={false} items={fileTree} showActions={false} variant="sidebar" />
+                </SidebarSection>
+              </Sidebar>
+            }
+            main={<ThreadSurface messages={messages} subtitle="Component-system reconstruction" title="Inspect Electron UI" />}
             composer={<Composer placeholder="Ask the agent to inspect, build, or ship..." />}
-            rightPanel={<FileTree items={fileTree} />}
+            rightPanel={
+              <FileBrowserPanel
+                breadcrumbs={["open-shell", "package.json"]}
+                code={previewCode}
+                fileName="package.json"
+                fileTree={fileTree}
+                language="json"
+              />
+            }
             bottomPanel={
               <BottomPanel
                 tabs={[
@@ -147,7 +182,11 @@ function renderPreview(slug: string) {
           <Sidebar
             items={[{ id: "knowledge", meta: "notes", title: "Component knowledge base" }]}
             projects={projects}
-          />
+          >
+            <SidebarSection heading="Files">
+              <FileTree gitLane={false} items={fileTree} showActions={false} variant="sidebar" />
+            </SidebarSection>
+          </Sidebar>
         </div>
       );
     case "composer":
@@ -180,7 +219,15 @@ function renderPreview(slug: string) {
         />
       );
     case "file-browser-panel":
-      return <FileBrowserPanel fileTree={fileTree} />;
+      return (
+        <FileBrowserPanel
+          breadcrumbs={["open-shell", "package.json"]}
+          code={previewCode}
+          fileName="package.json"
+          fileTree={fileTree}
+          language="json"
+        />
+      );
     case "file-tree":
       return <FileTree items={fileTree} />;
     case "dropdown-menu":
@@ -260,7 +307,7 @@ function renderPreview(slug: string) {
         </div>
       );
     case "thread-surface":
-      return <ThreadSurface messages={messages} title="Inspect Electron UI" />;
+      return <ThreadSurface messages={messages} subtitle="Component-system reconstruction" title="Inspect Electron UI" />;
     case "terminal-surface":
       return (
         <TerminalSurface cwd="~/open-shell">
