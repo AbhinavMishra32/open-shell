@@ -1,5 +1,8 @@
+import { ArrowLeft, ArrowRight, PanelLeftClose, Search, SquarePen } from "lucide-react";
+import { useMemo, useState } from "react";
 import {
   AppShell,
+  AppShellChromeButton,
   BottomPanel,
   Button,
   Composer,
@@ -16,13 +19,13 @@ import {
   TerminalSurface,
   ThreadSurface,
 } from "@open-shell/ui";
-import type { SidebarItem, SidebarProject } from "@open-shell/ui";
+import type { SidebarItem, SidebarNavItem, SidebarProject } from "@open-shell/ui";
 import "@open-shell/ui/styles.css";
 import "./app.css";
 
-const threads: SidebarItem[] = [];
+const baseThreads: SidebarItem[] = [];
 
-const projects: SidebarProject[] = [
+const baseProjects: SidebarProject[] = [
   {
     id: "project-desktop-agent-app",
     label: "desktop-agent-app",
@@ -119,10 +122,75 @@ const previewCode = `{
 }`;
 
 export function App() {
+  const threadOrder = useMemo(
+    () =>
+      baseProjects.flatMap((project) => project.threads?.map((thread) => thread.id) ?? []),
+    [],
+  );
+  const [history, setHistory] = useState({
+    entries: ["thread-inspect-electron-ui"],
+    index: 0,
+  });
+
+  const currentThreadId = history.entries[history.index] ?? threadOrder[0];
+
+  const projects = useMemo<SidebarProject[]>(
+    () =>
+      baseProjects.map((project) => {
+        const projectHasActiveThread = project.threads?.some((thread) => thread.id === currentThreadId) ?? false;
+        return {
+          ...project,
+          active: projectHasActiveThread,
+          threads: project.threads?.map((thread) => ({
+            ...thread,
+            active: thread.id === currentThreadId,
+          })),
+        };
+      }),
+    [currentThreadId],
+  );
+
+  const threads = useMemo<SidebarItem[]>(
+    () =>
+      baseThreads.map((thread) => ({
+        ...thread,
+        active: thread.id === currentThreadId,
+      })),
+    [currentThreadId],
+  );
+
+  const primaryItems = useMemo<SidebarNavItem[]>(
+    () => [
+      { id: "new-chat", label: "New chat", icon: <SquarePen size={18} strokeWidth={1.9} /> },
+      { id: "search", label: "Search", icon: <Search size={18} strokeWidth={1.9} /> },
+    ],
+    [],
+  );
+
+  const activeThreadTitle =
+    projects.flatMap((project) => project.threads ?? []).find((thread) => thread.id === currentThreadId)?.title ??
+    "Inspect Electron UI";
+
+  function openThread(threadId: string) {
+    setHistory((current) => {
+      if (current.entries[current.index] === threadId) {
+        return current;
+      }
+      const nextEntries = current.entries.slice(0, current.index + 1);
+      nextEntries.push(threadId);
+      return {
+        entries: nextEntries,
+        index: nextEntries.length - 1,
+      };
+    });
+  }
+
   return (
     <AppShell
+      canNavigateBack={history.index > 0}
+      canNavigateForward={history.index < history.entries.length - 1}
       headerTabs={[
-        { active: true, dirty: true, id: "inspect-electron-ui", title: "Inspect Electron UI" },
+        { active: true, dirty: true, id: currentThreadId, title: activeThreadTitle },
         { id: "component-system", title: "Component system" },
       ]}
       headerActions={(shell) => (
@@ -138,12 +206,68 @@ export function App() {
           </button>
         </>
       )}
+      onNavigateBack={() =>
+        setHistory((current) => ({
+          ...current,
+          index: Math.max(0, current.index - 1),
+        }))
+      }
+      onNavigateForward={() =>
+        setHistory((current) => ({
+          ...current,
+          index: Math.min(current.entries.length - 1, current.index + 1),
+        }))
+      }
+      sidebarChrome={(shell) => (
+        <>
+          <AppShellChromeButton
+            aria-label={shell.isSidebarOpen ? "Hide sidebar" : "Show sidebar"}
+            onClick={shell.toggleSidebar}
+          >
+            <PanelLeftClose size={18} strokeWidth={1.8} />
+          </AppShellChromeButton>
+          <AppShellChromeButton
+            aria-label="Back"
+            disabled={!shell.canNavigateBack}
+            onClick={shell.navigateBack}
+          >
+            <ArrowLeft size={18} strokeWidth={1.8} />
+          </AppShellChromeButton>
+          <AppShellChromeButton
+            aria-label="Forward"
+            disabled={!shell.canNavigateForward}
+            onClick={shell.navigateForward}
+          >
+            <ArrowRight size={18} strokeWidth={1.8} />
+          </AppShellChromeButton>
+        </>
+      )}
       sidebar={
-        <Sidebar items={threads} projects={projects} />
+        <Sidebar
+          items={threads}
+          primaryItems={primaryItems}
+          projects={projects}
+          renderItem={(item, options) => (
+            <button
+              className="codex-sidebar-item"
+              data-active={item.active === true ? "true" : undefined}
+              data-inset={options.inset === true ? "true" : "false"}
+              onClick={() => openThread(item.id)}
+              type="button"
+            >
+              <span className="codex-sidebar-item-title">{item.title}</span>
+              {item.meta != null ? (
+                <span className="codex-sidebar-item-meta" data-kind="shortcut">
+                  {item.meta}
+                </span>
+              ) : null}
+            </button>
+          )}
+        />
       }
       main={
         <div className="codex-renderer-stack">
-          <ThreadSurface title="Inspect Electron UI" subtitle="Component-system reconstruction" messages={messages} />
+          <ThreadSurface title={String(activeThreadTitle)} subtitle="Component-system reconstruction" messages={messages} />
           <Dialog>
             <DialogTrigger asChild>
               <Button variant="secondary">Open Codex popup primitive</Button>
