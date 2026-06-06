@@ -1,6 +1,32 @@
-import { useMemo, useState } from "react";
+import React, { useCallback, useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronRight, File, Folder, FolderOpen } from "lucide-react";
 import "./file-tree.css";
+
+export type TreeNode = {
+  id: string;
+  label: string;
+  icon?: React.ReactNode;
+  children?: TreeNode[];
+  data?: any;
+};
+
+export type TreeViewProps = {
+  data: TreeNode[];
+  className?: string;
+  onNodeClick?: (node: TreeNode) => void;
+  onNodeExpand?: (nodeId: string, expanded: boolean) => void;
+  defaultExpandedIds?: string[];
+  showLines?: boolean;
+  showIcons?: boolean;
+  selectable?: boolean;
+  multiSelect?: boolean;
+  selectedIds?: string[];
+  onSelectionChange?: (selectedIds: string[]) => void;
+  indent?: number;
+  animateExpand?: boolean;
+};
 
 export type FileTreeItem = {
   children?: FileTreeItem[];
@@ -14,64 +40,239 @@ export type FileTreeItem = {
   type?: "file" | "directory";
 };
 
-export function FileTree({
-  coloredIcons = true,
-  className,
-  defaultExpandedPaths,
-  gitLane = true,
-  items,
-  searchAriaLabel = "Filter files",
-  searchLabel = "Filter files",
-  searchPlaceholder = "Filter files...",
-  search = true,
-  showActions = true,
-  style,
-  variant = "default",
-}: {
-  coloredIcons?: boolean;
-  className?: string;
-  defaultExpandedPaths?: string[];
-  gitLane?: boolean;
-  items: FileTreeItem[];
+type FileTreeNodeMeta = {
+  decoration?: ReactNode;
+  gitStatus?: FileTreeItem["gitStatus"];
+  locked?: boolean;
+};
+
+export type FileTreeProps = Omit<TreeViewProps, "data"> & {
+  data?: TreeNode[];
+  items?: FileTreeItem[];
   search?: boolean;
   searchAriaLabel?: string;
   searchLabel?: string;
   searchPlaceholder?: string;
-  showActions?: boolean;
-  style?: CSSProperties;
   variant?: "default" | "sidebar";
-}) {
-  const initialExpandedPaths = useMemo(() => new Set(defaultExpandedPaths ?? collectDirectoryPaths(items)), [defaultExpandedPaths, items]);
-  const [expandedPaths, setExpandedPaths] = useState(initialExpandedPaths);
+};
 
-  function togglePath(path: string) {
-    setExpandedPaths((current) => {
-      const next = new Set(current);
-      if (next.has(path)) {
-        next.delete(path);
+export function FileTree({
+  data = [],
+  items,
+  className,
+  onNodeClick,
+  onNodeExpand,
+  defaultExpandedIds = [],
+  showLines = true,
+  showIcons = true,
+  selectable = true,
+  multiSelect = false,
+  selectedIds = [],
+  onSelectionChange,
+  indent = 20,
+  animateExpand = true,
+  search = true,
+  searchAriaLabel = "Filter files",
+  searchLabel = "Filter files",
+  searchPlaceholder = "Filter files...",
+  variant = "default",
+}: FileTreeProps) {
+  const normalizedData = useMemo(() => {
+    if (data.length > 0) {
+      return data;
+    }
+    return (items ?? []).map(mapFileTreeItemToNode);
+  }, [data, items]);
+
+  const [expandedIds, setExpandedIds] = useState<Set<string>>(new Set(defaultExpandedIds));
+  const [internalSelectedIds, setInternalSelectedIds] = useState<string[]>(selectedIds);
+
+  const isControlled = selectedIds !== undefined && onSelectionChange !== undefined;
+  const currentSelectedIds = isControlled ? selectedIds : internalSelectedIds;
+
+  const toggleExpanded = useCallback(
+    (nodeId: string) => {
+      setExpandedIds((prev) => {
+        const newSet = new Set(prev);
+        const isExpanded = newSet.has(nodeId);
+        isExpanded ? newSet.delete(nodeId) : newSet.add(nodeId);
+        onNodeExpand?.(nodeId, !isExpanded);
+        return newSet;
+      });
+    },
+    [onNodeExpand],
+  );
+
+  const handleSelection = useCallback(
+    (nodeId: string, ctrlKey = false) => {
+      if (!selectable) return;
+
+      let newSelection: string[];
+
+      if (multiSelect && ctrlKey) {
+        newSelection = currentSelectedIds.includes(nodeId)
+          ? currentSelectedIds.filter((id) => id !== nodeId)
+          : [...currentSelectedIds, nodeId];
       } else {
-        next.add(path);
+        newSelection = currentSelectedIds.includes(nodeId) ? [] : [nodeId];
       }
-      return next;
-    });
-  }
+
+      isControlled
+        ? onSelectionChange?.(newSelection)
+        : setInternalSelectedIds(newSelection);
+    },
+    [
+      selectable,
+      multiSelect,
+      currentSelectedIds,
+      isControlled,
+      onSelectionChange,
+    ],
+  );
+
+  const renderNode = (
+    node: TreeNode,
+    level = 0,
+    isLast = false,
+    parentPath: boolean[] = [],
+  ) => {
+    const hasChildren = (node.children?.length ?? 0) > 0;
+    const isExpanded = expandedIds.has(node.id);
+    const isSelected = currentSelectedIds.includes(node.id);
+    const currentPath = [...parentPath, isLast];
+    const meta = readNodeMeta(node.data);
+
+    const getDefaultIcon = () =>
+      hasChildren ? (
+        isExpanded ? (
+          <FolderOpen className="codex-treeview-node-glyph" />
+        ) : (
+          <Folder className="codex-treeview-node-glyph" />
+        )
+      ) : (
+        <File className="codex-treeview-node-glyph" />
+      );
+
+    return (
+      <div key={node.id} className="codex-treeview-branch">
+        <motion.div
+          className={cn(
+            "codex-treeview-node",
+            isSelected && "codex-treeview-node-selected",
+            selectable && "codex-treeview-node-selectable",
+            hasChildren && "codex-treeview-node-directory",
+          )}
+          style={{ paddingLeft: level * indent + 8 }}
+          onClick={(e) => {
+            if (hasChildren) toggleExpanded(node.id);
+            handleSelection(node.id, e.ctrlKey || e.metaKey);
+            onNodeClick?.(node);
+          }}
+          whileTap={{ scale: 0.98, transition: { duration: 0.1 } }}
+        >
+          {showLines && level > 0 && (
+            <div className="codex-treeview-lines" aria-hidden="true">
+              {currentPath.map((isLastInPath, pathIndex) => (
+                <div
+                  key={pathIndex}
+                  className="codex-treeview-line-vertical"
+                  style={{
+                    left: pathIndex * indent + 12,
+                    display:
+                      pathIndex === currentPath.length - 1 && isLastInPath
+                        ? "none"
+                        : "block",
+                  }}
+                />
+              ))}
+              <div
+                className="codex-treeview-line-horizontal"
+                style={{
+                  left: (level - 1) * indent + 12,
+                  width: indent - 4,
+                  transform: "translateY(-1px)",
+                }}
+              />
+              {isLast && (
+                <div
+                  className="codex-treeview-line-vertical codex-treeview-line-last"
+                  style={{
+                    left: (level - 1) * indent + 12,
+                    height: "50%",
+                  }}
+                />
+              )}
+            </div>
+          )}
+
+          <motion.div
+            className="codex-treeview-expand-icon"
+            animate={{ rotate: hasChildren && isExpanded ? 90 : 0 }}
+            transition={{ duration: 0.2, ease: "easeInOut" }}
+          >
+            {hasChildren && (
+              <ChevronRight className="codex-treeview-chevron" />
+            )}
+          </motion.div>
+
+          {showIcons && (
+            <motion.div
+              className="codex-treeview-node-icon"
+              whileHover={{ scale: 1.1 }}
+              transition={{ duration: 0.15 }}
+            >
+              {node.icon || getDefaultIcon()}
+            </motion.div>
+          )}
+
+          <span className="codex-treeview-label">{node.label}</span>
+          {meta.decoration ? <span className="codex-treeview-decoration">{meta.decoration}</span> : null}
+          {meta.gitStatus ? <span className="codex-file-tree-git-dot" data-git-status={meta.gitStatus}>{meta.gitStatus.slice(0, 1).toUpperCase()}</span> : null}
+        </motion.div>
+
+        <AnimatePresence>
+          {hasChildren && isExpanded && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{
+                duration: animateExpand ? 0.3 : 0,
+                ease: "easeInOut",
+              }}
+              className="codex-treeview-children"
+            >
+              <motion.div
+                initial={{ y: -10 }}
+                animate={{ y: 0 }}
+                exit={{ y: -10 }}
+                transition={{
+                  duration: animateExpand ? 0.2 : 0,
+                  delay: animateExpand ? 0.1 : 0,
+                }}
+              >
+                {node.children!.map((child, index) =>
+                  renderNode(
+                    child,
+                    level + 1,
+                    index === node.children!.length - 1,
+                    currentPath,
+                  ),
+                )}
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    );
+  };
 
   return (
     <div
-      className={["codex-file-tree", className].filter(Boolean).join(" ")}
-      data-file-tree-colored-icons={coloredIcons ? "true" : undefined}
+      className={cn("codex-file-tree", "codex-treeview-shell", variant === "sidebar" && "codex-treeview-shell-sidebar", className)}
       data-file-tree-variant={variant}
-      style={style}
     >
-      <FileTreeIconSprite />
-      <div
-        className="codex-file-tree-root"
-        data-file-tree-has-context-menu-action-lane={showActions ? "true" : "false"}
-        data-file-tree-has-git-lane={gitLane ? "true" : "false"}
-        data-file-tree-virtualized-root="true"
-        role="tree"
-        tabIndex={-1}
-      >
+      <div className="codex-file-tree-root" role="tree" tabIndex={-1}>
         {search ? (
           <div data-file-tree-search-container="true">
             <label className="codex-file-tree-search-label" htmlFor="codex-file-tree-search">
@@ -89,143 +290,46 @@ export function FileTree({
           </div>
         ) : null}
         <div data-file-tree-virtualized-scroll="true">
-          <div data-file-tree-virtualized-list="true">
-            {items.map((item) => (
-              <FileTreeRow
-                expandedPaths={expandedPaths}
-                gitLane={gitLane}
-                key={item.path}
-                item={item}
-                level={1}
-                onToggle={togglePath}
-                showActions={showActions}
-              />
-            ))}
-          </div>
+          <motion.div
+            className="codex-treeview-surface"
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            <div className="codex-treeview-surface-inner">
+              {normalizedData.map((node, index) =>
+                renderNode(node, 0, index === normalizedData.length - 1),
+              )}
+            </div>
+          </motion.div>
         </div>
       </div>
     </div>
   );
 }
 
-function FileTreeRow({
-  gitLane,
-  expandedPaths,
-  item,
-  level,
-  onToggle,
-  showActions,
-}: {
-  expandedPaths: Set<string>;
-  gitLane: boolean;
-  item: FileTreeItem;
-  level: number;
-  onToggle: (path: string) => void;
-  showActions: boolean;
-}) {
-  const isDirectory = item.type === "directory" || item.children != null;
-  const isExpanded = !isDirectory || expandedPaths.has(item.path);
-  const iconName = isDirectory ? "file-tree-icon-chevron" : item.locked === true ? "file-tree-icon-lock" : "file-tree-icon-file";
-  const iconToken = getIconToken(item.name, isDirectory);
-
-  return (
-    <>
-      <button
-        className="codex-file-tree-row"
-        data-file-tree-sticky-path={level === 1 ? item.path : undefined}
-        data-file-tree-sticky-row={level === 1 && isDirectory ? "true" : undefined}
-        data-path={item.path}
-        data-type="item"
-        role="treeitem"
-        aria-expanded={isDirectory ? isExpanded : undefined}
-        aria-level={level}
-        data-expanded={isExpanded ? "true" : "false"}
-        data-item-selected={item.selected ? "true" : undefined}
-        data-item-type={isDirectory ? "directory" : "file"}
-        onClick={() => {
-          if (isDirectory) {
-            onToggle(item.path);
-          }
-        }}
-        type="button"
-        style={{ "--tree-depth": String(level - 1) } as CSSProperties}
-      >
-        <span data-item-section="icon">
-          <svg data-icon-name={iconName} data-icon-token={iconToken} aria-hidden="true">
-            <use href={`#${iconName}`} />
-          </svg>
-        </span>
-        <span data-item-section="content">{item.name}</span>
-        <span data-item-section="decoration">
-          {item.decoration}
-        </span>
-        {gitLane ? <span data-item-section="git">{item.gitStatus != null ? <GitDot status={item.gitStatus} /> : null}</span> : null}
-        {showActions ? (
-          <span data-item-section="action">
-            <svg data-icon-name="file-tree-icon-ellipsis" aria-hidden="true">
-              <use href="#file-tree-icon-ellipsis" />
-            </svg>
-          </span>
-        ) : null}
-      </button>
-      {isDirectory ? (
-        <div className="codex-file-tree-children" data-expanded={isExpanded ? "true" : "false"}>
-          {item.children?.map((child) => (
-            <FileTreeRow
-              expandedPaths={expandedPaths}
-              gitLane={gitLane}
-              key={child.path}
-              item={child}
-              level={level + 1}
-              onToggle={onToggle}
-              showActions={showActions}
-            />
-          ))}
-        </div>
-      ) : null}
-    </>
-  );
+function mapFileTreeItemToNode(item: FileTreeItem): TreeNode {
+  return {
+    id: item.id ?? item.path,
+    label: item.name,
+    children: item.children?.map(mapFileTreeItemToNode),
+    data: {
+      decoration: item.decoration,
+      gitStatus: item.gitStatus,
+      locked: item.locked,
+    } satisfies FileTreeNodeMeta,
+  };
 }
 
-function collectDirectoryPaths(items: FileTreeItem[]) {
-  const paths: string[] = [];
-  for (const item of items) {
-    if (item.type === "directory" || item.children != null) {
-      paths.push(item.path);
-      paths.push(...collectDirectoryPaths(item.children ?? []));
-    }
+function readNodeMeta(data: any): FileTreeNodeMeta {
+  if (data == null || typeof data !== "object") {
+    return {};
   }
-  return paths;
+  return data as FileTreeNodeMeta;
 }
 
-function GitDot({ status }: { status: NonNullable<FileTreeItem["gitStatus"]> }) {
-  return (
-    <span className="codex-file-tree-git-dot" data-git-status={status}>
-      {status.slice(0, 1).toUpperCase()}
-    </span>
-  );
-}
-
-function getIconToken(name: string, isDirectory: boolean) {
-  if (isDirectory) {
-    return "default";
-  }
-  if (/\.(tsx|ts)$/.test(name)) {
-    return "typescript";
-  }
-  if (/\.(jsx|js|mjs|cjs)$/.test(name)) {
-    return "javascript";
-  }
-  if (/\.css$/.test(name)) {
-    return "css";
-  }
-  if (/\.json$/.test(name)) {
-    return "json";
-  }
-  if (/\.mdx?$/.test(name)) {
-    return "markdown";
-  }
-  return "default";
+function cn(...values: Array<string | false | null | undefined>) {
+  return values.filter(Boolean).join(" ");
 }
 
 function SearchIcon() {
@@ -239,29 +343,6 @@ function SearchIcon() {
         strokeLinejoin="round"
         strokeWidth="1.7"
       />
-    </svg>
-  );
-}
-
-function FileTreeIconSprite() {
-  return (
-    <svg data-icon-sprite="" aria-hidden="true" width="0" height="0">
-      <symbol id="file-tree-icon-chevron" viewBox="0 0 16 16">
-        <path d="M12.4697 5.46973C12.7626 5.17684 13.2374 5.17684 13.5303 5.46973C13.8232 5.76262 13.8232 6.23738 13.5303 6.53028L8.53028 11.5303C8.23738 11.8232 7.76262 11.8232 7.46973 11.5303L2.46973 6.53028C2.17684 6.23738 2.17684 5.76262 2.46973 5.46973C2.76262 5.17684 3.23738 5.17684 3.53028 5.46973L8 9.93946L12.4697 5.46973Z" fill="currentcolor" />
-      </symbol>
-      <symbol id="file-tree-icon-dot" viewBox="0 0 6 6">
-        <circle cx="3" cy="3" r="3" />
-      </symbol>
-      <symbol id="file-tree-icon-file" viewBox="0 0 16 16">
-        <path fill="currentColor" d="M8 1v3a3 3 0 0 0 3 3h3v5.5a2.5 2.5 0 0 1-2.5 2.5h-7A2.5 2.5 0 0 1 2 12.5v-9A2.5 2.5 0 0 1 4.5 1z" className="bg" opacity=".5" />
-        <path fill="currentColor" d="M9.5 1a.5.5 0 0 1 .354.146l4 4A.5.5 0 0 1 14 5.5V6h-3a2 2 0 0 1-2-2V1z" className="fg" />
-      </symbol>
-      <symbol id="file-tree-icon-lock" viewBox="0 0 16 16">
-        <path fill="currentcolor" d="M4 5.336V4a4 4 0 1 1 8 0v1.336c1.586.54 2 1.843 2 4.664v1c0 4.118-.883 5-5 5H7c-4.117 0-5-.883-5-5v-1c0-2.821.414-4.124 2-4.664M5.5 4v1.054Q6.166 4.998 7 5h2q.834-.002 1.5.054V4a2.5 2.5 0 0 0-5 0m-2 6v1c0 .995.055 1.692.167 2.193.107.483.246.686.35.79s.307.243.79.35c.5.112 1.198.167 2.193.167h2c.995 0 1.692-.055 2.193-.166.483-.108.686-.247.79-.35.104-.105.243-.308.35-.791.112-.5.167-1.198.167-2.193v-1c0-.995-.055-1.692-.166-2.193-.108-.483-.247-.686-.35-.79-.105-.104-.308-.243-.791-.35C10.693 6.555 9.995 6.5 9 6.5H7c-.995 0-1.692.055-2.193.167-.483.107-.686.246-.79.35s-.243.307-.35.79C3.555 8.307 3.5 9.005 3.5 10" />
-      </symbol>
-      <symbol id="file-tree-icon-ellipsis" viewBox="0 0 16 16">
-        <path d="M5 8.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M9.5 8.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0M14 8.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0" />
-      </symbol>
     </svg>
   );
 }

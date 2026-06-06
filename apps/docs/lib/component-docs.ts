@@ -210,7 +210,16 @@ export const componentDocs: ComponentDoc[] = [
       { name: "variant", type: '"default" | "sidebar"', description: "Use sidebar for compact transparent left-rail rendering.", defaultValue: "default" },
       { name: "gitLane", type: "boolean", description: "Show the git status lane.", defaultValue: "true" },
       { name: "showActions", type: "boolean", description: "Show the trailing action lane.", defaultValue: "true" },
+      { name: "data", type: "TreeNode[]", description: "Tree-view style data source for highly customizable app-owned node structures." },
       { name: "defaultExpandedPaths", type: "string[]", description: "Initial expanded directory paths. Defaults to all directories." },
+      { name: "defaultExpandedIds", type: "string[]", description: "Tree-node ids that should start expanded when using the data API." },
+      { name: "selectedIds", type: "string[]", description: "Controlled selection state for file or tree nodes." },
+      { name: "onSelectionChange", type: "(ids: string[]) => void", description: "Selection change callback for single or multi-select trees." },
+      { name: "onNodeClick", type: "(node: TreeNode) => void", description: "App-level node click callback." },
+      { name: "onNodeExpand", type: "(nodeId: string, expanded: boolean) => void", description: "Expansion callback for folder state changes." },
+      { name: "showLines", type: "boolean", description: "Render subtle hierarchy guide lines.", defaultValue: "false" },
+      { name: "showIcons", type: "boolean", description: "Toggle file and folder glyphs independently of the chevron lane.", defaultValue: "true" },
+      { name: "indent", type: "number", description: "Adjust hierarchy indentation without changing the component API.", defaultValue: "24" },
     ],
     related: ["file-browser-panel"],
     slug: "file-tree",
@@ -228,6 +237,7 @@ export const componentDocs: ComponentDoc[] = [
   variant="sidebar"
   gitLane={false}
   showActions={false}
+  showLines
   items={[
     { name: "packages", path: "packages", type: "directory", children: [
       { name: "ui", path: "packages/ui", type: "directory" },

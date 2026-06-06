@@ -5,18 +5,18 @@ export const metadata = {
 
 const releases = [
   {
-    version: "0.2.0",
-    status: "in progress",
+    version: "0.1.1",
+    status: "current",
     notes: [
       "Composer slot is optional in AppShell.",
       "Sidebar chrome exposes native toggle/back/forward controls.",
-      "FileTree adds sidebar mode, expansion state, and animated folder open/close.",
+      "FileTree now supports tree-view style expansion, selection, line guides, and data-node APIs while preserving the Open Shell visual style.",
       "Docs now track pages/history and release changes.",
     ],
   },
   {
     version: "0.1.0",
-    status: "current package baseline",
+    status: "initial release",
     notes: [
       "Initial Open Shell UI package with AppShell, Sidebar, Composer, BottomPanel, FileTree, FileBrowserPanel, and overlay primitives.",
     ],

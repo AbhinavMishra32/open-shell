@@ -1,6 +1,6 @@
 {
   "name": "@open-shell/docs",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "type": "module",
   "description": "Documentation and interactive component playground for Open Shell UI.",
@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit --pretty false"
   },
   "dependencies": {
-    "@open-shell/ui": "0.1.0",
+    "@open-shell/ui": "0.1.1",
     "fumadocs-core": "^16.9.3",
     "fumadocs-ui": "^16.9.3",
     "next": "^16.2.7",
