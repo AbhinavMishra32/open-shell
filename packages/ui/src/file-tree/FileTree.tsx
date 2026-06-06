@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import type { CSSProperties, ReactNode } from "react";
 import "./file-tree.css";
 
@@ -16,6 +17,7 @@ export type FileTreeItem = {
 export function FileTree({
   coloredIcons = true,
   className,
+  defaultExpandedPaths,
   gitLane = true,
   items,
   searchAriaLabel = "Filter files",
@@ -28,6 +30,7 @@ export function FileTree({
 }: {
   coloredIcons?: boolean;
   className?: string;
+  defaultExpandedPaths?: string[];
   gitLane?: boolean;
   items: FileTreeItem[];
   search?: boolean;
@@ -38,6 +41,21 @@ export function FileTree({
   style?: CSSProperties;
   variant?: "default" | "sidebar";
 }) {
+  const initialExpandedPaths = useMemo(() => new Set(defaultExpandedPaths ?? collectDirectoryPaths(items)), [defaultExpandedPaths, items]);
+  const [expandedPaths, setExpandedPaths] = useState(initialExpandedPaths);
+
+  function togglePath(path: string) {
+    setExpandedPaths((current) => {
+      const next = new Set(current);
+      if (next.has(path)) {
+        next.delete(path);
+      } else {
+        next.add(path);
+      }
+      return next;
+    });
+  }
+
   return (
     <div
       className={["codex-file-tree", className].filter(Boolean).join(" ")}
@@ -73,7 +91,15 @@ export function FileTree({
         <div data-file-tree-virtualized-scroll="true">
           <div data-file-tree-virtualized-list="true">
             {items.map((item) => (
-              <FileTreeRow gitLane={gitLane} key={item.path} item={item} level={1} showActions={showActions} />
+              <FileTreeRow
+                expandedPaths={expandedPaths}
+                gitLane={gitLane}
+                key={item.path}
+                item={item}
+                level={1}
+                onToggle={togglePath}
+                showActions={showActions}
+              />
             ))}
           </div>
         </div>
@@ -84,16 +110,21 @@ export function FileTree({
 
 function FileTreeRow({
   gitLane,
+  expandedPaths,
   item,
   level,
+  onToggle,
   showActions,
 }: {
+  expandedPaths: Set<string>;
   gitLane: boolean;
   item: FileTreeItem;
   level: number;
+  onToggle: (path: string) => void;
   showActions: boolean;
 }) {
   const isDirectory = item.type === "directory" || item.children != null;
+  const isExpanded = !isDirectory || expandedPaths.has(item.path);
   const iconName = isDirectory ? "file-tree-icon-chevron" : item.locked === true ? "file-tree-icon-lock" : "file-tree-icon-file";
   const iconToken = getIconToken(item.name, isDirectory);
 
@@ -106,10 +137,16 @@ function FileTreeRow({
         data-path={item.path}
         data-type="item"
         role="treeitem"
-        aria-expanded={isDirectory ? "true" : undefined}
+        aria-expanded={isDirectory ? isExpanded : undefined}
         aria-level={level}
+        data-expanded={isExpanded ? "true" : "false"}
         data-item-selected={item.selected ? "true" : undefined}
         data-item-type={isDirectory ? "directory" : "file"}
+        onClick={() => {
+          if (isDirectory) {
+            onToggle(item.path);
+          }
+        }}
         type="button"
         style={{ "--tree-depth": String(level - 1) } as CSSProperties}
       >
@@ -131,13 +168,34 @@ function FileTreeRow({
           </span>
         ) : null}
       </button>
-      {isDirectory
-        ? item.children?.map((child) => (
-            <FileTreeRow gitLane={gitLane} key={child.path} item={child} level={level + 1} showActions={showActions} />
-          ))
-        : null}
+      {isDirectory ? (
+        <div className="codex-file-tree-children" data-expanded={isExpanded ? "true" : "false"}>
+          {item.children?.map((child) => (
+            <FileTreeRow
+              expandedPaths={expandedPaths}
+              gitLane={gitLane}
+              key={child.path}
+              item={child}
+              level={level + 1}
+              onToggle={onToggle}
+              showActions={showActions}
+            />
+          ))}
+        </div>
+      ) : null}
     </>
   );
+}
+
+function collectDirectoryPaths(items: FileTreeItem[]) {
+  const paths: string[] = [];
+  for (const item of items) {
+    if (item.type === "directory" || item.children != null) {
+      paths.push(item.path);
+      paths.push(...collectDirectoryPaths(item.children ?? []));
+    }
+  }
+  return paths;
 }
 
 function GitDot({ status }: { status: NonNullable<FileTreeItem["gitStatus"]> }) {

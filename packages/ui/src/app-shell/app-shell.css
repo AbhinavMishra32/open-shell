@@ -110,6 +110,11 @@
   color: color-mix(in srgb, var(--codex-text-tertiary) 58%, transparent);
 }
 
+.codex-shell-chrome-button:disabled {
+  color: color-mix(in srgb, var(--codex-text-tertiary) 48%, transparent);
+  pointer-events: none;
+}
+
 .codex-shell-chrome-button:hover {
   background: color-mix(in srgb, var(--codex-text-primary) 7%, transparent);
   color: var(--codex-text-primary);
@@ -133,6 +138,22 @@
 .codex-app-tab-actions {
   display: inline-flex;
   align-items: center;
+}
+
+.codex-sidebar-chrome {
+  -webkit-app-region: drag;
+  position: absolute;
+  top: calc(-1 * var(--height-toolbar));
+  left: 0;
+  right: 0;
+  z-index: 55;
+  display: flex;
+  height: var(--height-toolbar);
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px 0 96px;
+  color: color-mix(in srgb, var(--codex-text-secondary) 76%, transparent);
+  pointer-events: auto;
 }
 
 .codex-app-main {

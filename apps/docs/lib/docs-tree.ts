@@ -26,6 +26,16 @@ export const docsTree: Root = {
     },
     {
       type: "page",
+      name: "Pages & History",
+      url: "/docs/pages",
+    },
+    {
+      type: "page",
+      name: "Versions",
+      url: "/docs/versions",
+    },
+    {
+      type: "page",
       name: "Theming",
       url: "/docs/theming",
     },

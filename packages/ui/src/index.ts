@@ -12,6 +12,7 @@ export {
   AppShellHeaderPillButton,
   AppShellHeaderToolButton,
   AppShellRightPanel,
+  AppShellSidebarChrome,
   AppShellTab,
   AppShellTabActionButton,
   AppShellTabActions,
