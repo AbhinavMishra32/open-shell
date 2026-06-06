@@ -16,20 +16,58 @@ export default function InstallationPage() {
       </p>
 
       <section className="docs-section">
-        <h2>Install the package</h2>
-        <CodeBlock code="npm install @open-shell/ui" />
+        <h2>Install into an app</h2>
+        <p>
+          The recommended no-publish path is source installation. The installer copies the component system into your
+          app so you can edit the files directly, just like a registry-driven component workflow.
+        </p>
+        <CodeBlock
+          title="From this repo"
+          code="npm run install:ui -- --target ../my-agent-app"
+        />
+        <CodeBlock
+          title="From GitHub raw"
+          code="curl -fsSL https://raw.githubusercontent.com/AbhinavMishra32/open-shell/main/scripts/install-open-shell-ui.mjs | node - --target ."
+        />
+      </section>
+
+      <section className="docs-section">
+        <h2>Choose the destination</h2>
+        <CodeBlock
+          code={`node scripts/install-open-shell-ui.mjs \\
+  --target ../my-agent-app \\
+  --out-dir src/components/ui/open-shell \\
+  --force`}
+        />
+        <p>
+          By default, files are copied into <code>src/components/open-shell</code>. The installer also writes an
+          <code>INSTALL.md</code> beside the copied files with import notes for that target app.
+        </p>
       </section>
 
       <section className="docs-section">
         <h2>Import styles once</h2>
         <p>
-          Import the token sheet in your root layout, app entry, or renderer entry. Component-level CSS is bundled by
-          the package exports.
+          Import the token sheet in your root layout, app entry, or renderer entry. If you install into the default
+          directory, the import path looks like this:
         </p>
         <CodeBlock
           title="React entry"
-          code={`import "@open-shell/ui/styles.css";
+          code={`import "@/components/open-shell/tokens/codex-theme.css";
 
+import { AppShell, Composer, Sidebar, ThreadSurface } from "@/components/open-shell";`}
+        />
+      </section>
+
+      <section className="docs-section">
+        <h2>Alternative package import</h2>
+        <p>
+          Inside this monorepo, the Electron example imports the workspace package directly. That path is useful for
+          local development, but source installation is the least-infrastructure path for external apps while the
+          package is not published.
+        </p>
+        <CodeBlock
+          code={`import "@open-shell/ui/styles.css";
 import { AppShell, Composer, Sidebar, ThreadSurface } from "@open-shell/ui";`}
         />
       </section>

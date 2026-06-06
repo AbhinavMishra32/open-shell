@@ -55,7 +55,7 @@ export const componentDocs: ComponentDoc[] = [
   main={<ThreadSurface title="Launch review" messages={messages} />}
   composer={<Composer placeholder="Ask the agent to inspect the product..." />}
   rightPanel={<Inspector />}
-  bottomPanel={<Terminal />)}
+  bottomPanel={<Terminal />}
 />`,
   },
   {

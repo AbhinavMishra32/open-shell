@@ -71,6 +71,38 @@ export function AgentWorkspace() {
 }
 ```
 
+## Install Into Another Project
+
+No publish step is required. The installer copies the component source into the target app, shadcn-style, so the receiving project owns the files.
+
+From this repo:
+
+```sh
+npm run install:ui -- --target ../my-agent-app
+```
+
+From GitHub raw:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/AbhinavMishra32/open-shell/main/scripts/install-open-shell-ui.mjs | node - --target .
+```
+
+Useful options:
+
+```sh
+node scripts/install-open-shell-ui.mjs \
+  --target ../my-agent-app \
+  --out-dir src/components/ui/open-shell \
+  --force
+```
+
+What it does:
+
+- copies `packages/ui/src` into the target project
+- writes an `INSTALL.md` beside the copied components
+- installs missing Radix dependencies unless `--skip-install` is passed
+- keeps React/React DOM as target-app responsibilities
+
 ## Monorepo
 
 | Workspace | Path | Purpose |
