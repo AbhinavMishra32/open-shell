@@ -1,6 +1,6 @@
 # @open-shell/ui
 
-Readable React components for building native-feeling Electron agent shells.
+React components for building dense agent-native desktop and web workspaces.
 
 ## Install
 
@@ -25,7 +25,19 @@ import "@open-shell/ui/styles.css";
 - `Button`, `IconButton`, `Pill`, `StatusDot`
 - `Dialog` and Radix-backed dialog parts
 - `DropdownMenu` and Radix-backed menu parts
+- `ContextMenu` and Radix-backed context-menu parts
+- `FileBrowserPanel`
 - `CodexMark`
+
+## Documentation
+
+Run the interactive docs site from the repository root:
+
+```sh
+npm run docs:dev
+```
+
+The docs app renders live examples from this package, including prop tables, slot notes, and source paths.
 
 ## Electron Material Contract
 
