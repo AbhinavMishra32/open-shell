@@ -20,6 +20,8 @@ export {
   AppShellTabStrip,
 } from "./app-shell/AppShell";
 export type { AppShellProps, AppShellState, AppShellTabItem } from "./app-shell/AppShell";
+export { SlotPanel } from "./slot-panel/SlotPanel";
+export type { SlotTab, SlotPanelHandle, SlotPanelProps, SlotLauncherItem } from "./slot-panel/SlotPanel";
 export { BottomPanel, TerminalSurface, SideChatView, ReviewView, DiagnosticsLogsView, clampBottomPanelHeight } from "./bottom-panel/BottomPanel";
 export type { BottomPanelTab, BottomPanelProps, BottomPanelHandle, TerminalSurfaceProps } from "./bottom-panel/BottomPanel";
 export { Composer } from "./composer/Composer";

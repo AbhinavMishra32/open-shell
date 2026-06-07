@@ -23,25 +23,7 @@ import {
 import "./bottom-panel.css";
 import "@xterm/xterm/css/xterm.css";
 
-/**
- * Represents a tab item config inside the BottomPanel component.
- */
-export type BottomPanelTab = {
-  /** Optional flag indicating whether the tab should start focused/active. */
-  active?: boolean;
-  /** Whether the tab is closable. If true, hovered tabs swap their left icon with a circular close badge. */
-  closable?: boolean;
-  /** The content/view rendered when this tab is active. */
-  content: ReactNode;
-  /** Optional icon rendered on the left side of the tab title (e.g. folder, terminal outline). */
-  icon?: ReactNode;
-  /** Unique identifier for the tab. */
-  id: string;
-  /** Optional keyboard shortcut string displayed in launcher menus (e.g. "⌘P"). */
-  shortcut?: string;
-  /** The text title of the tab. */
-  title: string;
-};
+
 
 const DEFAULT_BOTTOM_PANEL_HEIGHT = 280;
 
@@ -96,36 +78,84 @@ const defaultFileTreeItems = [
     ]
   }
 ];
+// Re-export SlotPanel types with Bottom-panel aliases for backwards compat
+export type { SlotTab as BottomPanelTab, SlotPanelHandle as BottomPanelHandle, SlotLauncherItem } from "../slot-panel/SlotPanel";
+import { SlotPanel } from "../slot-panel/SlotPanel";
+import type { SlotTab, SlotPanelHandle, SlotLauncherItem } from "../slot-panel/SlotPanel";
 
-/**
- * Imperative handle exposed via ref for controlling the tab system from outside.
- *
- * @example
- * ```tsx
- * const panelRef = useRef<BottomPanelHandle>(null);
- *
- * // Open a file editor tab
- * panelRef.current?.addTab({
- *   id: "file-app-tsx",
- *   title: "App.tsx",
- *   icon: <FileIcon size={14} />,
- *   closable: true,
- *   content: <CodeEditor file="src/App.tsx" />,
- * });
- *
- * <BottomPanel ref={panelRef} tabs={initialTabs} />
- * ```
- */
-export type BottomPanelHandle = {
-  /** Open a new tab with arbitrary content. If a tab with the same id exists, it is focused instead. */
-  addTab: (tab: BottomPanelTab) => void;
-  /** Close a tab by id. */
-  closeTab: (id: string) => void;
-  /** Focus a tab by id. */
-  setActiveTab: (id: string) => void;
-  /** Get the current list of open tabs (snapshot). */
-  getTabs: () => BottomPanelTab[];
-};
+export { SlotPanel };
+
+/** Built-in launcher presets provided by BottomPanel when no custom launcherItems are passed. */
+const defaultLauncherItems: SlotLauncherItem[] = [
+  {
+    type: "terminal",
+    title: "Terminal",
+    description: "Run interactive shell commands.",
+    icon: <TerminalIcon size={14} />,
+    shortcut: "⌃`",
+    createTab: () => ({
+      id: `terminal-${Date.now()}`,
+      title: "Terminal",
+      icon: <TerminalIcon size={14} />,
+      closable: true,
+      content: <TerminalSurface />,
+    }),
+  },
+  {
+    type: "files",
+    title: "Files",
+    description: "Browse project workspace files.",
+    icon: <FolderIcon size={14} />,
+    shortcut: "⌘P",
+    createTab: () => ({
+      id: `files-${Date.now()}`,
+      title: "Files",
+      icon: <FolderIcon size={14} />,
+      closable: true,
+      content: <FileTree items={defaultFileTreeItems} />,
+    }),
+  },
+  {
+    type: "sidechat",
+    title: "Side Chat",
+    description: "Chat with workspace assistant.",
+    icon: <MessagePlusIcon size={14} />,
+    createTab: () => ({
+      id: `sidechat-${Date.now()}`,
+      title: "Side Chat",
+      icon: <MessagePlusIcon size={14} />,
+      closable: true,
+      content: <SideChatView />,
+    }),
+  },
+  {
+    type: "review",
+    title: "Review",
+    description: "Review files and pull request changes.",
+    icon: <FilePlusIcon size={14} />,
+    shortcut: "⌃⇧G",
+    createTab: () => ({
+      id: `review-${Date.now()}`,
+      title: "Review",
+      icon: <FilePlusIcon size={14} />,
+      closable: true,
+      content: <ReviewView />,
+    }),
+  },
+  {
+    type: "logs",
+    title: "Logs",
+    description: "View diagnostics and streaming logs.",
+    icon: <ActivityIcon size={14} />,
+    createTab: () => ({
+      id: `logs-${Date.now()}`,
+      title: "Logs",
+      icon: <ActivityIcon size={14} />,
+      closable: true,
+      content: <DiagnosticsLogsView />,
+    }),
+  },
+];
 
 export interface BottomPanelProps {
   /** Initial height of the bottom panel in pixels. Defaults to 280. */
@@ -134,277 +164,90 @@ export interface BottomPanelProps {
   mainContentHeight?: number;
   /** Callback fired when a drag-resize action commits a new height. */
   onHeightChange?: (height: number) => void;
-  /** Initial array of tabs to populate the panel. */
-  tabs: BottomPanelTab[];
+  /** Initial tabs to populate the panel with. */
+  tabs?: SlotTab[];
+  /** Launcher items shown in the `+` dropdown and empty-state grid. */
+  launcherItems?: SlotLauncherItem[];
   /** Callback fired when the far-right panel close cross button is clicked. */
   onClose?: () => void;
 }
 
 /**
- * Resizable bottom panel with a fully open tab system.
- *
- * Use the `ref` handle to programmatically open, close, or focus any tab with arbitrary content.
- * Built-in launcher presets (Terminal, Files, Side Chat, Review, Logs) are available in the `+` dropdown.
+ * Resizable bottom panel — a thin wrapper around `SlotPanel` that adds
+ * drag-resize and height clamping. Drop `SlotPanel` directly into other
+ * slots (right panel, main area) where resize isn't needed.
  */
-export const BottomPanel = React.forwardRef<BottomPanelHandle, BottomPanelProps>(
+export const BottomPanel = React.forwardRef<SlotPanelHandle, BottomPanelProps>(
   function BottomPanel(
     {
       height = DEFAULT_BOTTOM_PANEL_HEIGHT,
       mainContentHeight = typeof window === "undefined" ? 720 : window.innerHeight,
       onHeightChange,
       tabs,
+      launcherItems,
       onClose,
     },
     ref,
   ) {
-  const [openTabs, setOpenTabs] = useState<BottomPanelTab[]>(() => tabs);
-  const activeTab = openTabs.find((tab) => tab.active) ?? openTabs[0];
-  const [activeTabId, setActiveTabId] = useState<string | null>(activeTab?.id ?? null);
-  const [panelHeight, setPanelHeight] = useState(() => clampBottomPanelHeight(height, mainContentHeight));
-  const dragStateRef = useRef<{ pointerId: number; startHeight: number; startY: number } | null>(null);
+    const [panelHeight, setPanelHeight] = useState(() => clampBottomPanelHeight(height, mainContentHeight));
+    const dragStateRef = useRef<{ pointerId: number; startHeight: number; startY: number } | null>(null);
 
-  useEffect(() => {
-    setPanelHeight((currentHeight) => clampBottomPanelHeight(currentHeight, mainContentHeight));
-  }, [mainContentHeight]);
+    useEffect(() => {
+      setPanelHeight((h) => clampBottomPanelHeight(h, mainContentHeight));
+    }, [mainContentHeight]);
 
-  // Sync open tabs state and active tab when initial tabs prop changes
-  useEffect(() => {
-    setOpenTabs(tabs);
-    const initialActive = tabs.find((t) => t.active) ?? tabs[0];
-    setActiveTabId(initialActive?.id ?? null);
-  }, [tabs]);
-
-  function commitHeight(nextHeight: number) {
-    const clampedHeight = clampBottomPanelHeight(nextHeight, mainContentHeight);
-    setPanelHeight(clampedHeight);
-    onHeightChange?.(clampedHeight);
-  }
-
-  function handlePointerDown(event: PointerEvent<HTMLDivElement>) {
-    event.preventDefault();
-    dragStateRef.current = {
-      pointerId: event.pointerId,
-      startHeight: panelHeight,
-      startY: event.clientY,
-    };
-    event.currentTarget.setPointerCapture(event.pointerId);
-    document.documentElement.dataset.codexBottomPanelResizing = "true";
-  }
-
-  function handlePointerMove(event: PointerEvent<HTMLDivElement>) {
-    const dragState = dragStateRef.current;
-    if (dragState == null || dragState.pointerId !== event.pointerId) {
-      return;
+    function commitHeight(next: number) {
+      const clamped = clampBottomPanelHeight(next, mainContentHeight);
+      setPanelHeight(clamped);
+      onHeightChange?.(clamped);
     }
 
-    commitHeight(dragState.startHeight + (dragState.startY - event.clientY));
-  }
-
-  function handlePointerUp(event: PointerEvent<HTMLDivElement>) {
-    if (dragStateRef.current?.pointerId === event.pointerId) {
-      dragStateRef.current = null;
-      document.documentElement.dataset.codexBottomPanelResizing = "false";
+    function handlePointerDown(e: PointerEvent<HTMLDivElement>) {
+      e.preventDefault();
+      dragStateRef.current = { pointerId: e.pointerId, startHeight: panelHeight, startY: e.clientY };
+      e.currentTarget.setPointerCapture(e.pointerId);
+      document.documentElement.dataset.codexBottomPanelResizing = "true";
     }
-  }
 
-  const handleCloseTab = (id: string) => {
-    const nextTabs = openTabs.filter((t) => t.id !== id);
-    setOpenTabs(nextTabs);
-    
-    if (activeTabId === id) {
-      if (nextTabs.length > 0) {
-        const deletedIndex = openTabs.findIndex((t) => t.id === id);
-        const nextActiveIndex = Math.min(deletedIndex, nextTabs.length - 1);
-        setActiveTabId(nextTabs[nextActiveIndex].id);
-      } else {
-        setActiveTabId(null);
+    function handlePointerMove(e: PointerEvent<HTMLDivElement>) {
+      const s = dragStateRef.current;
+      if (!s || s.pointerId !== e.pointerId) return;
+      commitHeight(s.startHeight + (s.startY - e.clientY));
+    }
+
+    function handlePointerUp(e: PointerEvent<HTMLDivElement>) {
+      if (dragStateRef.current?.pointerId === e.pointerId) {
+        dragStateRef.current = null;
+        document.documentElement.dataset.codexBottomPanelResizing = "false";
       }
     }
-  };
 
-  const handleAddTab = (tab: BottomPanelTab) => {
-    // If a tab with this id already exists, just focus it
-    const existing = openTabs.find((t) => t.id === tab.id);
-    if (existing) {
-      setActiveTabId(tab.id);
-      return;
-    }
-    setOpenTabs((prev) => [...prev, tab]);
-    setActiveTabId(tab.id);
-  };
-
-  // Built-in preset tab factories for the launcher dropdown
-  const addPresetTab = (type: "terminal" | "files" | "sidechat" | "review" | "logs") => {
-    const newId = `${type}-${Date.now()}`;
-    const presets: Record<string, { title: string; icon: ReactNode; content: ReactNode }> = {
-      terminal: { title: "Terminal", icon: <TerminalIcon size={14} />, content: <TerminalSurface /> },
-      files: { title: "Files", icon: <FolderIcon size={14} />, content: <FileTree items={defaultFileTreeItems} /> },
-      sidechat: { title: "Side Chat", icon: <MessagePlusIcon size={14} />, content: <SideChatView /> },
-      review: { title: "Review", icon: <FilePlusIcon size={14} />, content: <ReviewView /> },
-      logs: { title: "Logs", icon: <ActivityIcon size={14} />, content: <DiagnosticsLogsView /> },
-    };
-    const preset = presets[type];
-    handleAddTab({ id: newId, title: preset.title, icon: preset.icon, content: preset.content, closable: true });
-  };
-
-  // Expose imperative handle to parent
-  React.useImperativeHandle(ref, () => ({
-    addTab: handleAddTab,
-    closeTab: handleCloseTab,
-    setActiveTab: (id: string) => setActiveTabId(id),
-    getTabs: () => [...openTabs],
-  }));
-
-  return (
-    <Tabs.Root
-      className="codex-bottom-panel"
-      data-app-shell-focus-area="bottom-panel"
-      style={{ "--app-shell-bottom-panel-height": `${panelHeight}px` } as CSSProperties}
-      value={activeTabId || ""}
-      onValueChange={(val) => setActiveTabId(val || null)}
-    >
+    return (
       <div
-        className="codex-bottom-panel-resize-handle"
-        aria-label="Resize bottom panel"
-        role="separator"
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={handlePointerUp}
-        onPointerCancel={handlePointerUp}
-      />
-      <div className="codex-bottom-panel-inner">
-        <div className="codex-bottom-panel-tabbar">
-          <div className="codex-bottom-panel-tabs-container">
-            <Tabs.List className="codex-bottom-panel-tabs" aria-label="Bottom panel tabs">
-              {openTabs.map((tab) => (
-                <Tabs.Trigger
-                  key={tab.id}
-                  value={tab.id}
-                  className="codex-bottom-panel-tab"
-                  data-tab-id={tab.id}
-                  data-closable={tab.closable === true ? "true" : undefined}
-                  onClick={() => setActiveTabId(tab.id)}
-                >
-                  <span className="codex-bottom-panel-tab-icon-wrapper">
-                    {tab.closable === true ? (
-                      <span
-                        className="codex-bottom-panel-tab-close"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleCloseTab(tab.id);
-                        }}
-                        title="Close tab"
-                        aria-label="Close tab"
-                      >
-                        <svg viewBox="0 0 10 10" width="8" height="8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
-                          <line x1="2.5" y1="2.5" x2="7.5" y2="7.5" />
-                          <line x1="7.5" y1="2.5" x2="2.5" y2="7.5" />
-                        </svg>
-                      </span>
-                    ) : null}
-                    {tab.icon != null ? (
-                      <span className="codex-bottom-panel-tab-icon">{tab.icon}</span>
-                    ) : null}
-                  </span>
-                  <span className="codex-bottom-panel-tab-title">{tab.title}</span>
-                </Tabs.Trigger>
-              ))}
-            </Tabs.List>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="codex-bottom-panel-add-action" type="button" aria-label="Open bottom panel launcher">
-                  <Plus size={15} strokeWidth={1.8} />
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="codex-bottom-panel-launcher-menu" side="bottom">
-                <DropdownMenuItem onSelect={() => addPresetTab("files")}>
-                  <FolderIcon />
-                  <span>Files</span>
-                  <span className="codex-bottom-panel-launcher-shortcut">⌘P</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => addPresetTab("sidechat")}>
-                  <MessagePlusIcon />
-                  <span>Side chat</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => addPresetTab("review")}>
-                  <FilePlusIcon />
-                  <span>Review</span>
-                  <span className="codex-bottom-panel-launcher-shortcut">⌃⇧G</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => addPresetTab("terminal")}>
-                  <TerminalIcon />
-                  <span>Terminal</span>
-                  <span className="codex-bottom-panel-launcher-shortcut">⌃`</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onSelect={() => addPresetTab("logs")}>
-                  <ActivityIcon />
-                  <span>Logs</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-          <div className="codex-bottom-panel-actions">
-            <button
-              className="codex-bottom-panel-action codex-bottom-panel-close-action"
-              type="button"
-              aria-label="Close bottom panel"
-              onClick={onClose}
-            >
-              ×
-            </button>
-          </div>
-        </div>
-
-        {openTabs.length === 0 ? (
-          <div className="codex-bottom-panel-outlet codex-bottom-panel-launcher-container">
-            <div className="codex-bottom-panel-launcher-grid">
-              <div className="codex-launcher-header">
-                <h3>Select a tool to open in this slot</h3>
-                <p>Click any option below to initialize the surface.</p>
-              </div>
-              <div className="codex-launcher-cards">
-                <button type="button" className="codex-launcher-card" onClick={() => addPresetTab("terminal")}>
-                  <div className="codex-launcher-card-icon"><TerminalIcon size={22} /></div>
-                  <div className="codex-launcher-card-info">
-                    <h4>Terminal</h4>
-                    <p>Run mock or interactive shell commands.</p>
-                  </div>
-                </button>
-                <button type="button" className="codex-launcher-card" onClick={() => addPresetTab("files")}>
-                  <div className="codex-launcher-card-icon"><FolderIcon size={22} /></div>
-                  <div className="codex-launcher-card-info">
-                    <h4>File Tree</h4>
-                    <p>Browse project workspace files.</p>
-                  </div>
-                </button>
-                <button type="button" className="codex-launcher-card" onClick={() => addPresetTab("sidechat")}>
-                  <div className="codex-launcher-card-icon"><MessagePlusIcon size={22} /></div>
-                  <div className="codex-launcher-card-info">
-                    <h4>Side Chat</h4>
-                    <p>Chat with workspace assistant.</p>
-                  </div>
-                </button>
-                <button type="button" className="codex-launcher-card" onClick={() => addPresetTab("review")}>
-                  <div className="codex-launcher-card-icon"><FilePlusIcon size={22} /></div>
-                  <div className="codex-launcher-card-info">
-                    <h4>Review</h4>
-                    <p>Review files and pull request changes.</p>
-                  </div>
-                </button>
-              </div>
-            </div>
-          </div>
-        ) : (
-          openTabs.map((tab) => (
-            <Tabs.Content key={tab.id} value={tab.id} className="codex-bottom-panel-outlet">
-              {tab.content}
-            </Tabs.Content>
-          ))
-        )}
+        className="codex-bottom-panel"
+        data-app-shell-focus-area="bottom-panel"
+        style={{ "--app-shell-bottom-panel-height": `${panelHeight}px` } as CSSProperties}
+      >
+        <div
+          className="codex-bottom-panel-resize-handle"
+          aria-label="Resize bottom panel"
+          role="separator"
+          onPointerDown={handlePointerDown}
+          onPointerMove={handlePointerMove}
+          onPointerUp={handlePointerUp}
+          onPointerCancel={handlePointerUp}
+        />
+        <SlotPanel
+          ref={ref}
+          tabs={tabs}
+          launcherItems={launcherItems ?? defaultLauncherItems}
+          onClose={onClose}
+          ariaLabel="Bottom panel tabs"
+        />
       </div>
-    </Tabs.Root>
-  );
-});
+    );
+  },
+);
 
 export interface TerminalSurfaceProps {
   /** Optional class name appended to the container. */
