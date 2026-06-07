@@ -1,13 +1,26 @@
 import {
+  Archive,
+  Box,
   ChevronDown,
+  Code2,
   Ellipsis,
   File as FileIcon,
+  Gauge,
+  GitBranch,
+  Globe,
+  Keyboard,
   ListTree,
+  Monitor,
   PanelBottom,
   PanelRight,
+  Palette,
+  Plug,
   Search,
+  Settings as SettingsIcon,
+  ShieldCheck,
   SquarePen,
   Terminal as TerminalIcon,
+  UserCircle,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
@@ -27,12 +40,29 @@ import {
   DialogTrigger,
   FileBrowserPanel,
   FileTree,
+  SettingsCard,
+  SettingsOptionCard,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsSelect,
+  SettingsSidebar,
+  SettingsToggle,
   Sidebar,
   TerminalSurface,
   ThreadSurface,
   useShellHistory,
 } from "@open-shell/ui";
-import type { ShellHistoryEntry, SidebarItem, SidebarNavItem, SidebarProject, SlotTab, TreeNode } from "@open-shell/ui";
+import type {
+  SettingsNavItem,
+  SettingsNavSection,
+  ShellHistoryEntry,
+  SidebarItem,
+  SidebarNavItem,
+  SidebarProject,
+  SlotTab,
+  TreeNode,
+} from "@open-shell/ui";
 import "@open-shell/ui/styles.css";
 import "./app.css";
 
@@ -168,9 +198,43 @@ const previewFiles = {
 } satisfies Record<string, { breadcrumbs: string[]; code: string; fileName: string; language: string }>;
 
 type ExampleHistoryEntry = ShellHistoryEntry<
-  "bottom-tab" | "file" | "thread",
-  { filePath?: string; tabId?: string; threadId?: string }
+  "bottom-tab" | "file" | "settings" | "thread",
+  { filePath?: string; settingsItemId?: string; tabId?: string; threadId?: string }
 >;
+
+const settingsSections: SettingsNavSection[] = [
+  {
+    id: "personal",
+    label: "Personal",
+    items: [
+      { id: "general", label: "General", icon: <SettingsIcon size={18} strokeWidth={1.7} /> },
+      { id: "profile", label: "Profile", icon: <UserCircle size={18} strokeWidth={1.7} /> },
+      { id: "appearance", label: "Appearance", icon: <Palette size={18} strokeWidth={1.7} /> },
+      { id: "configuration", label: "Configuration", icon: <ShieldCheck size={18} strokeWidth={1.7} /> },
+      { id: "keyboard", label: "Keyboard shortcuts", icon: <Keyboard size={18} strokeWidth={1.7} /> },
+      { id: "usage", label: "Usage & billing", icon: <Gauge size={18} strokeWidth={1.7} /> },
+    ],
+  },
+  {
+    id: "integrations",
+    label: "Integrations",
+    items: [
+      { id: "appshots", label: "Appshots", icon: <Box size={18} strokeWidth={1.7} /> },
+      { id: "mcp", label: "MCP servers", icon: <Plug size={18} strokeWidth={1.7} /> },
+      { id: "browser", label: "Browser", icon: <Globe size={18} strokeWidth={1.7} /> },
+      { id: "computer-use", label: "Computer use", icon: <Monitor size={18} strokeWidth={1.7} /> },
+    ],
+  },
+  {
+    id: "coding",
+    label: "Coding",
+    items: [
+      { id: "hooks", label: "Hooks", icon: <Code2 size={18} strokeWidth={1.7} /> },
+      { id: "git", label: "Git", icon: <GitBranch size={18} strokeWidth={1.7} /> },
+      { id: "archived", label: "Archived chats", icon: <Archive size={18} strokeWidth={1.7} /> },
+    ],
+  },
+];
 
 export function App() {
   const history = useShellHistory<ExampleHistoryEntry>(() => [
@@ -179,17 +243,31 @@ export function App() {
   const [currentThreadId, setCurrentThreadId] = useState("thread-inspect-electron-ui");
   const [activeBottomTabId, setActiveBottomTabId] = useState("terminal");
   const [selectedFilePath, setSelectedFilePath] = useState<keyof typeof previewFiles>("package.json");
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [settingsItemId, setSettingsItemId] = useState("general");
+  const [settingsQuery, setSettingsQuery] = useState("");
+  const [defaultPermissions, setDefaultPermissions] = useState(true);
+  const [autoReview, setAutoReview] = useState(true);
+  const [fullAccess, setFullAccess] = useState(true);
+  const [workMode, setWorkMode] = useState<"coding" | "everyday">("coding");
 
   useEffect(() => {
     const current = history.current;
     if (current?.type === "thread" && current.payload?.threadId != null) {
+      setIsSettingsOpen(false);
       setCurrentThreadId(current.payload.threadId);
     }
     if (current?.type === "bottom-tab" && current.payload?.tabId != null) {
+      setIsSettingsOpen(false);
       setActiveBottomTabId(current.payload.tabId);
     }
     if (current?.type === "file" && current.payload?.filePath != null && current.payload.filePath in previewFiles) {
+      setIsSettingsOpen(false);
       setSelectedFilePath(current.payload.filePath as keyof typeof previewFiles);
+    }
+    if (current?.type === "settings" && current.payload?.settingsItemId != null) {
+      setIsSettingsOpen(true);
+      setSettingsItemId(current.payload.settingsItemId);
     }
   }, [history.current]);
 
@@ -235,11 +313,32 @@ export function App() {
       const title =
         baseProjects.flatMap((project) => project.threads ?? []).find((thread) => thread.id === threadId)?.title ??
         threadId;
+      setIsSettingsOpen(false);
       setCurrentThreadId(threadId);
       history.push(createThreadHistoryEntry(threadId, String(title)));
     },
     [history.push],
   );
+
+  const openSettings = useCallback(
+    (itemId = "general") => {
+      const item = findSettingsItem(itemId);
+      setIsSettingsOpen(true);
+      setSettingsItemId(itemId);
+      history.push({
+        id: `settings:${itemId}`,
+        payload: { settingsItemId: itemId },
+        title: String(item?.label ?? "Settings"),
+        type: "settings",
+      });
+    },
+    [history.push],
+  );
+
+  const closeSettings = useCallback(() => {
+    setIsSettingsOpen(false);
+    history.push(createThreadHistoryEntry(currentThreadId, String(activeThreadTitle)));
+  }, [activeThreadTitle, currentThreadId, history.push]);
 
   const openFile = useCallback(
     (filePath: string) => {
@@ -247,6 +346,7 @@ export function App() {
         return;
       }
       const file = previewFiles[filePath as keyof typeof previewFiles];
+      setIsSettingsOpen(false);
       setSelectedFilePath(filePath as keyof typeof previewFiles);
       history.push({
         id: `file:${filePath}`,
@@ -275,6 +375,7 @@ export function App() {
       if (tabId == null) {
         return;
       }
+      setIsSettingsOpen(false);
       setActiveBottomTabId(tabId);
       history.push({
         id: `bottom-tab:${tabId}`,
@@ -314,14 +415,19 @@ export function App() {
   );
 
   const selectedFile = previewFiles[selectedFilePath];
+  const activeSettingsItem = findSettingsItem(settingsItemId) ?? findSettingsItem("general");
 
   return (
     <AppShell
       history={history}
-      headerTabs={[
-        { active: true, dirty: true, id: currentThreadId, title: activeThreadTitle },
-        { id: "component-system", title: "Component system" },
-      ]}
+      headerTabs={
+        isSettingsOpen
+          ? [{ active: true, id: `settings-${settingsItemId}`, title: activeSettingsItem?.label ?? "Settings" }]
+          : [
+              { active: true, dirty: true, id: currentThreadId, title: activeThreadTitle },
+              { id: "component-system", title: "Component system" },
+            ]
+      }
       headerActions={(shell) => (
         <>
           <AppShellHeaderPillButton type="button" aria-label="Current app">
@@ -355,82 +461,121 @@ export function App() {
         </>
       )}
       sidebar={
-        <Sidebar
-          items={threads}
-          primaryItems={primaryItems}
-          projects={projects}
-          renderItem={(item, options) => (
-            <button
-              className="codex-sidebar-item"
-              data-active={item.active === true ? "true" : undefined}
-              data-inset={options.inset === true ? "true" : "false"}
-              onClick={() => openThread(item.id)}
-              type="button"
-            >
-              <span className="codex-sidebar-item-title">{item.title}</span>
-              {item.meta != null ? (
-                <span className="codex-sidebar-item-meta" data-kind="shortcut">
-                  {item.meta}
+        isSettingsOpen ? (
+          <SettingsSidebar
+            activeItemId={settingsItemId}
+            onBack={closeSettings}
+            onItemSelect={(item: SettingsNavItem) => openSettings(item.id)}
+            onSearchChange={setSettingsQuery}
+            query={settingsQuery}
+            sections={settingsSections}
+          />
+        ) : (
+          <Sidebar
+            footer={
+              <button className="codex-sidebar-settings" type="button" onClick={() => openSettings("general")}>
+                <span className="codex-sidebar-footer-icon" aria-hidden="true">
+                  <SettingsIcon size={18} strokeWidth={1.7} />
                 </span>
-              ) : null}
-            </button>
-          )}
-        />
+                <span>Settings</span>
+              </button>
+            }
+            items={threads}
+            primaryItems={primaryItems}
+            projects={projects}
+            renderItem={(item, options) => (
+              <button
+                className="codex-sidebar-item"
+                data-active={item.active === true ? "true" : undefined}
+                data-inset={options.inset === true ? "true" : "false"}
+                onClick={() => openThread(item.id)}
+                type="button"
+              >
+                <span className="codex-sidebar-item-title">{item.title}</span>
+                {item.meta != null ? (
+                  <span className="codex-sidebar-item-meta" data-kind="shortcut">
+                    {item.meta}
+                  </span>
+                ) : null}
+              </button>
+            )}
+          />
+        )
       }
       main={
-        <div className="codex-renderer-stack">
-          <ThreadSurface title={String(activeThreadTitle)} subtitle="Component-system reconstruction" messages={messages} />
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="secondary">Open Codex popup primitive</Button>
-            </DialogTrigger>
-            <DialogContent size="wide">
-              <DialogHeader
-                title="Codex dialog primitive"
-                subtitle="Radix dialog behavior with the recovered Codex overlay, surface, close button, sizes, and measured-height transition."
-              />
-              <DialogBody>
-                <DialogSection>
-                  This is the shared popup layer used as the readable target for upstream `dialog-layout-CCvvb1Vc.js`.
-                </DialogSection>
-              </DialogBody>
-              <DialogFooter>
-                <Button variant="secondary">Cancel</Button>
-                <Button variant="primary">Continue</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </div>
+        isSettingsOpen ? (
+          <ExampleSettingsContent
+            autoReview={autoReview}
+            defaultPermissions={defaultPermissions}
+            fullAccess={fullAccess}
+            sectionTitle={String(activeSettingsItem?.label ?? "General")}
+            setAutoReview={setAutoReview}
+            setDefaultPermissions={setDefaultPermissions}
+            setFullAccess={setFullAccess}
+            setWorkMode={setWorkMode}
+            workMode={workMode}
+          />
+        ) : (
+          <div className="codex-renderer-stack">
+            <ThreadSurface title={String(activeThreadTitle)} subtitle="Component-system reconstruction" messages={messages} />
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="secondary">Open Codex popup primitive</Button>
+              </DialogTrigger>
+              <DialogContent size="wide">
+                <DialogHeader
+                  title="Codex dialog primitive"
+                  subtitle="Radix dialog behavior with the recovered Codex overlay, surface, close button, sizes, and measured-height transition."
+                />
+                <DialogBody>
+                  <DialogSection>
+                    This is the shared popup layer used as the readable target for upstream `dialog-layout-CCvvb1Vc.js`.
+                  </DialogSection>
+                </DialogBody>
+                <DialogFooter>
+                  <Button variant="secondary">Cancel</Button>
+                  <Button variant="primary">Continue</Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          </div>
+        )
       }
-      composer={<Composer placeholder="Ask Codex to build, inspect, or recreate a component..." />}
+      composer={isSettingsOpen ? undefined : <Composer placeholder="Ask Codex to build, inspect, or recreate a component..." />}
       rightPanel={
-        <FileBrowserPanel
-          breadcrumbs={selectedFile.breadcrumbs}
-          code={selectedFile.code}
-          fileName={selectedFile.fileName}
-          language={selectedFile.language}
-          sidePanel={
-            <aside className="codex-file-browser-tree-panel" data-app-shell-focus-area="file-tree">
-              <FileTree
-                items={fileTreeItems}
-                defaultExpandedIds={["open-shell", "open-shell/packages/ui/src", "open-shell/packages/ui/src/lib"]}
-                selectedIds={[selectedFilePath]}
-                onSelectionChange={() => undefined}
-                onNodeClick={handleFileTreeNodeClick}
-              />
-            </aside>
-          }
-        />
+        isSettingsOpen ? undefined : (
+          <FileBrowserPanel
+            breadcrumbs={selectedFile.breadcrumbs}
+            code={selectedFile.code}
+            fileName={selectedFile.fileName}
+            language={selectedFile.language}
+            sidePanel={
+              <aside className="codex-file-browser-tree-panel" data-app-shell-focus-area="file-tree">
+                <FileTree
+                  items={fileTreeItems}
+                  defaultExpandedIds={["open-shell", "open-shell/packages/ui/src", "open-shell/packages/ui/src/lib"]}
+                  selectedIds={[selectedFilePath]}
+                  onSelectionChange={() => undefined}
+                  onNodeClick={handleFileTreeNodeClick}
+                />
+              </aside>
+            }
+          />
+        )
       }
-      bottomPanel={(shell) => (
-        <BottomPanel
-          activeTabId={activeBottomTabId}
-          keepMounted
-          onActiveTabChange={handleBottomTabChange}
-          onClose={shell.toggleBottomPanel}
-          tabs={bottomPanelTabs}
-        />
-      )}
+      bottomPanel={
+        isSettingsOpen
+          ? undefined
+          : (shell) => (
+              <BottomPanel
+                activeTabId={activeBottomTabId}
+                keepMounted
+                onActiveTabChange={handleBottomTabChange}
+                onClose={shell.toggleBottomPanel}
+                tabs={bottomPanelTabs}
+              />
+            )
+      }
     />
   );
 }
@@ -442,4 +587,100 @@ function createThreadHistoryEntry(threadId: string, title: string): ExampleHisto
     title,
     type: "thread",
   };
+}
+
+function ExampleSettingsContent({
+  autoReview,
+  defaultPermissions,
+  fullAccess,
+  sectionTitle,
+  setAutoReview,
+  setDefaultPermissions,
+  setFullAccess,
+  setWorkMode,
+  workMode,
+}: {
+  autoReview: boolean;
+  defaultPermissions: boolean;
+  fullAccess: boolean;
+  sectionTitle: string;
+  setAutoReview: (value: boolean) => void;
+  setDefaultPermissions: (value: boolean) => void;
+  setFullAccess: (value: boolean) => void;
+  setWorkMode: (value: "coding" | "everyday") => void;
+  workMode: "coding" | "everyday";
+}) {
+  return (
+    <SettingsPanel title={sectionTitle}>
+      <SettingsSection>
+        <div className="codex-settings-work-mode-grid">
+          <SettingsOptionCard
+            description="More technical responses and control"
+            icon={<TerminalIcon size={18} strokeWidth={1.7} />}
+            onClick={() => setWorkMode("coding")}
+            selected={workMode === "coding"}
+            title="For coding"
+          />
+          <SettingsOptionCard
+            description="Same power, less technical detail"
+            icon={<Search size={18} strokeWidth={1.7} />}
+            onClick={() => setWorkMode("everyday")}
+            selected={workMode === "everyday"}
+            title="For everyday work"
+          />
+        </div>
+      </SettingsSection>
+
+      <SettingsSection title="Permissions">
+        <SettingsCard>
+          <SettingsRow
+            control={<SettingsToggle checked={defaultPermissions} onCheckedChange={setDefaultPermissions} />}
+            description="By default, Codex can read and edit files in its workspace. It can ask for additional access when needed."
+            title="Default permissions"
+          />
+          <SettingsRow
+            control={<SettingsToggle checked={autoReview} onCheckedChange={setAutoReview} />}
+            description="Codex automatically reviews requests for additional access. Auto-review can make mistakes."
+            title="Auto-review"
+          />
+          <SettingsRow
+            control={<SettingsToggle checked={fullAccess} onCheckedChange={setFullAccess} />}
+            description="When Codex runs with full access, it can edit any file on your computer and run commands with network."
+            title="Full access"
+          />
+        </SettingsCard>
+      </SettingsSection>
+
+      <SettingsSection title="General">
+        <SettingsCard>
+          <SettingsRow
+            control={
+              <SettingsSelect defaultValue="ghostty" aria-label="Default open destination">
+                <option value="ghostty">Ghostty</option>
+                <option value="terminal">Terminal</option>
+                <option value="editor">Editor</option>
+              </SettingsSelect>
+            }
+            description="Where files and folders open by default"
+            title="Default open destination"
+          />
+          <SettingsRow
+            control={
+              <SettingsSelect defaultValue="auto" aria-label="Language">
+                <option value="auto">Auto Detect</option>
+                <option value="en">English</option>
+                <option value="hi">Hindi</option>
+              </SettingsSelect>
+            }
+            description="Language for the app UI"
+            title="Language"
+          />
+        </SettingsCard>
+      </SettingsSection>
+    </SettingsPanel>
+  );
+}
+
+function findSettingsItem(itemId: string) {
+  return settingsSections.flatMap((section) => section.items).find((item) => item.id === itemId);
 }

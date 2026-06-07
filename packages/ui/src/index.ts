@@ -42,6 +42,28 @@ export type { FileTreeItem, FileTreeProps, TreeNode, TreeViewProps } from "./fil
 export { FileBrowserBreadcrumbs, FileBrowserPanel, FileBrowserTab } from "./file-browser/FileBrowserPanel";
 export type { FileBrowserPanelProps } from "./file-browser/FileBrowserPanel";
 export { CodexMark } from "./icons/CodexMark";
+export {
+  SettingsCard,
+  SettingsOptionCard,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsSelect,
+  SettingsSidebar,
+  SettingsToggle,
+} from "./settings/Settings";
+export type {
+  SettingsCardProps,
+  SettingsNavItem,
+  SettingsNavSection,
+  SettingsOptionCardProps,
+  SettingsPanelProps,
+  SettingsRowProps,
+  SettingsSectionProps,
+  SettingsSelectProps,
+  SettingsSidebarProps,
+  SettingsToggleProps,
+} from "./settings/Settings";
 export { Button, IconButton, Pill, StatusDot } from "./primitives/Button";
 export {
   ContextMenu,
