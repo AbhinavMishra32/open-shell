@@ -156,7 +156,7 @@ const fileTreeItems = [
 
 const previewCode = `{
   "name": "@open-shell/ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Native-looking shell primitives for modern desktop apps.",
   "exports": {
     ".": "./dist/index.js",

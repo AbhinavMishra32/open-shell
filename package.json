@@ -1,6 +1,6 @@
 {
   "name": "open-shell",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "private": true,
   "packageManager": "npm@11.6.1",
   "description": "A research-driven Electron component system for modern agentic desktop apps.",
@@ -11,13 +11,13 @@
   ],
   "scripts": {
     "build": "turbo run build",
-    "dev": "turbo run dev --filter=@open-shell/electron-example",
-    "docs:build": "npm run build -w @open-shell/docs",
-    "docs:dev": "npm run dev -w @open-shell/docs",
+    "dev": "npm run build -w @open-shell/ui && turbo run dev --filter=@open-shell/electron-example",
+    "docs:build": "npm run build -w @open-shell/ui && npm run build -w @open-shell/docs",
+    "docs:dev": "npm run build -w @open-shell/ui && npm run dev -w @open-shell/docs",
     "docs:start": "npm run start -w @open-shell/docs",
     "install:ui": "node scripts/install-open-shell-ui.mjs",
-    "start": "npm run start -w @open-shell/electron-example",
-    "start:example": "npm run start -w @open-shell/electron-example",
+    "start": "npm run build -w @open-shell/ui && npm run start -w @open-shell/electron-example",
+    "start:example": "npm run build -w @open-shell/ui && npm run start -w @open-shell/electron-example",
     "typecheck": "turbo run typecheck",
     "research:refresh": "npm run refresh:components --prefix research/codex-internals",
     "research:start": "npm run start --prefix research/codex-internals"

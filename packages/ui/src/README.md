@@ -7,10 +7,12 @@ It is rebuilt from the component research and literal upstream extraction in `re
 Use this layer for the copy app:
 
 - `AppShell` for the native Electron-style Codex frame
+- `useShellHistory` and `ShellHistoryProvider` for shared back/forward navigation across app surfaces
 - `Sidebar` for navigation, project/thread rows, and footer status
+- `SettingsSidebar` and `SettingsPanel` for Codex-style settings navigation and main content
 - `ThreadSurface` for static conversation/workspace content
 - `Composer` for the Codex prompt dock
-- `BottomPanel` and `TerminalSurface` for the app-shell bottom panel and terminal tab system
+- `SlotPanel`, `BottomPanel`, and `TerminalSurface` for mounted tabs, the app-shell bottom panel, and terminal tab system
 - `FileTree` for the filesystem tree DOM contract and core icon sprite
 - `FileBrowserPanel` for the right-side file/editor panel using the shared `FileTree`
 - `Dialog` and `DialogContent` for the shared popup/dialog primitive
@@ -34,6 +36,8 @@ Readable port evidence:
 - `file-tree/FileTree.tsx` ports the upstream filesystem tree data attributes, flex row lanes, selected state, `Filter files…` search wrapper, and base icon sprite from `file-tree-search-input-DWq_lg9v.js`.
 - `file-browser/FileBrowserPanel.tsx` ports the right-panel file browser shape from `RightPanelOutlet`/`RightPanelTabs` usage in `thread-app-shell-chrome-BjerXYKb.js`.
 - `app-shell/AppShell.tsx` ports the header tab-controller shape from `app-shell-D7yvB1FT.js` and the thread overflow action set from `thread-actions-DlCTuMux.js` / `local-conversation-thread-CRSaT3IN.js`.
+- `history/ShellHistory.tsx` provides the reusable shell history controller used by AppShell chrome and app-owned surfaces.
+- `settings/Settings.tsx` ports a readable settings sidebar/panel grammar for app-level settings modes.
 - `thread/ThreadSurface.tsx` ports the readable static version of the Codex conversation rhythm: assistant activity rows, user bubble, and edited-files review card.
 
 Use `research/codex-internals/src/component-library` as the literal source/reference catalog:

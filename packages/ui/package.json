@@ -1,26 +1,41 @@
 {
   "name": "@open-shell/ui",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "High-fidelity React primitives, shell layouts, and Electron UX systems for agentic desktop apps.",
+  "license": "MIT",
+  "homepage": "https://github.com/AbhinavMishra32/open-shell#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AbhinavMishra32/open-shell.git",
+    "directory": "packages/ui"
+  },
   "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "sideEffects": [
     "**/*.css"
   ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./src/index.ts"
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
     },
-    "./styles.css": "./src/tokens/codex-theme.css"
+    "./styles.css": "./dist/styles.css",
+    "./package.json": "./package.json"
   },
   "files": [
-    "src",
-    "dist"
+    "dist",
+    "README.md"
   ],
   "scripts": {
-    "build": "tsc -p tsconfig.build.json --pretty false",
+    "build": "tsc -p tsconfig.build.json --pretty false && node scripts/copy-css.mjs",
     "prepack": "npm run build",
     "typecheck": "tsc --noEmit --pretty false"
+  },
+  "publishConfig": {
+    "access": "public"
   },
   "peerDependencies": {
     "react": ">=19",

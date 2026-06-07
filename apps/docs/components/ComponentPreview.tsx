@@ -137,7 +137,7 @@ function renderPreview(slug: string) {
             sidebar={
               <Sidebar items={[]} projects={projects}>
                 <SidebarSection heading="Files">
-                  <FileTree gitLane={false} items={fileTree} showActions={false} variant="sidebar" />
+                  <FileTree items={fileTree} variant="sidebar" />
                 </SidebarSection>
               </Sidebar>
             }
@@ -157,11 +157,7 @@ function renderPreview(slug: string) {
                 tabs={[
                   {
                     active: true,
-                    content: (
-                      <TerminalSurface cwd="~/open-shell">
-                        {"npm run docs:dev\n✓ docs ready on localhost:3001\n› awaiting component edits"}
-                      </TerminalSurface>
-                    ),
+                    content: <TerminalSurface />,
                     id: "terminal",
                     title: "open-shell",
                   },
@@ -184,7 +180,7 @@ function renderPreview(slug: string) {
             projects={projects}
           >
             <SidebarSection heading="Files">
-              <FileTree gitLane={false} items={fileTree} showActions={false} variant="sidebar" />
+              <FileTree items={fileTree} variant="sidebar" />
             </SidebarSection>
           </Sidebar>
         </div>
@@ -202,11 +198,7 @@ function renderPreview(slug: string) {
           tabs={[
             {
               active: true,
-              content: (
-                <TerminalSurface cwd="~/open-shell">
-                  {"[docs] loaded component preview registry\n[agent] hydrated bottom panel tabs\n› npm run docs:dev"}
-                </TerminalSurface>
-              ),
+              content: <TerminalSurface />,
               id: "terminal",
               title: "open-shell",
             },
@@ -309,11 +301,7 @@ function renderPreview(slug: string) {
     case "thread-surface":
       return <ThreadSurface messages={messages} subtitle="Component-system reconstruction" title="Inspect Electron UI" />;
     case "terminal-surface":
-      return (
-        <TerminalSurface cwd="~/open-shell">
-          {"npm run docs:build\n✓ compiled component docs\n✓ emitted interactive examples"}
-        </TerminalSurface>
-      );
+      return <TerminalSurface />;
     default:
       return <p>No preview registered yet.</p>;
   }

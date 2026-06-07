@@ -83,11 +83,7 @@ export default function HomePage() {
                 tabs={[
                   {
                     active: true,
-                    content: (
-                      <TerminalSurface cwd="~/open-shell">
-                        {"npm run docs:dev\n✓ Open Shell UI docs ready\n› component previews mounted"}
-                      </TerminalSurface>
-                    ),
+                    content: <TerminalSurface />,
                     id: "terminal",
                     title: "open-shell",
                   },

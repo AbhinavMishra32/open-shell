@@ -5,8 +5,18 @@ export const metadata = {
 
 const releases = [
   {
-    version: "0.1.1",
+    version: "0.3.0",
     status: "current",
+    notes: [
+      "Shared shell history API now powers AppShell back/forward controls across threads, files, settings, and slot tabs.",
+      "SlotPanel and BottomPanel keep inactive tab content mounted so terminals and long-running tools stay alive.",
+      "Reusable settings surfaces are available for Codex-style settings sidebars, panels, rows, toggles, selects, and option cards.",
+      "@open-shell/ui now builds from dist as a publishable npm package with JS, declarations, and copied CSS assets.",
+    ],
+  },
+  {
+    version: "0.1.1",
+    status: "previous",
     notes: [
       "Composer slot is optional in AppShell.",
       "Sidebar chrome exposes native toggle/back/forward controls.",

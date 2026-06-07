@@ -42,6 +42,11 @@ export const componentDocs: ComponentDoc[] = [
         description: "Right-side chrome controls owned by the consuming app.",
       },
       {
+        name: "history",
+        type: "ShellHistoryController",
+        description: "Shared app history controller. Drives default sidebar chrome back/forward controls.",
+      },
+      {
         name: "chromeControls",
         type: "ReactNode | (state: AppShellState) => ReactNode",
         description: "Mac/native titlebar-adjacent controls owned by the consuming app.",
@@ -115,6 +120,70 @@ export const componentDocs: ComponentDoc[] = [
 />`,
   },
   {
+    category: "Navigation",
+    description:
+      "Codex-style settings navigation surface with back-to-app control, search, grouped sections, active rows, and caller-owned settings mode switching.",
+    importName: "SettingsSidebar",
+    props: [
+      { name: "sections", type: "SettingsNavSection[]", description: "Grouped settings navigation model." },
+      { name: "activeItemId", type: "string", description: "Currently selected settings row." },
+      { name: "onBack", type: "() => void", description: "Callback for returning from settings to the main app." },
+      { name: "onItemSelect", type: "(item: SettingsNavItem) => void", description: "Callback fired when a settings row is selected." },
+      { name: "query", type: "string", description: "Controlled search query." },
+      { name: "onSearchChange", type: "(query: string) => void", description: "Search input callback." },
+    ],
+    related: ["app-shell", "button"],
+    slug: "settings-sidebar",
+    slots: [
+      { name: "back", description: "Back-to-app button." },
+      { name: "search", description: "Settings filter input." },
+      { name: "sections", description: "Grouped settings rows with icons, labels, and badges." },
+      { name: "footer", description: "Optional settings footer slot." },
+    ],
+    sourcePath: "packages/ui/src/settings/Settings.tsx",
+    title: "SettingsSidebar",
+    usage: `import { SettingsSidebar } from "@open-shell/ui";
+
+<SettingsSidebar
+  activeItemId="general"
+  sections={settingsSections}
+  onBack={() => history.push({ id: "thread:home", type: "thread" })}
+  onItemSelect={(item) => history.push({ id: \`settings:\${item.id}\`, type: "settings" })}
+/>`,
+  },
+  {
+    category: "Shell",
+    description:
+      "Settings content system with page header, sections, bordered cards, rows, switches, select controls, and selectable option cards.",
+    importName: "SettingsPanel",
+    props: [
+      { name: "title", type: "ReactNode", description: "Settings page title." },
+      { name: "subtitle", type: "ReactNode", description: "Optional page subtitle." },
+      { name: "SettingsRow.control", type: "ReactNode", description: "Right-side control slot for toggles, selects, buttons, or custom controls." },
+      { name: "SettingsToggle.checked", type: "boolean", description: "Controlled switch state." },
+      { name: "SettingsOptionCard.selected", type: "boolean", description: "Selected card state." },
+    ],
+    related: ["settings-sidebar", "app-shell"],
+    slug: "settings-panel",
+    slots: [
+      { name: "header", description: "Title and subtitle region." },
+      { name: "section", description: "Logical settings group." },
+      { name: "card", description: "Bordered row group." },
+      { name: "row control", description: "Toggle, select, or custom control." },
+    ],
+    sourcePath: "packages/ui/src/settings/Settings.tsx",
+    title: "SettingsPanel",
+    usage: `import { SettingsCard, SettingsPanel, SettingsRow, SettingsSection, SettingsToggle } from "@open-shell/ui";
+
+<SettingsPanel title="General">
+  <SettingsSection title="Permissions">
+    <SettingsCard>
+      <SettingsRow title="Auto-review" control={<SettingsToggle checked={enabled} />} />
+    </SettingsCard>
+  </SettingsSection>
+</SettingsPanel>`,
+  },
+  {
     category: "Input",
     description:
       "A high-context agent composer with attachment menu, permissions surface, model/reasoning picker, dictation button, and submit affordance.",
@@ -143,7 +212,10 @@ export const componentDocs: ComponentDoc[] = [
       { name: "height", type: "number", description: "Initial height of the resizable panel in pixels.", defaultValue: "280" },
       { name: "mainContentHeight", type: "number", description: "Height of the main container viewport, used to clamp drag resizing to maximum 50% height." },
       { name: "onHeightChange", type: "(height: number) => void", description: "Callback fired when the resize action commits a new height." },
-      { name: "onClose", type: "() => void", description: "Callback fired when the panel's close button is clicked, mapping to shell state controls." }
+      { name: "onClose", type: "() => void", description: "Callback fired when the panel's close button is clicked, mapping to shell state controls." },
+      { name: "activeTabId", type: "string | null", description: "Controlled active tab id for history-aware panels." },
+      { name: "keepMounted", type: "boolean", description: "Keep inactive tab content mounted for terminals and long-running tools.", defaultValue: "true" },
+      { name: "onActiveTabChange", type: "(id, tab) => void", description: "Callback fired when users switch tabs." },
     ],
     related: ["app-shell", "file-tree", "terminal-surface"],
     slug: "bottom-panel",
@@ -166,7 +238,7 @@ import { Terminal } from "lucide-react";
       icon: <Terminal size={14} />,
       closable: true,
       active: true,
-      content: <TerminalSurface cwd="~/general">npm run dev</TerminalSurface>,
+      content: <TerminalSurface />,
     },
   ]}
 />`,
@@ -211,12 +283,8 @@ import { Terminal } from "lucide-react";
     props: [
       { name: "items", type: "FileTreeItem[]", description: "Nested directory/file model." },
       { name: "search", type: "boolean", description: "Show the filter input.", defaultValue: "true" },
-      { name: "coloredIcons", type: "boolean", description: "Enable extension color tokens.", defaultValue: "true" },
       { name: "variant", type: '"default" | "sidebar"', description: "Use sidebar for compact transparent left-rail rendering.", defaultValue: "default" },
-      { name: "gitLane", type: "boolean", description: "Show the git status lane.", defaultValue: "true" },
-      { name: "showActions", type: "boolean", description: "Show the trailing action lane.", defaultValue: "true" },
       { name: "data", type: "TreeNode[]", description: "Tree-view style data source for highly customizable app-owned node structures." },
-      { name: "defaultExpandedPaths", type: "string[]", description: "Initial expanded directory paths. Defaults to all directories." },
       { name: "defaultExpandedIds", type: "string[]", description: "Tree-node ids that should start expanded when using the data API." },
       { name: "selectedIds", type: "string[]", description: "Controlled selection state for file or tree nodes." },
       { name: "onSelectionChange", type: "(ids: string[]) => void", description: "Selection change callback for single or multi-select trees." },
@@ -240,8 +308,6 @@ import { Terminal } from "lucide-react";
 
 <FileTree
   variant="sidebar"
-  gitLane={false}
-  showActions={false}
   showLines
   items={[
     { name: "packages", path: "packages", type: "directory", children: [
@@ -394,25 +460,23 @@ import { Terminal } from "lucide-react";
   {
     category: "Data",
     description:
-      "Terminal output surface with cwd header and monospace buffer, designed for bottom-panel or split-pane usage.",
+      "xterm.js terminal emulator surface designed for bottom-panel or split-pane usage. Wire onData to an app-owned PTY.",
     importName: "TerminalSurface",
     props: [
-      { name: "cwd", type: "string", description: "Displayed working directory." },
-      { name: "children", type: "ReactNode", description: "Terminal output buffer." },
+      { name: "onData", type: "(data: string) => void", description: "Callback fired when the user types terminal input." },
+      { name: "onTitleChange", type: "(title: string) => void", description: "Callback fired when terminal escape sequences update the title." },
+      { name: "options", type: "Record<string, unknown>", description: "xterm.js terminal option overrides." },
     ],
     related: ["bottom-panel"],
     slug: "terminal-surface",
     slots: [
-      { name: "header", description: "CWD/status row." },
-      { name: "buffer", description: "Preformatted output region." },
+      { name: "terminal", description: "Mounted xterm.js terminal viewport." },
     ],
     sourcePath: "packages/ui/src/bottom-panel/BottomPanel.tsx",
     title: "TerminalSurface",
     usage: `import { TerminalSurface } from "@open-shell/ui";
 
-<TerminalSurface cwd="~/open-shell">
-  npm run docs:dev
-</TerminalSurface>`,
+<TerminalSurface onData={(data) => pty.write(data)} />`,
   },
 ];
 

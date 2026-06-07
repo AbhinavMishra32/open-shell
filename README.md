@@ -11,7 +11,7 @@
 [![license](https://img.shields.io/badge/license-MIT-0F172A?style=for-the-badge)](./LICENSE)
 [![prs](https://img.shields.io/badge/PRs-welcome-22C55E?style=for-the-badge)](./CONTRIBUTING.md)
 
-Open Shell UI is a React component system for building agent-native software: translucent desktop shells, dense sidebars, terminals, file trees, review panes, command menus, chat surfaces, and high-context composers.
+Open Shell UI is a React component system for building agent-native software: translucent desktop shells, dense sidebars, shared back/forward history, settings surfaces, persistent slot tabs, terminals, file trees, review panes, command menus, chat surfaces, and high-context composers.
 
 It is the UI engine layer you want before you start writing product logic. Instead of another dashboard kit, it gives teams the primitives and shell grammar for modern agent workspaces.
 
@@ -25,6 +25,8 @@ This repository is now organized like a serious component-library project:
 - `apps/docs` is a Next/Fumadocs documentation site with live component previews.
 - `examples/electron-shell` is the runnable Electron app that consumes the package.
 - `research/codex-internals` remains the private research/provenance workspace for continuing component-system reconstruction.
+
+Current release: `0.3.0`.
 
 ## Quick Start
 
@@ -45,11 +47,17 @@ import {
   Sidebar,
   TerminalSurface,
   ThreadSurface,
+  useShellHistory,
 } from "@open-shell/ui";
 
 export function AgentWorkspace() {
+  const history = useShellHistory([
+    { id: "thread:launch-review", type: "thread", title: "Launch review" },
+  ]);
+
   return (
     <AppShell
+      history={history}
       sidebar={<Sidebar items={[]} projects={projects} />}
       main={<ThreadSurface title="Launch review" messages={messages} />}
       composer={<Composer placeholder="Ask the agent to inspect this codebase..." />}
@@ -69,6 +77,21 @@ export function AgentWorkspace() {
     />
   );
 }
+```
+
+## Install From npm
+
+`@open-shell/ui` now builds as a normal npm package:
+
+```sh
+npm install @open-shell/ui react react-dom
+```
+
+Then import the package and stylesheet:
+
+```tsx
+import { AppShell, Sidebar, useShellHistory } from "@open-shell/ui";
+import "@open-shell/ui/styles.css";
 ```
 
 ## Install Into Another Project
@@ -119,8 +142,12 @@ What it does:
 | Component | Category | Notes |
 | --- | --- | --- |
 | `AppShell` | Shell | Sidebar, topbar, main, composer, right panel, and bottom panel slots. |
+| `useShellHistory` | Navigation | Shared back/forward stack for threads, files, settings, routes, and slot tabs. |
 | `Sidebar` | Navigation | Project/thread navigation, primary actions, footer controls. |
+| `SettingsSidebar` | Navigation | Settings sidebar with search, grouped sections, back-to-app control, and active rows. |
+| `SettingsPanel` | Shell | Settings main surface with sections, cards, rows, toggles, selects, and option cards. |
 | `Composer` | Input | Attachment menu, permission control, model/reasoning menu, submit. |
+| `SlotPanel` | Shell | Generic tab system for any slot, with controlled active state and mounted inactive tabs. |
 | `BottomPanel` | Shell | Resizable Radix Tabs panel for terminal, files, side chat, logs. |
 | `TerminalSurface` | Data | Monospace process/log surface for bottom-panel slots. |
 | `FileTree` | Data | Searchable file tree with icon, git, and action lanes. |
@@ -168,10 +195,12 @@ The Electron example demonstrates:
 - transparent macOS window surface
 - hidden inset titlebar
 - translucent sidebar material
+- Codex-style sidebar collapse, back, and forward controls connected to shared shell history
+- settings sidebar/main-mode switching using reusable settings primitives
 - chat thread canvas
 - composer dock
 - inspector/file-tree side rail
-- resizable bottom terminal panel
+- resizable bottom terminal panel with mounted inactive tabs so terminal state survives tab switches
 
 ## Shell Slots
 
@@ -188,6 +217,27 @@ type AppShellSlots = {
 ```
 
 That slot contract is the center of the system. The layout, animation, and density are coordinated at shell level so downstream apps can focus on data and workflow logic.
+
+## Shared History
+
+Use `useShellHistory` when any surface in the app should participate in one back/forward stack:
+
+```tsx
+const history = useShellHistory([
+  { id: "thread:home", type: "thread", title: "Home" },
+]);
+
+history.push({
+  id: "file:package.json",
+  type: "file",
+  title: "package.json",
+  payload: { path: "package.json" },
+});
+
+<AppShell history={history} sidebar={<Sidebar projects={projects} />} main={<CurrentSurface />} />;
+```
+
+The default sidebar chrome uses that controller for Codex-style back and forward buttons. `SlotPanel` and `BottomPanel` expose `activeTabId`, `onActiveTabChange`, tab lifecycle callbacks, and `keepMounted` so terminal/process surfaces do not reset when another tab becomes active.
 
 ## Commands
 
