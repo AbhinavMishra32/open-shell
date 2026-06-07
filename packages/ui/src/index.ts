@@ -20,8 +20,8 @@ export {
   AppShellTabStrip,
 } from "./app-shell/AppShell";
 export type { AppShellProps, AppShellState, AppShellTabItem } from "./app-shell/AppShell";
-export { BottomPanel, TerminalSurface, clampBottomPanelHeight } from "./bottom-panel/BottomPanel";
-export type { BottomPanelTab } from "./bottom-panel/BottomPanel";
+export { BottomPanel, TerminalSurface, SideChatView, ReviewView, DiagnosticsLogsView, clampBottomPanelHeight } from "./bottom-panel/BottomPanel";
+export type { BottomPanelTab, BottomPanelProps, BottomPanelHandle, TerminalSurfaceProps } from "./bottom-panel/BottomPanel";
 export { Composer } from "./composer/Composer";
 export { FileTree } from "./file-tree/FileTree";
 export type { FileTreeItem, FileTreeProps, TreeNode, TreeViewProps } from "./file-tree/FileTree";

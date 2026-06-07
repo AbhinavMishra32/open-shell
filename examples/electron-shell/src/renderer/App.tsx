@@ -1,4 +1,4 @@
-import { ArrowLeft, ArrowRight, PanelLeftClose, Search, SquarePen } from "lucide-react";
+import { ArrowLeft, ArrowRight, File as FileIcon, PanelLeftClose, Search, SquarePen, Terminal as TerminalIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import {
   AppShell,
@@ -300,31 +300,28 @@ export function App() {
           language="json"
         />
       }
-      bottomPanel={
+      bottomPanel={(shell) => (
         <BottomPanel
+          onClose={shell.toggleBottomPanel}
           tabs={[
             {
               active: true,
               closable: true,
               id: "terminal",
-              title: "open-shell",
-              content: (
-                <TerminalSurface>
-                  {`[AppServerConnection] incoming_line_processed dispatchDurationMs=0 lineBytes=358
-[electron-message-handler] Request completed conversationId=none durationMs=72
-~/open-shell main
-› npm run start:example`}
-                </TerminalSurface>
-              ),
+              title: "desktop-agent-app",
+              icon: <TerminalIcon size={14} />,
+              content: <TerminalSurface />,
             },
             {
               id: "files",
-              title: "Files",
+              title: "Open file",
+              closable: true,
+              icon: <FileIcon size={14} />,
               content: <FileTree items={fileTreeItems} />,
             },
           ]}
         />
-      }
+      )}
     />
   );
 }

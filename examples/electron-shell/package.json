@@ -1,7 +1,7 @@
 {
   "name": "@open-shell/electron-example",
   "productName": "Open Shell Example",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Example Electron app consuming @open-shell/ui.",
   "main": "src/main/main.cjs",
@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit --pretty false"
   },
   "dependencies": {
-    "@open-shell/ui": "0.1.0",
+    "@open-shell/ui": "*",
     "@vitejs/plugin-react": "^5.1.1",
     "electron": "42.1.0",
     "react": "^19.2.1",

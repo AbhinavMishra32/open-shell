@@ -136,32 +136,37 @@ export const componentDocs: ComponentDoc[] = [
   {
     category: "Shell",
     description:
-      "Resizable bottom panel primitive for terminal output, file picker, side chat, or any auxiliary task surface.",
+      "Resizable stateful bottom slot panel featuring Codex-style tabs, inline launcher triggers, interactive Terminal surface, Side Chat, diagnostics logging, and code checklist reviews.",
     importName: "BottomPanel",
     props: [
-      { name: "tabs", type: "BottomPanelTab[]", description: "Radix Tabs-backed panel tabs with content." },
-      { name: "height", type: "number", description: "Initial panel height in pixels.", defaultValue: "280" },
-      { name: "mainContentHeight", type: "number", description: "Viewport height used for clamping." },
-      { name: "onHeightChange", type: "(height: number) => void", description: "Notifies parent when resize commits." },
+      { name: "tabs", type: "BottomPanelTab[]", description: "Array of tab configurations. A BottomPanelTab contains: id (string), title (string), content (ReactNode), icon (ReactNode), active (boolean), closable (boolean), and shortcut (string)." },
+      { name: "height", type: "number", description: "Initial height of the resizable panel in pixels.", defaultValue: "280" },
+      { name: "mainContentHeight", type: "number", description: "Height of the main container viewport, used to clamp drag resizing to maximum 50% height." },
+      { name: "onHeightChange", type: "(height: number) => void", description: "Callback fired when the resize action commits a new height." },
+      { name: "onClose", type: "() => void", description: "Callback fired when the panel's close button is clicked, mapping to shell state controls." }
     ],
-    related: ["app-shell", "file-tree"],
+    related: ["app-shell", "file-tree", "terminal-surface"],
     slug: "bottom-panel",
     slots: [
-      { name: "tabbar", description: "Active tab and launcher controls." },
-      { name: "resize handle", description: "Top-edge separator for drag resizing." },
-      { name: "outlet", description: "Selected tab content." },
+      { name: "tabbar", description: "Inline tab list triggers, dynamic macOS-style circular hover close button, and inline add trigger." },
+      { name: "resize handle", description: "Top border interaction area for resizing panel." },
+      { name: "outlet", description: "Radix Tabs Content area displaying active tool view, or empty launcher dashboard grid." },
     ],
     sourcePath: "packages/ui/src/bottom-panel/BottomPanel.tsx",
     title: "BottomPanel",
     usage: `import { BottomPanel, TerminalSurface } from "@open-shell/ui";
+import { Terminal } from "lucide-react";
 
 <BottomPanel
+  onClose={togglePanel}
   tabs={[
     {
       id: "terminal",
-      title: "open-shell",
+      title: "desktop-agent-app",
+      icon: <Terminal size={14} />,
+      closable: true,
       active: true,
-      content: <TerminalSurface>npm run docs:dev</TerminalSurface>,
+      content: <TerminalSurface cwd="~/general">npm run dev</TerminalSurface>,
     },
   ]}
 />`,

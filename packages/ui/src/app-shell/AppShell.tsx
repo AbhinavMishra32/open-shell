@@ -31,7 +31,7 @@ export type AppShellState = {
 };
 
 export type AppShellProps = {
-  bottomPanel?: ReactNode;
+  bottomPanel?: ReactNode | ((state: AppShellState) => ReactNode);
   canNavigateBack?: boolean;
   canNavigateForward?: boolean;
   chromeControls?: ReactNode | ((state: AppShellState) => ReactNode);
@@ -242,7 +242,7 @@ export function AppShell({
             data-open={isBottomPanelOpen ? "true" : "false"}
             data-app-shell-focus-area="bottom-panel"
           >
-            <AppShellBottomPanel>{bottomPanel}</AppShellBottomPanel>
+            <AppShellBottomPanel>{resolveSlot(bottomPanel, shellState)}</AppShellBottomPanel>
           </section>
         ) : null}
       </main>

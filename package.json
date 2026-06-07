@@ -1,6 +1,6 @@
 {
   "name": "open-shell",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "packageManager": "npm@11.6.1",
   "description": "A research-driven Electron component system for modern agentic desktop apps.",
@@ -29,6 +29,8 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@radix-ui/react-context-menu": "^2.2.16"
+    "@radix-ui/react-context-menu": "^2.2.16",
+    "@xterm/xterm": "^5.5.0",
+    "@xterm/addon-fit": "^0.10.0"
   }
 }
