@@ -22,6 +22,18 @@ export {
 export type { AppShellProps, AppShellState, AppShellTabItem } from "./app-shell/AppShell";
 export { SlotPanel } from "./slot-panel/SlotPanel";
 export type { SlotTab, SlotPanelHandle, SlotPanelProps, SlotLauncherItem } from "./slot-panel/SlotPanel";
+export {
+  ShellHistoryProvider,
+  useShellHistory,
+  useShellHistoryContext,
+} from "./history/ShellHistory";
+export type {
+  ShellHistoryController,
+  ShellHistoryEntry,
+  ShellHistoryProviderProps,
+  ShellHistoryState,
+  UseShellHistoryOptions,
+} from "./history/ShellHistory";
 export { BottomPanel, TerminalSurface, SideChatView, ReviewView, DiagnosticsLogsView, clampBottomPanelHeight } from "./bottom-panel/BottomPanel";
 export type { BottomPanelTab, BottomPanelProps, BottomPanelHandle, TerminalSurfaceProps } from "./bottom-panel/BottomPanel";
 export { Composer } from "./composer/Composer";

@@ -80,14 +80,28 @@ export type SlotPanelHandle = {
 };
 
 export interface SlotPanelProps {
+  /** Controlled active tab id. */
+  activeTabId?: string | null;
   /** Initial tabs to populate the panel with. */
   tabs?: SlotTab[];
+  /** Initial active tab id for uncontrolled panels. */
+  defaultActiveTabId?: string | null;
   /** Items shown in the `+` dropdown and the empty-state launcher grid. */
   launcherItems?: SlotLauncherItem[];
   /** Optional CSS class name for the root element. */
   className?: string;
+  /** Keep inactive tab content mounted so terminals and long-running tools keep state. */
+  keepMounted?: boolean;
   /** Optional close button handler. If provided, a close `×` button is shown in the tab bar. */
   onClose?: () => void;
+  /** Fired whenever the active tab changes. */
+  onActiveTabChange?: (id: string | null, tab: SlotTab | null) => void;
+  /** Fired when a tab is closed. */
+  onTabClose?: (id: string, nextTabs: SlotTab[]) => void;
+  /** Fired when a tab is opened or focused from launcher/ref. */
+  onTabOpen?: (tab: SlotTab) => void;
+  /** Fired when the internal tab list changes. */
+  onTabsChange?: (tabs: SlotTab[]) => void;
   /** Accessible label for the tab list. */
   ariaLabel?: string;
 }
@@ -116,31 +130,70 @@ export interface SlotPanelProps {
  * ```
  */
 export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
-  function SlotPanel({ tabs: initialTabs, launcherItems = [], className, onClose, ariaLabel = "Panel tabs" }, ref) {
+  function SlotPanel(
+    {
+      activeTabId: controlledActiveTabId,
+      tabs: initialTabs,
+      defaultActiveTabId,
+      launcherItems = [],
+      className,
+      keepMounted = true,
+      onClose,
+      onActiveTabChange,
+      onTabClose,
+      onTabOpen,
+      onTabsChange,
+      ariaLabel = "Panel tabs",
+    },
+    ref,
+  ) {
     const [openTabs, setOpenTabs] = useState<SlotTab[]>(() => initialTabs ?? []);
-    const activeDefault = openTabs.find((t) => t.active) ?? openTabs[0];
-    const [activeTabId, setActiveTabId] = useState<string | null>(activeDefault?.id ?? null);
+    const activeDefault = openTabs.find((t) => t.active) ?? openTabs.find((t) => t.id === defaultActiveTabId) ?? openTabs[0];
+    const [uncontrolledActiveTabId, setUncontrolledActiveTabId] = useState<string | null>(
+      controlledActiveTabId ?? defaultActiveTabId ?? activeDefault?.id ?? null,
+    );
+    const activeTabId = controlledActiveTabId !== undefined ? controlledActiveTabId : uncontrolledActiveTabId;
+    const initialTabsSignature = initialTabs?.map((tab) => tab.id).join("\u0000") ?? "";
 
-    // Sync when initialTabs prop changes
+    // Treat `tabs` as initial/uncontrolled input. This preserves mounted tool state
+    // when callers create inline arrays during ordinary shell re-renders.
     useEffect(() => {
-      if (initialTabs) {
-        setOpenTabs(initialTabs);
-        const active = initialTabs.find((t) => t.active) ?? initialTabs[0];
-        setActiveTabId(active?.id ?? null);
+      if (initialTabs == null) {
+        return;
       }
-    }, [initialTabs]);
+      setOpenTabs((currentTabs) => {
+        const currentSignature = currentTabs.map((tab) => tab.id).join("\u0000");
+        if (currentSignature === initialTabsSignature) {
+          return currentTabs;
+        }
+        return initialTabs;
+      });
+      const active = initialTabs.find((t) => t.active) ?? initialTabs.find((t) => t.id === defaultActiveTabId) ?? initialTabs[0];
+      setUncontrolledActiveTabId((currentId) =>
+        currentId != null && initialTabs.some((tab) => tab.id === currentId) ? currentId : active?.id ?? null,
+      );
+    }, [defaultActiveTabId, initialTabs, initialTabsSignature]);
+
+    const commitActiveTabId = (id: string | null) => {
+      if (controlledActiveTabId === undefined) {
+        setUncontrolledActiveTabId(id);
+      }
+      onActiveTabChange?.(id, openTabs.find((tab) => tab.id === id) ?? null);
+    };
 
     const handleCloseTab = (id: string) => {
       const nextTabs = openTabs.filter((t) => t.id !== id);
       setOpenTabs(nextTabs);
+      onTabsChange?.(nextTabs);
+      onTabClose?.(id, nextTabs);
 
       if (activeTabId === id) {
         if (nextTabs.length > 0) {
           const deletedIndex = openTabs.findIndex((t) => t.id === id);
           const nextActiveIndex = Math.min(deletedIndex, nextTabs.length - 1);
-          setActiveTabId(nextTabs[nextActiveIndex].id);
+          commitActiveTabId(nextTabs[nextActiveIndex].id);
         } else {
-          setActiveTabId(null);
+          commitActiveTabId(null);
         }
       }
     };
@@ -148,11 +201,15 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
     const handleAddTab = (tab: SlotTab) => {
       const existing = openTabs.find((t) => t.id === tab.id);
       if (existing) {
-        setActiveTabId(tab.id);
+        commitActiveTabId(tab.id);
+        onTabOpen?.(existing);
         return;
       }
-      setOpenTabs((prev) => [...prev, tab]);
-      setActiveTabId(tab.id);
+      const nextTabs = [...openTabs, tab];
+      setOpenTabs(nextTabs);
+      onTabsChange?.(nextTabs);
+      commitActiveTabId(tab.id);
+      onTabOpen?.(tab);
     };
 
     const handleLauncherSelect = (item: SlotLauncherItem) => {
@@ -163,7 +220,7 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
     React.useImperativeHandle(ref, () => ({
       addTab: handleAddTab,
       closeTab: handleCloseTab,
-      setActiveTab: (id: string) => setActiveTabId(id),
+      setActiveTab: (id: string) => commitActiveTabId(id),
       getTabs: () => [...openTabs],
     }));
 
@@ -171,7 +228,7 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
       <Tabs.Root
         className={`codex-slot-panel${className ? ` ${className}` : ""}`}
         value={activeTabId || ""}
-        onValueChange={(val) => setActiveTabId(val || null)}
+        onValueChange={(val) => commitActiveTabId(val || null)}
       >
         <div className="codex-slot-panel-tabbar">
           <div className="codex-slot-panel-tabs-container">
@@ -183,7 +240,6 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
                   className="codex-slot-panel-tab"
                   data-tab-id={tab.id}
                   data-closable={tab.closable === true ? "true" : undefined}
-                  onClick={() => setActiveTabId(tab.id)}
                 >
                   <span className="codex-slot-panel-tab-icon-wrapper">
                     {tab.closable === true ? (
@@ -279,7 +335,13 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
           </div>
         ) : (
           openTabs.map((tab) => (
-            <Tabs.Content key={tab.id} value={tab.id} className="codex-slot-panel-outlet">
+            <Tabs.Content
+              key={tab.id}
+              value={tab.id}
+              className="codex-slot-panel-outlet"
+              forceMount={keepMounted ? true : undefined}
+              hidden={keepMounted && activeTabId !== tab.id ? true : undefined}
+            >
               {tab.content}
             </Tabs.Content>
           ))

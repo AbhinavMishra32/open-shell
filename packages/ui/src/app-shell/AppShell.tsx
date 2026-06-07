@@ -5,6 +5,8 @@ import {
   ContextMenuContent,
   ContextMenuTrigger,
 } from "../primitives/ContextMenu";
+import { ShellHistoryProvider } from "../history/ShellHistory";
+import type { ShellHistoryController } from "../history/ShellHistory";
 import "./app-shell.css";
 
 export type AppShellTabItem = {
@@ -17,6 +19,7 @@ export type AppShellTabItem = {
 export type AppShellState = {
   canNavigateBack: boolean;
   canNavigateForward: boolean;
+  history?: ShellHistoryController<any>;
   isBottomPanelOpen: boolean;
   isRightPanelOpen: boolean;
   isSidebarOpen: boolean;
@@ -43,6 +46,7 @@ export type AppShellProps = {
   defaultSidebarWidth?: number;
   headerActions?: ReactNode | ((state: AppShellState) => ReactNode);
   headerTabs?: AppShellTabItem[];
+  history?: ShellHistoryController<any>;
   main: ReactNode;
   renderHeaderTab?: (tab: AppShellTabItem, state: AppShellState) => ReactNode;
   renderHeaderTabActions?: (tab: AppShellTabItem, state: AppShellState) => ReactNode;
@@ -62,8 +66,8 @@ export type AppShellButtonProps = ButtonHTMLAttributes<HTMLButtonElement>;
 
 export function AppShell({
   bottomPanel,
-  canNavigateBack = false,
-  canNavigateForward = false,
+  canNavigateBack,
+  canNavigateForward,
   chromeControls,
   composer,
   collapsedSidebarTrigger,
@@ -73,6 +77,7 @@ export function AppShell({
   defaultSidebarWidth = 300,
   headerActions,
   headerTabs = [],
+  history,
   main,
   renderHeaderTab,
   renderHeaderTabActions,
@@ -100,15 +105,26 @@ export function AppShell({
   const toggleBottomPanel = useCallback(() => {
     setIsBottomPanelOpen((value) => !value);
   }, []);
+  const resolvedCanNavigateBack = canNavigateBack ?? history?.canGoBack ?? false;
+  const resolvedCanNavigateForward = canNavigateForward ?? history?.canGoForward ?? false;
   const navigateBack = useCallback(() => {
-    onNavigateBack?.();
-  }, [onNavigateBack]);
+    if (onNavigateBack != null) {
+      onNavigateBack();
+      return;
+    }
+    history?.goBack();
+  }, [history, onNavigateBack]);
   const navigateForward = useCallback(() => {
-    onNavigateForward?.();
-  }, [onNavigateForward]);
+    if (onNavigateForward != null) {
+      onNavigateForward();
+      return;
+    }
+    history?.goForward();
+  }, [history, onNavigateForward]);
   const shellState: AppShellState = {
-    canNavigateBack,
-    canNavigateForward,
+    canNavigateBack: resolvedCanNavigateBack,
+    canNavigateForward: resolvedCanNavigateForward,
+    history,
     isBottomPanelOpen,
     isRightPanelOpen,
     isSidebarOpen,
@@ -150,7 +166,7 @@ export function AppShell({
     [sidebarMaxWidth, sidebarMinWidth, sidebarWidth],
   );
 
-  return (
+  const shell = (
     <div
       className="codex-app-shell"
       data-sidebar-open={isSidebarOpen ? "true" : "false"}
@@ -248,6 +264,8 @@ export function AppShell({
       </main>
     </div>
   );
+
+  return history != null ? <ShellHistoryProvider history={history}>{shell}</ShellHistoryProvider> : shell;
 }
 
 export function AppShellSidebarChrome({ children, className, ...props }: AppShellSlotProps) {

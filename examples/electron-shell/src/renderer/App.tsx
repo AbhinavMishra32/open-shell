@@ -1,10 +1,22 @@
-import { ArrowLeft, ArrowRight, File as FileIcon, PanelLeftClose, Search, SquarePen, Terminal as TerminalIcon } from "lucide-react";
-import { useMemo, useState } from "react";
+import {
+  ChevronDown,
+  Ellipsis,
+  File as FileIcon,
+  ListTree,
+  PanelBottom,
+  PanelRight,
+  Search,
+  SquarePen,
+  Terminal as TerminalIcon,
+} from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   AppShell,
-  AppShellChromeButton,
+  AppShellHeaderPillButton,
+  AppShellHeaderToolButton,
   BottomPanel,
   Button,
+  CodexMark,
   Composer,
   Dialog,
   DialogBody,
@@ -18,8 +30,9 @@ import {
   Sidebar,
   TerminalSurface,
   ThreadSurface,
+  useShellHistory,
 } from "@open-shell/ui";
-import type { SidebarItem, SidebarNavItem, SidebarProject } from "@open-shell/ui";
+import type { ShellHistoryEntry, SidebarItem, SidebarNavItem, SidebarProject, SlotTab, TreeNode } from "@open-shell/ui";
 import "@open-shell/ui/styles.css";
 import "./app.css";
 
@@ -113,7 +126,7 @@ const fileTreeItems = [
 
 const previewCode = `{
   "name": "@open-shell/ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Native-looking shell primitives for modern desktop apps.",
   "exports": {
     ".": "./dist/index.js",
@@ -121,18 +134,64 @@ const previewCode = `{
   }
 }`;
 
-export function App() {
-  const threadOrder = useMemo(
-    () =>
-      baseProjects.flatMap((project) => project.threads?.map((thread) => thread.id) ?? []),
-    [],
-  );
-  const [history, setHistory] = useState({
-    entries: ["thread-inspect-electron-ui"],
-    index: 0,
-  });
+const previewFiles = {
+  "package.json": {
+    breadcrumbs: ["open-shell", "package.json"],
+    code: previewCode,
+    fileName: "package.json",
+    language: "json",
+  },
+  "packages/ui/src/primitives/Dialog.tsx": {
+    breadcrumbs: ["open-shell", "packages", "ui", "src", "primitives", "Dialog.tsx"],
+    code: `export function DialogContent() {
+  return <div className="codex-dialog-surface" />;
+}`,
+    fileName: "Dialog.tsx",
+    language: "tsx",
+  },
+  "packages/ui/src/bottom-panel/BottomPanel.tsx": {
+    breadcrumbs: ["open-shell", "packages", "ui", "src", "bottom-panel", "BottomPanel.tsx"],
+    code: `export function BottomPanel() {
+  return <SlotPanel keepMounted />;
+}`,
+    fileName: "BottomPanel.tsx",
+    language: "tsx",
+  },
+  "packages/ui/src/file-tree/FileTree.tsx": {
+    breadcrumbs: ["open-shell", "packages", "ui", "src", "file-tree", "FileTree.tsx"],
+    code: `export function FileTree() {
+  return <TreeView data={nodes} />;
+}`,
+    fileName: "FileTree.tsx",
+    language: "tsx",
+  },
+} satisfies Record<string, { breadcrumbs: string[]; code: string; fileName: string; language: string }>;
 
-  const currentThreadId = history.entries[history.index] ?? threadOrder[0];
+type ExampleHistoryEntry = ShellHistoryEntry<
+  "bottom-tab" | "file" | "thread",
+  { filePath?: string; tabId?: string; threadId?: string }
+>;
+
+export function App() {
+  const history = useShellHistory<ExampleHistoryEntry>(() => [
+    createThreadHistoryEntry("thread-inspect-electron-ui", "Inspect Electron UI"),
+  ]);
+  const [currentThreadId, setCurrentThreadId] = useState("thread-inspect-electron-ui");
+  const [activeBottomTabId, setActiveBottomTabId] = useState("terminal");
+  const [selectedFilePath, setSelectedFilePath] = useState<keyof typeof previewFiles>("package.json");
+
+  useEffect(() => {
+    const current = history.current;
+    if (current?.type === "thread" && current.payload?.threadId != null) {
+      setCurrentThreadId(current.payload.threadId);
+    }
+    if (current?.type === "bottom-tab" && current.payload?.tabId != null) {
+      setActiveBottomTabId(current.payload.tabId);
+    }
+    if (current?.type === "file" && current.payload?.filePath != null && current.payload.filePath in previewFiles) {
+      setSelectedFilePath(current.payload.filePath as keyof typeof previewFiles);
+    }
+  }, [history.current]);
 
   const projects = useMemo<SidebarProject[]>(
     () =>
@@ -171,75 +230,128 @@ export function App() {
     projects.flatMap((project) => project.threads ?? []).find((thread) => thread.id === currentThreadId)?.title ??
     "Inspect Electron UI";
 
-  function openThread(threadId: string) {
-    setHistory((current) => {
-      if (current.entries[current.index] === threadId) {
-        return current;
+  const openThread = useCallback(
+    (threadId: string) => {
+      const title =
+        baseProjects.flatMap((project) => project.threads ?? []).find((thread) => thread.id === threadId)?.title ??
+        threadId;
+      setCurrentThreadId(threadId);
+      history.push(createThreadHistoryEntry(threadId, String(title)));
+    },
+    [history.push],
+  );
+
+  const openFile = useCallback(
+    (filePath: string) => {
+      if (!(filePath in previewFiles)) {
+        return;
       }
-      const nextEntries = current.entries.slice(0, current.index + 1);
-      nextEntries.push(threadId);
-      return {
-        entries: nextEntries,
-        index: nextEntries.length - 1,
-      };
-    });
-  }
+      const file = previewFiles[filePath as keyof typeof previewFiles];
+      setSelectedFilePath(filePath as keyof typeof previewFiles);
+      history.push({
+        id: `file:${filePath}`,
+        payload: { filePath },
+        title: file.fileName,
+        type: "file",
+      });
+    },
+    [history.push],
+  );
+
+  const handleFileTreeNodeClick = useCallback(
+    (node: TreeNode) => {
+      if (node.data?.type === "directory") {
+        return;
+      }
+      if (typeof node.data?.path === "string") {
+        openFile(node.data.path);
+      }
+    },
+    [openFile],
+  );
+
+  const handleBottomTabChange = useCallback(
+    (tabId: string | null, tab: SlotTab | null) => {
+      if (tabId == null) {
+        return;
+      }
+      setActiveBottomTabId(tabId);
+      history.push({
+        id: `bottom-tab:${tabId}`,
+        payload: { tabId },
+        title: tab?.title ?? tabId,
+        type: "bottom-tab",
+      });
+    },
+    [history.push],
+  );
+
+  const bottomPanelTabs = useMemo<SlotTab[]>(
+    () => [
+      {
+        active: true,
+        closable: true,
+        id: "terminal",
+        title: "desktop-agent-app",
+        icon: <TerminalIcon size={14} />,
+        content: <TerminalSurface />,
+      },
+      {
+        id: "files",
+        title: "Open file",
+        closable: true,
+        icon: <FileIcon size={14} />,
+        content: (
+          <FileTree
+            items={fileTreeItems}
+            defaultExpandedIds={["open-shell", "open-shell/packages/ui/src", "open-shell/packages/ui/src/lib"]}
+            onNodeClick={handleFileTreeNodeClick}
+          />
+        ),
+      },
+    ],
+    [handleFileTreeNodeClick],
+  );
+
+  const selectedFile = previewFiles[selectedFilePath];
 
   return (
     <AppShell
-      canNavigateBack={history.index > 0}
-      canNavigateForward={history.index < history.entries.length - 1}
+      history={history}
       headerTabs={[
         { active: true, dirty: true, id: currentThreadId, title: activeThreadTitle },
         { id: "component-system", title: "Component system" },
       ]}
       headerActions={(shell) => (
         <>
-          <button className="codex-header-tool-button" type="button" onClick={shell.toggleBottomPanel} aria-label="Toggle bottom panel">
-            _
-          </button>
-          <button className="codex-header-tool-button" type="button" onClick={shell.toggleRightPanel} aria-label="Toggle right panel">
-            []
-          </button>
-          <button className="codex-header-tool-button codex-header-tool-button-plain" type="button" aria-label="More actions">
-            ...
-          </button>
-        </>
-      )}
-      onNavigateBack={() =>
-        setHistory((current) => ({
-          ...current,
-          index: Math.max(0, current.index - 1),
-        }))
-      }
-      onNavigateForward={() =>
-        setHistory((current) => ({
-          ...current,
-          index: Math.min(current.entries.length - 1, current.index + 1),
-        }))
-      }
-      sidebarChrome={(shell) => (
-        <>
-          <AppShellChromeButton
-            aria-label={shell.isSidebarOpen ? "Hide sidebar" : "Show sidebar"}
-            onClick={shell.toggleSidebar}
+          <AppShellHeaderPillButton type="button" aria-label="Current app">
+            <span className="codex-header-agent-icon" aria-hidden="true">
+              <CodexMark className="codex-header-agent-mark" />
+            </span>
+            <ChevronDown size={18} strokeWidth={1.7} />
+          </AppShellHeaderPillButton>
+          <AppShellHeaderToolButton type="button" aria-label="Thread outline">
+            <ListTree size={20} strokeWidth={1.7} />
+          </AppShellHeaderToolButton>
+          <AppShellHeaderToolButton
+            type="button"
+            onClick={shell.toggleBottomPanel}
+            aria-label="Toggle bottom panel"
+            data-active={shell.isBottomPanelOpen ? "true" : undefined}
           >
-            <PanelLeftClose size={18} strokeWidth={1.8} />
-          </AppShellChromeButton>
-          <AppShellChromeButton
-            aria-label="Back"
-            disabled={!shell.canNavigateBack}
-            onClick={shell.navigateBack}
+            <PanelBottom size={20} strokeWidth={1.7} />
+          </AppShellHeaderToolButton>
+          <AppShellHeaderToolButton
+            type="button"
+            onClick={shell.toggleRightPanel}
+            aria-label="Toggle right panel"
+            data-active={shell.isRightPanelOpen ? "true" : undefined}
           >
-            <ArrowLeft size={18} strokeWidth={1.8} />
-          </AppShellChromeButton>
-          <AppShellChromeButton
-            aria-label="Forward"
-            disabled={!shell.canNavigateForward}
-            onClick={shell.navigateForward}
-          >
-            <ArrowRight size={18} strokeWidth={1.8} />
-          </AppShellChromeButton>
+            <PanelRight size={20} strokeWidth={1.7} />
+          </AppShellHeaderToolButton>
+          <AppShellHeaderToolButton className="codex-header-tool-button-plain" type="button" aria-label="More actions">
+            <Ellipsis size={20} strokeWidth={1.7} />
+          </AppShellHeaderToolButton>
         </>
       )}
       sidebar={
@@ -293,35 +405,41 @@ export function App() {
       composer={<Composer placeholder="Ask Codex to build, inspect, or recreate a component..." />}
       rightPanel={
         <FileBrowserPanel
-          breadcrumbs={["open-shell", "packages", "ui", "package.json"]}
-          code={previewCode}
-          fileName="package.json"
-          fileTree={fileTreeItems}
-          language="json"
+          breadcrumbs={selectedFile.breadcrumbs}
+          code={selectedFile.code}
+          fileName={selectedFile.fileName}
+          language={selectedFile.language}
+          sidePanel={
+            <aside className="codex-file-browser-tree-panel" data-app-shell-focus-area="file-tree">
+              <FileTree
+                items={fileTreeItems}
+                defaultExpandedIds={["open-shell", "open-shell/packages/ui/src", "open-shell/packages/ui/src/lib"]}
+                selectedIds={[selectedFilePath]}
+                onSelectionChange={() => undefined}
+                onNodeClick={handleFileTreeNodeClick}
+              />
+            </aside>
+          }
         />
       }
       bottomPanel={(shell) => (
         <BottomPanel
+          activeTabId={activeBottomTabId}
+          keepMounted
+          onActiveTabChange={handleBottomTabChange}
           onClose={shell.toggleBottomPanel}
-          tabs={[
-            {
-              active: true,
-              closable: true,
-              id: "terminal",
-              title: "desktop-agent-app",
-              icon: <TerminalIcon size={14} />,
-              content: <TerminalSurface />,
-            },
-            {
-              id: "files",
-              title: "Open file",
-              closable: true,
-              icon: <FileIcon size={14} />,
-              content: <FileTree items={fileTreeItems} />,
-            },
-          ]}
+          tabs={bottomPanelTabs}
         />
       )}
     />
   );
+}
+
+function createThreadHistoryEntry(threadId: string, title: string): ExampleHistoryEntry {
+  return {
+    id: `thread:${threadId}`,
+    payload: { threadId },
+    title,
+    type: "thread",
+  };
 }

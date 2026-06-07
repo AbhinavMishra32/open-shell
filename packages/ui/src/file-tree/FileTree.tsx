@@ -45,7 +45,10 @@ export type FileTreeItem = {
 
 type FileTreeNodeMeta = {
   decoration?: ReactNode;
+  item?: FileTreeItem;
   locked?: boolean;
+  path?: string;
+  type?: "file" | "directory";
 };
 
 export type FileTreeProps = Omit<TreeViewProps, "data"> & {
@@ -321,7 +324,10 @@ function mapFileTreeItemToNode(item: FileTreeItem): TreeNode {
     children: item.children?.map(mapFileTreeItemToNode),
     data: {
       decoration: item.decoration,
+      item,
       locked: item.locked,
+      path: item.path,
+      type: item.type ?? (item.children != null ? "directory" : "file"),
     } satisfies FileTreeNodeMeta,
   };
 }

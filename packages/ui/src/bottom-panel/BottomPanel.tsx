@@ -158,12 +158,26 @@ const defaultLauncherItems: SlotLauncherItem[] = [
 ];
 
 export interface BottomPanelProps {
+  /** Controlled active tab id forwarded to SlotPanel. */
+  activeTabId?: string | null;
+  /** Initial active tab id for uncontrolled panels. */
+  defaultActiveTabId?: string | null;
   /** Initial height of the bottom panel in pixels. Defaults to 280. */
   height?: number;
   /** Height of the main container viewport, used to clamp panel resizing to maximum 50% height. */
   mainContentHeight?: number;
+  /** Keep inactive tab content mounted so terminals and long-running tools keep state. */
+  keepMounted?: boolean;
+  /** Callback fired when the active tab changes. */
+  onActiveTabChange?: (id: string | null, tab: SlotTab | null) => void;
   /** Callback fired when a drag-resize action commits a new height. */
   onHeightChange?: (height: number) => void;
+  /** Callback fired when a tab is closed. */
+  onTabClose?: (id: string, nextTabs: SlotTab[]) => void;
+  /** Callback fired when a tab is opened or focused. */
+  onTabOpen?: (tab: SlotTab) => void;
+  /** Callback fired when the internal tab list changes. */
+  onTabsChange?: (tabs: SlotTab[]) => void;
   /** Initial tabs to populate the panel with. */
   tabs?: SlotTab[];
   /** Launcher items shown in the `+` dropdown and empty-state grid. */
@@ -180,9 +194,16 @@ export interface BottomPanelProps {
 export const BottomPanel = React.forwardRef<SlotPanelHandle, BottomPanelProps>(
   function BottomPanel(
     {
+      activeTabId,
+      defaultActiveTabId,
       height = DEFAULT_BOTTOM_PANEL_HEIGHT,
       mainContentHeight = typeof window === "undefined" ? 720 : window.innerHeight,
+      keepMounted,
+      onActiveTabChange,
       onHeightChange,
+      onTabClose,
+      onTabOpen,
+      onTabsChange,
       tabs,
       launcherItems,
       onClose,
@@ -239,9 +260,16 @@ export const BottomPanel = React.forwardRef<SlotPanelHandle, BottomPanelProps>(
         />
         <SlotPanel
           ref={ref}
+          activeTabId={activeTabId}
+          defaultActiveTabId={defaultActiveTabId}
           tabs={tabs}
           launcherItems={launcherItems ?? defaultLauncherItems}
+          keepMounted={keepMounted}
           onClose={onClose}
+          onActiveTabChange={onActiveTabChange}
+          onTabClose={onTabClose}
+          onTabOpen={onTabOpen}
+          onTabsChange={onTabsChange}
           ariaLabel="Bottom panel tabs"
         />
       </div>
