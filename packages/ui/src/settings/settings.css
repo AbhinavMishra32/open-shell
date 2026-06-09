@@ -7,6 +7,7 @@
   gap: 12px;
   padding: 18px 12px 12px;
   color: var(--opaline-text-primary);
+  background: color-mix(in srgb, var(--opaline-bg-secondary) 82%, transparent);
 }
 
 .opaline-settings-back {
@@ -93,7 +94,7 @@
   border: 0;
   border-radius: 10px;
   padding: 0 10px;
-  color: var(--opaline-text-primary);
+  color: color-mix(in srgb, var(--opaline-text-primary) 92%, transparent);
   background: transparent;
   cursor: default;
   font-size: 14px;
@@ -104,10 +105,12 @@
 .opaline-settings-nav-item:hover,
 .opaline-settings-nav-item[data-active="true"] {
   background: color-mix(in srgb, var(--opaline-text-primary) 7%, transparent);
+  color: var(--opaline-text-primary);
 }
 
 .opaline-settings-nav-item[data-muted="true"] {
-  color: var(--opaline-text-tertiary);
+  opacity: 0.46;
+  pointer-events: none;
 }
 
 .opaline-settings-nav-icon {
@@ -115,7 +118,7 @@
   width: 22px;
   height: 22px;
   place-items: center;
-  color: color-mix(in srgb, var(--opaline-text-primary) 82%, transparent);
+  color: color-mix(in srgb, currentColor 86%, transparent);
 }
 
 .opaline-settings-nav-icon svg {
