@@ -18,7 +18,7 @@
   justify-content: space-between;
   height: 36px;
   padding: 0 10px 0 12px;
-  background: var(--opaline-bg-primary);
+  background: transparent;
   user-select: none;
 }
 
@@ -108,8 +108,8 @@
 /* Icon wrapper */
 .opaline-slot-panel-tab-icon-wrapper {
   position: relative;
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -134,16 +134,22 @@
   display: none;
   align-items: center;
   justify-content: center;
-  width: 16px;
-  height: 16px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--opaline-text-primary) 35%, transparent);
-  color: var(--opaline-bg-primary);
+  width: 17px;
+  height: 17px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--opaline-text-primary) 18%, transparent);
+  color: color-mix(in srgb, var(--opaline-text-primary) 72%, transparent);
   cursor: pointer;
 }
 
 .opaline-slot-panel-tab-close:hover {
-  background: var(--opaline-text-primary);
+  background: color-mix(in srgb, var(--opaline-text-primary) 28%, transparent);
+  color: var(--opaline-text-primary);
+}
+
+.opaline-slot-panel-tab-close svg {
+  width: 9px;
+  height: 9px;
 }
 
 .opaline-slot-panel-tab[data-closable="true"]:hover .opaline-slot-panel-tab-icon {

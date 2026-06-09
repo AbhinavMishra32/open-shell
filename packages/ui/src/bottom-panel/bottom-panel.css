@@ -6,7 +6,7 @@
   min-height: 160px;
   overflow: visible;
   border-top: 1px solid var(--opaline-border-subtle);
-  background: var(--opaline-bg-primary);
+  background: color-mix(in srgb, var(--opaline-bg-primary) 82%, transparent);
   transition: none !important;
 }
 
@@ -46,7 +46,7 @@ html[data-opaline-bottom-panel-resizing="true"] .opaline-bottom-panel-resize-han
   height: 100%;
   min-height: 0;
   overflow: hidden;
-  background: var(--opaline-bg-primary);
+  background: transparent;
 }
 
 .opaline-terminal-surface .terminal-panel__screen {
@@ -60,9 +60,14 @@ html[data-opaline-bottom-panel-resizing="true"] .opaline-bottom-panel-resize-han
   box-sizing: border-box;
   width: 100%;
   height: 100%;
+  background: transparent !important;
 }
 
 .opaline-terminal-surface .xterm-viewport {
+  background: transparent !important;
+}
+
+.opaline-terminal-surface .xterm-screen {
   background: transparent !important;
 }
 
