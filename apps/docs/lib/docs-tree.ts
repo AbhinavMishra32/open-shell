@@ -2,7 +2,7 @@ import type { Root } from "fumadocs-core/page-tree";
 import { componentDocs } from "./component-docs";
 
 export const docsTree: Root = {
-  name: "Open Shell",
+  name: "Opaline",
   children: [
     {
       type: "page",

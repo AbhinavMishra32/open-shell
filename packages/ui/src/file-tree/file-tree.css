@@ -22,7 +22,7 @@
   --trees-git-lane-width: 24px;
   --trees-icon-width: 20px;
   --trees-icon-nudge: 1px;
-  --tree-indent: 24px;
+  --tree-indent: 18px;
   --trees-file-icon-color-css: #7b61ff;
   --trees-file-icon-color-default: var(--codex-text-tertiary);
   --trees-file-icon-color-javascript: #d6a900;
@@ -152,135 +152,6 @@
   background-color: var(--trees-bg);
 }
 
-.codex-treeview-shell {
-  width: 100%;
-}
-
-.codex-treeview-surface {
-  width: 100%;
-  background: var(--trees-bg);
-}
-
-.codex-treeview-shell-contained .codex-treeview-surface {
-  border: 1px solid var(--trees-border-color);
-  border-radius: 14px;
-}
-
-.codex-treeview-shell-sidebar .codex-treeview-surface,
-.codex-treeview-shell:not(.codex-treeview-shell-contained) .codex-treeview-surface {
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-}
-
-.codex-treeview-surface-inner {
-  width: 100%;
-  padding: 8px 0;
-}
-
-.codex-treeview-branch {
-  width: 100%;
-  user-select: none;
-}
-
-.codex-treeview-node {
-  position: relative;
-  display: flex;
-  width: 100%;
-  box-sizing: border-box;
-  min-height: var(--trees-row-height);
-  align-items: center;
-  gap: 8px;
-  padding-top: 8px;
-  padding-right: 12px;
-  padding-bottom: 8px;
-  border-radius: 10px;
-  color: var(--trees-fg-muted);
-  cursor: pointer;
-  transition:
-    background-color var(--transition-duration-basic) var(--cubic-enter),
-    color var(--transition-duration-basic) var(--cubic-enter);
-}
-
-.codex-treeview-node:hover {
-  background: var(--trees-bg-muted);
-  color: var(--trees-fg);
-}
-
-.codex-treeview-node-selected {
-  background: var(--trees-selected-bg);
-  color: var(--trees-selected-fg);
-}
-
-.codex-treeview-expand-icon,
-.codex-treeview-node-icon {
-  display: flex;
-  width: 16px;
-  height: 16px;
-  align-items: center;
-  justify-content: center;
-  flex: 0 0 auto;
-}
-
-.codex-treeview-chevron,
-.codex-treeview-node-glyph {
-  width: 16px;
-  height: 16px;
-}
-
-.codex-treeview-chevron,
-.codex-treeview-node-icon {
-  color: var(--trees-fg-muted);
-}
-
-.codex-treeview-label {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  font-size: 14px;
-  font-weight: 500;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.codex-treeview-decoration {
-  display: inline-flex;
-  align-items: center;
-  margin-left: auto;
-  color: var(--trees-fg-muted);
-}
-
-.codex-treeview-children {
-  overflow: hidden;
-}
-
-.codex-treeview-lines {
-  position: absolute;
-  inset: 0 auto 0 0;
-  pointer-events: none;
-}
-
-.codex-treeview-line-vertical,
-.codex-treeview-line-horizontal {
-  position: absolute;
-  border-color: color-mix(in srgb, var(--codex-border-subtle) 76%, transparent);
-}
-
-.codex-treeview-line-vertical {
-  top: 0;
-  bottom: 0;
-  border-left: 1px solid color-mix(in srgb, var(--codex-border-subtle) 76%, transparent);
-}
-
-.codex-treeview-line-horizontal {
-  top: 50%;
-  border-top: 1px solid color-mix(in srgb, var(--codex-border-subtle) 76%, transparent);
-}
-
-.codex-treeview-line-last {
-  bottom: auto;
-}
-
 .codex-file-tree-row {
   position: relative;
   display: flex;
@@ -292,7 +163,7 @@
   border-radius: var(--trees-border-radius);
   margin: 0 var(--trees-item-margin-x);
   padding: 0 var(--trees-item-padding-x);
-  padding-left: calc(var(--trees-item-padding-x) + var(--tree-depth, 0) * var(--tree-indent));
+  padding-left: calc(var(--trees-item-padding-x) + var(--tree-depth-offset, 0px));
   background: var(--trees-bg);
   color: var(--trees-fg-muted);
   font-family: var(--trees-font-family);
@@ -301,10 +172,6 @@
   text-align: start;
   cursor: default;
   user-select: none;
-  transition:
-    background-color var(--transition-duration-basic) var(--cubic-enter),
-    color var(--transition-duration-basic) var(--cubic-enter),
-    transform var(--transition-duration-basic) var(--cubic-enter);
 }
 
 .codex-file-tree-row:hover,
@@ -324,7 +191,6 @@
 }
 
 [data-item-section="icon"],
-[data-item-section="node-icon"],
 [data-item-section="action"] {
   display: flex;
   align-items: center;
@@ -333,84 +199,10 @@
 }
 
 [data-item-section="icon"] svg,
-[data-item-section="node-icon"] svg,
 [data-item-section="action"] svg {
   width: var(--trees-icon-width);
   height: var(--trees-icon-width);
   fill: currentColor;
-}
-
-[data-item-section="node-icon"] {
-  color: color-mix(in srgb, var(--trees-fg-muted) 92%, transparent);
-}
-
-.codex-file-tree-row[data-item-type="directory"] [data-icon-name="file-tree-icon-chevron"] {
-  color: color-mix(in srgb, var(--trees-fg-muted) 82%, transparent);
-  transition: transform var(--transition-duration-basic) var(--cubic-enter);
-}
-
-.codex-file-tree-row[data-item-type="directory"][data-expanded="false"] [data-icon-name="file-tree-icon-chevron"] {
-  transform: rotate(-90deg) translateX(calc(-1 * var(--trees-icon-nudge)));
-}
-
-.codex-file-tree-row[data-item-type="file"] [data-item-section="icon"] svg {
-  border-radius: 5px;
-}
-
-.codex-file-tree-guides {
-  position: absolute;
-  inset: 0 auto 0 0;
-  width: calc(var(--tree-depth, 0) * var(--tree-indent) + var(--trees-item-padding-x));
-  pointer-events: none;
-}
-
-.codex-file-tree-guide-column,
-.codex-file-tree-guide-branch {
-  position: absolute;
-  border-color: color-mix(in srgb, var(--codex-border-subtle) 76%, transparent);
-}
-
-.codex-file-tree-guide-column {
-  top: -6px;
-  bottom: -6px;
-  left: calc(var(--trees-item-padding-x) + var(--tree-guide-index, 0) * var(--tree-indent) + 7px);
-  border-left: 1px solid transparent;
-}
-
-.codex-file-tree-guide-column[data-has-line="true"] {
-  border-left-color: color-mix(in srgb, var(--codex-border-subtle) 76%, transparent);
-}
-
-.codex-file-tree-guide-branch {
-  top: 50%;
-  left: calc(var(--trees-item-padding-x) + (var(--tree-depth, 0) - 1) * var(--tree-indent) + 7px);
-  width: calc(var(--tree-indent) - 9px);
-  border-top: 1px solid color-mix(in srgb, var(--codex-border-subtle) 76%, transparent);
-  transform: translateY(-0.5px);
-}
-
-.codex-file-tree-children {
-  display: grid;
-  grid-template-rows: 1fr;
-  opacity: 1;
-  overflow: hidden;
-  transition:
-    grid-template-rows var(--transition-duration-relaxed) cubic-bezier(0.2, 0, 0, 1),
-    opacity var(--transition-duration-basic) var(--cubic-enter);
-}
-
-.codex-file-tree[data-file-tree-animated="false"] .codex-file-tree-children,
-.codex-file-tree[data-file-tree-animated="false"] .codex-file-tree-row[data-item-type="directory"] [data-icon-name="file-tree-icon-chevron"] {
-  transition: none;
-}
-
-.codex-file-tree-children[data-expanded="false"] {
-  grid-template-rows: 0fr;
-  opacity: 0;
-}
-
-.codex-file-tree-children > * {
-  min-height: 0;
 }
 
 [data-item-section="content"] {
@@ -480,8 +272,47 @@
   color: var(--trees-file-icon-color-typescript);
 }
 
-[data-icon-name="file-tree-icon-chevron"] {
-  transform: translateY(var(--trees-icon-nudge));
+.codex-file-tree-chevron-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  margin-right: 4px;
+  color: var(--codex-text-secondary);
+}
+
+.codex-file-tree-chevron-container svg {
+  width: 12px;
+  height: 12px;
+  fill: currentColor;
+  transition: transform 0.15s ease;
+}
+
+.codex-file-tree-row[aria-expanded="false"] .codex-file-tree-chevron-container svg {
+  transform: rotate(-90deg);
+}
+
+.codex-file-tree-chevron-spacer {
+  flex: 0 0 auto;
+  width: 16px;
+}
+.codex-file-tree-indent-guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: calc(var(--trees-item-padding-x) + (var(--indent-index) * var(--tree-indent, 18px)) + 6px);
+  width: 1px;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--codex-text-primary) 20%, transparent);
+  opacity: 0.5;
+  transition: opacity 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.codex-file-tree:hover .codex-file-tree-indent-guide {
+  opacity: 0.9;
+  background: color-mix(in srgb, var(--codex-text-primary) 35%, transparent);
 }
 
 .codex-file-tree-git-dot {
@@ -506,4 +337,22 @@
 
 .codex-file-tree-git-dot[data-git-status="deleted"] {
   color: var(--codex-danger);
+}
+
+/* Submenu collapse/expand animations */
+.codex-file-tree-submenu {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  opacity: 1;
+  max-height: 1000px;
+  transition:
+    max-height 0.3s cubic-bezier(0.2, 0, 0, 1),
+    opacity 0.2s cubic-bezier(0.2, 0, 0, 1);
+}
+
+.codex-file-tree-submenu[data-open="false"] {
+  max-height: 0;
+  opacity: 0;
+  pointer-events: none;
 }

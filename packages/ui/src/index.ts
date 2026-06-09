@@ -34,11 +34,11 @@ export type {
   ShellHistoryState,
   UseShellHistoryOptions,
 } from "./history/ShellHistory";
-export { BottomPanel, TerminalSurface, SideChatView, ReviewView, DiagnosticsLogsView, clampBottomPanelHeight } from "./bottom-panel/BottomPanel";
-export type { BottomPanelTab, BottomPanelProps, BottomPanelHandle, TerminalSurfaceProps } from "./bottom-panel/BottomPanel";
+export { BottomPanel, TerminalSurface, clampBottomPanelHeight } from "./bottom-panel/BottomPanel";
+export type { BottomPanelHandle, BottomPanelProps, BottomPanelTab, TerminalSurfaceProps } from "./bottom-panel/BottomPanel";
 export { Composer } from "./composer/Composer";
 export { FileTree } from "./file-tree/FileTree";
-export type { FileTreeItem, FileTreeProps, TreeNode, TreeViewProps } from "./file-tree/FileTree";
+export type { FileTreeItem, FileTreeProps, TreeNode } from "./file-tree/FileTree";
 export { FileBrowserBreadcrumbs, FileBrowserPanel, FileBrowserTab } from "./file-browser/FileBrowserPanel";
 export type { FileBrowserPanelProps } from "./file-browser/FileBrowserPanel";
 export { CodexMark } from "./icons/CodexMark";

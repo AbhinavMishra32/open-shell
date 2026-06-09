@@ -11,7 +11,7 @@ export default function ElectronExamplePage() {
       <p className="docs-kicker">Example app</p>
       <h1>Electron Shell</h1>
       <p className="docs-lede">
-        The example app lives beside the package and imports `@open-shell/ui` exactly like an external app would. It is
+        The example app lives beside the package and imports `@opaline/ui` exactly like an external app would. It is
         the fastest place to test shell-level changes before publishing or copying components into another product.
       </p>
 
@@ -21,7 +21,7 @@ export default function ElectronExamplePage() {
           code={`npm run start:example
 
 # or during shell iteration
-npm run dev -- --filter=@open-shell/electron-example`}
+npm run dev -- --filter=@opaline/electron-example`}
         />
       </section>
 
@@ -29,7 +29,7 @@ npm run dev -- --filter=@open-shell/electron-example`}
         <h2>Renderer entry</h2>
         <CodeBlock
           title="examples/electron-shell/src/renderer/App.tsx"
-          code={`import { AppShell, Composer, Sidebar, ThreadSurface } from "@open-shell/ui";
+          code={`import { AppShell, Composer, Sidebar, ThreadSurface } from "@opaline/ui";
 
 export function App() {
   return (

@@ -57,6 +57,9 @@ export type AppShellProps = {
   sidebarMaxWidth?: number;
   sidebarMinWidth?: number;
   showSidebarChrome?: boolean;
+  defaultRightPanelWidth?: number;
+  rightPanelMinWidth?: number;
+  rightPanelMaxWidth?: number;
   onNavigateBack?: () => void;
   onNavigateForward?: () => void;
 };
@@ -74,7 +77,7 @@ export function AppShell({
   defaultBottomPanelOpen,
   defaultRightPanelOpen,
   defaultSidebarOpen = true,
-  defaultSidebarWidth = 300,
+  defaultSidebarWidth = 260,
   headerActions,
   headerTabs = [],
   history,
@@ -88,6 +91,9 @@ export function AppShell({
   sidebarMaxWidth = 520,
   sidebarMinWidth = 240,
   showSidebarChrome = true,
+  defaultRightPanelWidth = 292,
+  rightPanelMinWidth = 240,
+  rightPanelMaxWidth = 600,
   onNavigateBack,
   onNavigateForward,
 }: AppShellProps) {
@@ -95,6 +101,8 @@ export function AppShell({
   const [sidebarWidth, setSidebarWidth] = useState(defaultSidebarWidth);
   const [isSidebarResizing, setIsSidebarResizing] = useState(false);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(defaultRightPanelOpen ?? rightPanel != null);
+  const [rightPanelWidth, setRightPanelWidth] = useState(defaultRightPanelWidth);
+  const [isRightPanelResizing, setIsRightPanelResizing] = useState(false);
   const [isBottomPanelOpen, setIsBottomPanelOpen] = useState(defaultBottomPanelOpen ?? bottomPanel != null);
   const toggleSidebar = useCallback(() => {
     setIsSidebarOpen((value) => !value);
@@ -112,6 +120,7 @@ export function AppShell({
       onNavigateBack();
       return;
     }
+
     history?.goBack();
   }, [history, onNavigateBack]);
   const navigateForward = useCallback(() => {
@@ -119,8 +128,13 @@ export function AppShell({
       onNavigateForward();
       return;
     }
+
     history?.goForward();
   }, [history, onNavigateForward]);
+
+  // Panels are toggled explicitly by the user — we no longer auto-open
+  // them whenever their content slot changes.
+
   const shellState: AppShellState = {
     canNavigateBack: resolvedCanNavigateBack,
     canNavigateForward: resolvedCanNavigateForward,
@@ -165,6 +179,34 @@ export function AppShell({
     },
     [sidebarMaxWidth, sidebarMinWidth, sidebarWidth],
   );
+  const startRightPanelResize = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      event.currentTarget.setPointerCapture(event.pointerId);
+      setIsRightPanelResizing(true);
+      const startX = event.clientX;
+      const startWidth = rightPanelWidth;
+
+      function move(pointerEvent: PointerEvent) {
+        const nextWidth = Math.max(0, Math.min(rightPanelMaxWidth, startWidth - (pointerEvent.clientX - startX)));
+        if (nextWidth < rightPanelMinWidth) {
+          setIsRightPanelOpen(false);
+          return;
+        }
+        setIsRightPanelOpen(true);
+        setRightPanelWidth(nextWidth);
+      }
+
+      function stop() {
+        setIsRightPanelResizing(false);
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", stop);
+      }
+
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", stop, { once: true });
+    },
+    [rightPanelMaxWidth, rightPanelMinWidth, rightPanelWidth],
+  );
 
   const shell = (
     <div
@@ -175,13 +217,11 @@ export function AppShell({
           "--codex-left-panel-max-width": `${sidebarMaxWidth}px`,
           "--codex-left-panel-min-content": `${sidebarMinWidth + 80}px`,
           "--codex-left-panel-width": `${sidebarWidth}px`,
+          "--codex-right-panel-width": `${rightPanelWidth}px`,
         } as CSSProperties
       }
     >
       {chromeControls != null ? <AppShellChromeControls>{resolveSlot(chromeControls, shellState)}</AppShellChromeControls> : null}
-      {!isSidebarOpen && collapsedSidebarTrigger != null ? (
-        <div className="codex-sidebar-reopen-button">{resolveSlot(collapsedSidebarTrigger, shellState)}</div>
-      ) : null}
       <aside
         className="codex-left-panel app-shell-left-panel"
         data-open={isSidebarOpen ? "true" : "false"}
@@ -205,6 +245,9 @@ export function AppShell({
       </aside>
       <main className="codex-app-main">
         <AppShellHeader>
+          {collapsedSidebarTrigger != null ? (
+            <div className="codex-sidebar-reopen-button">{resolveSlot(collapsedSidebarTrigger, shellState)}</div>
+          ) : null}
           <AppShellHeaderContextSurface>
             <AppShellTabStrip>
               {headerTabs.map((tab, index) => (
@@ -245,8 +288,18 @@ export function AppShell({
             <aside
               className="codex-right-panel-slot"
               data-open={isRightPanelOpen ? "true" : "false"}
+              data-resizing={isRightPanelResizing ? "true" : "false"}
               data-app-shell-focus-area="right-panel"
             >
+              <div
+                className="codex-right-panel-resize-handle"
+                role="separator"
+                aria-orientation="vertical"
+                aria-disabled={!isRightPanelOpen}
+                onPointerDown={isRightPanelOpen ? startRightPanelResize : undefined}
+              >
+                <div className="codex-right-panel-resize-handle-line" />
+              </div>
               <AppShellRightPanel>{rightPanel}</AppShellRightPanel>
             </aside>
           ) : null}
@@ -266,6 +319,14 @@ export function AppShell({
   );
 
   return history != null ? <ShellHistoryProvider history={history}>{shell}</ShellHistoryProvider> : shell;
+}
+
+export function AppShellChromeControls({ children, className, ...props }: AppShellSlotProps) {
+  return (
+    <div className={joinClassNames("codex-shell-chrome-controls", className)} {...props}>
+      {children}
+    </div>
+  );
 }
 
 export function AppShellSidebarChrome({ children, className, ...props }: AppShellSlotProps) {
@@ -289,14 +350,6 @@ function DefaultSidebarChrome({ state }: { state: AppShellState }) {
         <ForwardIcon />
       </AppShellChromeButton>
     </>
-  );
-}
-
-export function AppShellChromeControls({ children, className, ...props }: AppShellSlotProps) {
-  return (
-    <div className={joinClassNames("codex-shell-chrome-controls", className)} {...props}>
-      {children}
-    </div>
   );
 }
 

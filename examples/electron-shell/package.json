@@ -1,9 +1,9 @@
 {
-  "name": "@open-shell/electron-example",
-  "productName": "Open Shell Example",
+  "name": "@opaline/electron-example",
+  "productName": "Opaline Example",
   "version": "0.3.0",
   "private": true,
-  "description": "Example Electron app consuming @open-shell/ui.",
+  "description": "Example Electron app consuming @opaline/ui.",
   "main": "src/main/main.cjs",
   "scripts": {
     "start": "npm run build && electron .",
@@ -12,7 +12,7 @@
     "typecheck": "tsc --noEmit --pretty false"
   },
   "dependencies": {
-    "@open-shell/ui": "*",
+    "@opaline/ui": "*",
     "@vitejs/plugin-react": "^5.1.1",
     "electron": "42.1.0",
     "react": "^19.2.1",

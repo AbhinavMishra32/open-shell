@@ -5,9 +5,9 @@ import os from "node:os";
 import path from "node:path";
 import process from "node:process";
 
-const DEFAULT_REPO = "https://github.com/AbhinavMishra32/open-shell.git";
+const DEFAULT_REPO = "https://github.com/AbhinavMishra32/opaline.git";
 const DEFAULT_REF = "main";
-const DEFAULT_OUT_DIR = "src/components/open-shell";
+const DEFAULT_OUT_DIR = "src/components/opaline";
 const REQUIRED_DEPS = [
   "@radix-ui/react-context-menu",
   "@radix-ui/react-dialog",
@@ -30,7 +30,7 @@ const skipInstall = args.skipInstall === true;
 const sourceRoot = resolveSourceRoot(args);
 
 assertDirectory(targetRoot, "Target project directory");
-assertDirectory(path.join(sourceRoot, "packages/ui/src"), "Open Shell UI source directory");
+assertDirectory(path.join(sourceRoot, "packages/ui/src"), "Opaline UI source directory");
 
 const packageJsonPath = path.join(targetRoot, "package.json");
 if (!fs.existsSync(packageJsonPath)) {
@@ -52,7 +52,7 @@ if (missingDeps.length > 0 && !skipInstall) {
 }
 
 console.log("");
-console.log("Open Shell UI installed.");
+console.log("Opaline UI installed.");
 console.log(`- Components: ${relative(targetRoot, outDir)}`);
 console.log(`- Import: ${toImportPath(args.outDir ?? DEFAULT_OUT_DIR)}`);
 if (missingDeps.length > 0 && skipInstall) {
@@ -104,7 +104,7 @@ function resolveSourceRoot(options) {
 }
 
 function cloneFromGitHub(repo, ref) {
-  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "open-shell-ui-"));
+  const tmpDir = fs.mkdtempSync(path.join(os.tmpdir(), "opaline-ui-"));
   const result = spawnSync(
     "git",
     ["clone", "--depth", "1", "--branch", ref, "--filter=blob:none", repo, tmpDir],
@@ -140,9 +140,9 @@ function copyDirectory(from, to, { force: shouldForce }) {
 function writeInstallNotes(targetRootPath, installedDir) {
   const notesPath = path.join(installedDir, "INSTALL.md");
   const importPath = toImportPath(path.relative(targetRootPath, installedDir));
-  const content = `# Open Shell UI
+  const content = `# Opaline UI
 
-These files were installed by \`scripts/install-open-shell-ui.mjs\`.
+These files were installed by \`scripts/install-opaline-ui.mjs\`.
 
 This is intentionally shadcn-style: the source is copied into your app, not imported from a published package.
 You own these files now. Edit them, theme them, and wire them to your product data.
@@ -216,20 +216,20 @@ function toImportPath(filePath) {
 }
 
 function fail(message) {
-  console.error(`open-shell-ui installer: ${message}`);
+  console.error(`opaline-ui installer: ${message}`);
   process.exit(1);
 }
 
 function printHelp() {
-  console.log(`Open Shell UI installer
+  console.log(`Opaline UI installer
 
 Usage:
-  node scripts/install-open-shell-ui.mjs [options]
+  node scripts/install-opaline-ui.mjs [options]
 
 Options:
   --target <dir>              Target project directory. Defaults to cwd.
   --out-dir <dir>             Component destination. Defaults to ${DEFAULT_OUT_DIR}.
-  --source <dir>              Local open-shell repo root. Defaults to this repo when available.
+  --source <dir>              Local opaline repo root. Defaults to this repo when available.
   --repo <git-url>            GitHub repo to clone when no local source exists.
   --ref <branch-or-tag>       Git ref for GitHub install. Defaults to ${DEFAULT_REF}.
   --package-manager <pm>      npm, pnpm, yarn, or bun. Auto-detected by lockfile.
@@ -238,8 +238,8 @@ Options:
   --help                      Show this help.
 
 Examples:
-  node scripts/install-open-shell-ui.mjs --target ../my-app
-  node scripts/install-open-shell-ui.mjs --target ../my-app --out-dir src/components/ui/open-shell --force
-  curl -fsSL https://raw.githubusercontent.com/AbhinavMishra32/open-shell/main/scripts/install-open-shell-ui.mjs | node - --target .
+  node scripts/install-opaline-ui.mjs --target ../my-app
+  node scripts/install-opaline-ui.mjs --target ../my-app --out-dir src/components/ui/opaline --force
+  curl -fsSL https://raw.githubusercontent.com/AbhinavMishra32/opaline/main/scripts/install-opaline-ui.mjs | node - --target .
 `);
 }

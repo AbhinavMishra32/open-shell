@@ -1,13 +1,13 @@
 import * as Tabs from "@radix-ui/react-tabs";
 import type { ReactNode } from "react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../primitives/DropdownMenu";
-import { Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import "./slot-panel.css";
 
 // ---------------------------------------------------------------------------
@@ -80,27 +80,31 @@ export type SlotPanelHandle = {
 };
 
 export interface SlotPanelProps {
-  /** Controlled active tab id. */
+  /** Controlled active tab id. Useful when external app state owns tab focus. */
   activeTabId?: string | null;
-  /** Initial tabs to populate the panel with. */
-  tabs?: SlotTab[];
   /** Initial active tab id for uncontrolled panels. */
   defaultActiveTabId?: string | null;
+  /** Initial tabs to populate the panel with. */
+  tabs?: SlotTab[];
+  /** Update incoming tab definitions by id on every render. Use for controlled file tabs. */
+  syncTabs?: boolean;
   /** Items shown in the `+` dropdown and the empty-state launcher grid. */
   launcherItems?: SlotLauncherItem[];
   /** Optional CSS class name for the root element. */
   className?: string;
-  /** Keep inactive tab content mounted so terminals and long-running tools keep state. */
+  /** Keep inactive content mounted so terminals and long-running tools continue. */
   keepMounted?: boolean;
   /** Optional close button handler. If provided, a close `×` button is shown in the tab bar. */
   onClose?: () => void;
-  /** Fired whenever the active tab changes. */
-  onActiveTabChange?: (id: string | null, tab: SlotTab | null) => void;
-  /** Fired when a tab is closed. */
-  onTabClose?: (id: string, nextTabs: SlotTab[]) => void;
-  /** Fired when a tab is opened or focused from launcher/ref. */
+  /** Callback fired when the active tab changes (user clicks a different tab). */
+  onTabChange?: (tabId: string) => void;
+  /** Callback fired when a tab changes. Preferred newer callback. */
+  onActiveTabChange?: (tabId: string | null, tab: SlotTab | null) => void;
+  /** Callback fired when a tab is closed. */
+  onTabClose?: (tabId: string, nextTabs?: SlotTab[]) => void;
+  /** Callback fired when a tab is opened or focused from launcher/ref. */
   onTabOpen?: (tab: SlotTab) => void;
-  /** Fired when the internal tab list changes. */
+  /** Callback fired when the internal tab list changes. */
   onTabsChange?: (tabs: SlotTab[]) => void;
   /** Accessible label for the tab list. */
   ariaLabel?: string;
@@ -130,55 +134,122 @@ export interface SlotPanelProps {
  * ```
  */
 export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
-  function SlotPanel(
-    {
-      activeTabId: controlledActiveTabId,
-      tabs: initialTabs,
-      defaultActiveTabId,
-      launcherItems = [],
-      className,
-      keepMounted = true,
-      onClose,
-      onActiveTabChange,
-      onTabClose,
-      onTabOpen,
-      onTabsChange,
-      ariaLabel = "Panel tabs",
-    },
-    ref,
-  ) {
+  function SlotPanel({
+    activeTabId: controlledActiveTabId,
+    defaultActiveTabId,
+    tabs: initialTabs,
+    syncTabs = false,
+    launcherItems = [],
+    className,
+    keepMounted = true,
+    onClose,
+    onTabChange,
+    onActiveTabChange,
+    onTabClose,
+    onTabOpen,
+    onTabsChange,
+    ariaLabel = "Panel tabs",
+  }, ref) {
     const [openTabs, setOpenTabs] = useState<SlotTab[]>(() => initialTabs ?? []);
     const activeDefault = openTabs.find((t) => t.active) ?? openTabs.find((t) => t.id === defaultActiveTabId) ?? openTabs[0];
     const [uncontrolledActiveTabId, setUncontrolledActiveTabId] = useState<string | null>(
       controlledActiveTabId ?? defaultActiveTabId ?? activeDefault?.id ?? null,
     );
     const activeTabId = controlledActiveTabId !== undefined ? controlledActiveTabId : uncontrolledActiveTabId;
+    const tabsRef = useRef<HTMLDivElement | null>(null);
+    const [tabOverflow, setTabOverflow] = useState({
+      canScrollLeft: false,
+      canScrollRight: false,
+    });
+
     const initialTabsSignature = initialTabs?.map((tab) => tab.id).join("\u0000") ?? "";
-
-    // Treat `tabs` as initial/uncontrolled input. This preserves mounted tool state
-    // when callers create inline arrays during ordinary shell re-renders.
-    useEffect(() => {
-      if (initialTabs == null) {
-        return;
-      }
-      setOpenTabs((currentTabs) => {
-        const currentSignature = currentTabs.map((tab) => tab.id).join("\u0000");
-        if (currentSignature === initialTabsSignature) {
-          return currentTabs;
-        }
-        return initialTabs;
-      });
-      const active = initialTabs.find((t) => t.active) ?? initialTabs.find((t) => t.id === defaultActiveTabId) ?? initialTabs[0];
-      setUncontrolledActiveTabId((currentId) =>
-        currentId != null && initialTabs.some((tab) => tab.id === currentId) ? currentId : active?.id ?? null,
-      );
-    }, [defaultActiveTabId, initialTabs, initialTabsSignature]);
-
-    const commitActiveTabId = (id: string | null) => {
+    const commitActiveTabId = useCallback((id: string | null) => {
       if (controlledActiveTabId === undefined) {
         setUncontrolledActiveTabId(id);
       }
+
+      if (id) {
+        onTabChange?.(id);
+      }
+
       onActiveTabChange?.(id, openTabs.find((tab) => tab.id === id) ?? null);
+    }, [controlledActiveTabId, onActiveTabChange, onTabChange, openTabs]);
+
+    // Treat inline `tabs` as initial input by default; controlled file-tab surfaces
+    // can opt into by-id syncing without wiping launcher-created tabs.
+    useEffect(() => {
+      if (!initialTabs) {
+        return;
+      }
+
+      setOpenTabs((previousTabs) => {
+        const previousSignature = previousTabs
+          .filter((tab) => initialTabs.some((incoming) => incoming.id === tab.id))
+          .map((tab) => tab.id)
+          .join("\u0000");
+
+        if (!syncTabs && previousTabs.length > 0 && previousSignature === initialTabsSignature) {
+          return previousTabs;
+        }
+
+        const incomingIds = new Set(initialTabs.map((tab) => tab.id));
+        const previousById = new Map(previousTabs.map((tab) => [tab.id, tab] as const));
+        const syncedTabs = syncTabs
+          ? initialTabs.map((tab) => ({
+              ...previousById.get(tab.id),
+              ...tab,
+            }))
+          : initialTabs;
+        const launcherTabs = syncTabs ? previousTabs.filter((tab) => !incomingIds.has(tab.id)) : [];
+        return [...syncedTabs, ...launcherTabs];
+      });
+    }, [initialTabs, initialTabsSignature, syncTabs]);
+
+    useEffect(() => {
+      if (controlledActiveTabId !== undefined) {
+        setUncontrolledActiveTabId(controlledActiveTabId);
+      }
+    }, [controlledActiveTabId]);
+
+    useEffect(() => {
+      if (activeTabId == null || openTabs.some((tab) => tab.id === activeTabId)) {
+        return;
+      }
+
+      commitActiveTabId(openTabs[0]?.id ?? null);
+    }, [activeTabId, commitActiveTabId, openTabs]);
+
+    useEffect(() => {
+      const tabList = tabsRef.current;
+      if (!tabList) {
+        return;
+      }
+      const currentTabList = tabList;
+
+      function updateOverflow() {
+        const scrollLeft = currentTabList.scrollLeft;
+        const maxScrollLeft = currentTabList.scrollWidth - currentTabList.clientWidth;
+        setTabOverflow({
+          canScrollLeft: scrollLeft > 1,
+          canScrollRight: maxScrollLeft - scrollLeft > 1,
+        });
+      }
+
+      updateOverflow();
+      const observer = new ResizeObserver(updateOverflow);
+      observer.observe(currentTabList);
+      currentTabList.addEventListener("scroll", updateOverflow, { passive: true });
+      return () => {
+        observer.disconnect();
+        currentTabList.removeEventListener("scroll", updateOverflow);
+      };
+    }, [openTabs]);
+
+    const scrollTabs = (direction: "left" | "right") => {
+      tabsRef.current?.scrollBy({
+        left: direction === "left" ? -180 : 180,
+        behavior: "smooth",
+      });
     };
 
     const handleCloseTab = (id: string) => {
@@ -232,7 +303,23 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
       >
         <div className="codex-slot-panel-tabbar">
           <div className="codex-slot-panel-tabs-container">
-            <Tabs.List className="codex-slot-panel-tabs" aria-label={ariaLabel}>
+            {tabOverflow.canScrollLeft ? (
+              <button
+                className="codex-slot-panel-scroll-affordance is-left"
+                type="button"
+                aria-label="Scroll tabs left"
+                onClick={() => scrollTabs("left")}
+              >
+                <ChevronLeft size={14} strokeWidth={1.9} />
+              </button>
+            ) : null}
+            <Tabs.List
+              ref={tabsRef}
+              className="codex-slot-panel-tabs"
+              aria-label={ariaLabel}
+              data-overflow-left={tabOverflow.canScrollLeft ? "true" : undefined}
+              data-overflow-right={tabOverflow.canScrollRight ? "true" : undefined}
+            >
               {openTabs.map((tab) => (
                 <Tabs.Trigger
                   key={tab.id}
@@ -266,6 +353,16 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
                 </Tabs.Trigger>
               ))}
             </Tabs.List>
+            {tabOverflow.canScrollRight ? (
+              <button
+                className="codex-slot-panel-scroll-affordance is-right"
+                type="button"
+                aria-label="Scroll tabs right"
+                onClick={() => scrollTabs("right")}
+              >
+                <ChevronRight size={14} strokeWidth={1.9} />
+              </button>
+            ) : null}
             {launcherItems.length > 0 && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

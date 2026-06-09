@@ -10,7 +10,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         title: (
           <span className="docs-brand-lockup">
             <span className="docs-brand-mark" />
-            Open Shell UI
+            Opaline UI
           </span>
         ),
       }}
@@ -18,7 +18,7 @@ export default function Layout({ children }: { children: ReactNode }) {
         defaultOpenLevel: 1,
         prefetch: false,
       }}
-      githubUrl="https://github.com/AbhinavMishra32/open-shell"
+      githubUrl="https://github.com/AbhinavMishra32/opaline"
     >
       {children}
     </DocsLayout>

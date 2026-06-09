@@ -1,16 +1,16 @@
-# @open-shell/ui
+# @opaline/ui
 
 React components for building dense agent-native desktop and web workspaces.
 
 ## Install
 
 ```sh
-npm install @open-shell/ui react react-dom
+npm install @opaline/ui react react-dom
 ```
 
 ```tsx
-import { AppShell, Sidebar, ThreadSurface, Composer, useShellHistory } from "@open-shell/ui";
-import "@open-shell/ui/styles.css";
+import { AppShell, Sidebar, ThreadSurface, Composer, useShellHistory } from "@opaline/ui";
+import "@opaline/ui/styles.css";
 ```
 
 ## Exports

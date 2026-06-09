@@ -52,7 +52,7 @@ import {
   TerminalSurface,
   ThreadSurface,
   useShellHistory,
-} from "@open-shell/ui";
+} from "@opaline/ui";
 import type {
   SettingsNavItem,
   SettingsNavSection,
@@ -62,8 +62,8 @@ import type {
   SidebarProject,
   SlotTab,
   TreeNode,
-} from "@open-shell/ui";
-import "@open-shell/ui/styles.css";
+} from "@opaline/ui";
+import "@opaline/ui/styles.css";
 import "./app.css";
 
 const baseThreads: SidebarItem[] = [];
@@ -123,18 +123,18 @@ const messages = [
 
 const fileTreeItems = [
   {
-    name: "open-shell",
-    path: "open-shell",
+    name: "opaline",
+    path: "opaline",
     type: "directory" as const,
     children: [
       {
         name: "src",
-        path: "open-shell/packages/ui/src",
+        path: "opaline/packages/ui/src",
         type: "directory" as const,
         children: [
           {
             name: "lib",
-            path: "open-shell/packages/ui/src",
+            path: "opaline/packages/ui/src",
             type: "directory" as const,
             children: [
               { name: "Dialog.tsx", path: "packages/ui/src/primitives/Dialog.tsx", gitStatus: "added" as const },
@@ -155,7 +155,7 @@ const fileTreeItems = [
 ];
 
 const previewCode = `{
-  "name": "@open-shell/ui",
+  "name": "@opaline/ui",
   "version": "0.3.0",
   "description": "Native-looking shell primitives for modern desktop apps.",
   "exports": {
@@ -166,13 +166,13 @@ const previewCode = `{
 
 const previewFiles = {
   "package.json": {
-    breadcrumbs: ["open-shell", "package.json"],
+    breadcrumbs: ["opaline", "package.json"],
     code: previewCode,
     fileName: "package.json",
     language: "json",
   },
   "packages/ui/src/primitives/Dialog.tsx": {
-    breadcrumbs: ["open-shell", "packages", "ui", "src", "primitives", "Dialog.tsx"],
+    breadcrumbs: ["opaline", "packages", "ui", "src", "primitives", "Dialog.tsx"],
     code: `export function DialogContent() {
   return <div className="codex-dialog-surface" />;
 }`,
@@ -180,7 +180,7 @@ const previewFiles = {
     language: "tsx",
   },
   "packages/ui/src/bottom-panel/BottomPanel.tsx": {
-    breadcrumbs: ["open-shell", "packages", "ui", "src", "bottom-panel", "BottomPanel.tsx"],
+    breadcrumbs: ["opaline", "packages", "ui", "src", "bottom-panel", "BottomPanel.tsx"],
     code: `export function BottomPanel() {
   return <SlotPanel keepMounted />;
 }`,
@@ -188,7 +188,7 @@ const previewFiles = {
     language: "tsx",
   },
   "packages/ui/src/file-tree/FileTree.tsx": {
-    breadcrumbs: ["open-shell", "packages", "ui", "src", "file-tree", "FileTree.tsx"],
+    breadcrumbs: ["opaline", "packages", "ui", "src", "file-tree", "FileTree.tsx"],
     code: `export function FileTree() {
   return <TreeView data={nodes} />;
 }`,
@@ -405,7 +405,7 @@ export function App() {
         content: (
           <FileTree
             items={fileTreeItems}
-            defaultExpandedIds={["open-shell", "open-shell/packages/ui/src", "open-shell/packages/ui/src/lib"]}
+            defaultExpandedIds={["opaline", "opaline/packages/ui/src", "opaline/packages/ui/src/lib"]}
             onNodeClick={handleFileTreeNodeClick}
           />
         ),
@@ -553,7 +553,7 @@ export function App() {
               <aside className="codex-file-browser-tree-panel" data-app-shell-focus-area="file-tree">
                 <FileTree
                   items={fileTreeItems}
-                  defaultExpandedIds={["open-shell", "open-shell/packages/ui/src", "open-shell/packages/ui/src/lib"]}
+                  defaultExpandedIds={["opaline", "opaline/packages/ui/src", "opaline/packages/ui/src/lib"]}
                   selectedIds={[selectedFilePath]}
                   onSelectionChange={() => undefined}
                   onNodeClick={handleFileTreeNodeClick}

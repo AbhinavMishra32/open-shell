@@ -1,6 +1,6 @@
-# Open Shell Electron Example
+# Opaline Electron Example
 
-Runnable Electron app that consumes `@open-shell/ui` from the workspace.
+Runnable Electron app that consumes `@opaline/ui` from the workspace.
 
 ## Run
 

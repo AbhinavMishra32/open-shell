@@ -22,7 +22,7 @@
 
 @supports (color: color-mix(in lab, red, red)) {
   [data-codex-window-type="electron"]:not([data-codex-os="win32"]) .app-shell-left-panel {
-    background: color-mix(in srgb, var(--color-token-editor-background) 64%, transparent);
+    background: color-mix(in srgb, var(--color-token-editor-background) 55%, transparent);
   }
 }
 

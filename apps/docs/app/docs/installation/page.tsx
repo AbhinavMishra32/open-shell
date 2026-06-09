@@ -2,7 +2,7 @@ import { CodeBlock } from "@/components/CodeBlock";
 
 export const metadata = {
   title: "Installation",
-  description: "Install and configure Open Shell UI.",
+  description: "Install and configure Opaline UI.",
 };
 
 export default function InstallationPage() {
@@ -27,20 +27,20 @@ export default function InstallationPage() {
         />
         <CodeBlock
           title="From GitHub raw"
-          code="curl -fsSL https://raw.githubusercontent.com/AbhinavMishra32/open-shell/main/scripts/install-open-shell-ui.mjs | node - --target ."
+          code="curl -fsSL https://raw.githubusercontent.com/AbhinavMishra32/opaline/main/scripts/install-opaline-ui.mjs | node - --target ."
         />
       </section>
 
       <section className="docs-section">
         <h2>Choose the destination</h2>
         <CodeBlock
-          code={`node scripts/install-open-shell-ui.mjs \\
+          code={`node scripts/install-opaline-ui.mjs \\
   --target ../my-agent-app \\
-  --out-dir src/components/ui/open-shell \\
+  --out-dir src/components/ui/opaline \\
   --force`}
         />
         <p>
-          By default, files are copied into <code>src/components/open-shell</code>. The installer also writes an
+          By default, files are copied into <code>src/components/opaline</code>. The installer also writes an
           <code>INSTALL.md</code> beside the copied files with import notes for that target app.
         </p>
       </section>
@@ -53,9 +53,9 @@ export default function InstallationPage() {
         </p>
         <CodeBlock
           title="React entry"
-          code={`import "@/components/open-shell/tokens/codex-theme.css";
+          code={`import "@/components/opaline/tokens/codex-theme.css";
 
-import { AppShell, Composer, Sidebar, ThreadSurface } from "@/components/open-shell";`}
+import { AppShell, Composer, Sidebar, ThreadSurface } from "@/components/opaline";`}
         />
       </section>
 
@@ -67,8 +67,8 @@ import { AppShell, Composer, Sidebar, ThreadSurface } from "@/components/open-sh
           package is not published.
         </p>
         <CodeBlock
-          code={`import "@open-shell/ui/styles.css";
-import { AppShell, Composer, Sidebar, ThreadSurface } from "@open-shell/ui";`}
+          code={`import "@opaline/ui/styles.css";
+import { AppShell, Composer, Sidebar, ThreadSurface } from "@opaline/ui";`}
         />
       </section>
 

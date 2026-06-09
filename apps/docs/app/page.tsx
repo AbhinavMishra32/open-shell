@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { AppShell, BottomPanel, Composer, FileTree, Sidebar, TerminalSurface, ThreadSurface } from "@open-shell/ui";
+import { AppShell, BottomPanel, Composer, FileTree, Sidebar, TerminalSurface, ThreadSurface } from "@opaline/ui";
 import { componentDocs } from "@/lib/component-docs";
 
 const previewProjects = [
@@ -39,7 +39,7 @@ export default function HomePage() {
           <p className="landing-eyebrow">Agent-native interface system</p>
           <h1>Build desktop-grade AI products without rebuilding the shell every time.</h1>
           <p className="landing-lede">
-            Open Shell UI is a React component system for founders and engineers building high-context agent
+            Opaline UI is a React component system for founders and engineers building high-context agent
             workspaces: translucent shells, live terminals, file trees, review panes, command menus, and dense
             composer interactions.
           </p>
@@ -53,11 +53,11 @@ export default function HomePage() {
           </div>
           <div className="landing-install">
             <span>Install</span>
-            <code>npm install @open-shell/ui</code>
+            <code>npm install @opaline/ui</code>
           </div>
         </div>
 
-        <div className="landing-shell-card" aria-label="Open Shell UI preview">
+        <div className="landing-shell-card" aria-label="Opaline UI preview">
           <AppShell
             sidebar={<Sidebar items={[]} projects={previewProjects} />}
             main={
@@ -85,7 +85,7 @@ export default function HomePage() {
                     active: true,
                     content: <TerminalSurface />,
                     id: "terminal",
-                    title: "open-shell",
+                    title: "opaline",
                   },
                 ]}
               />

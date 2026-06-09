@@ -1,6 +1,6 @@
 # Contributing
 
-Open Shell is a research-heavy UI project, so fidelity matters as much as polish.
+Opaline is a research-heavy UI project, so fidelity matters as much as polish.
 
 ## Development
 

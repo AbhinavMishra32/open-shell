@@ -1,14 +1,14 @@
 <svg width="1440" height="720" viewBox="0 0 1440 720" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">Open Shell system map</title>
+  <title id="title">Opaline system map</title>
   <desc id="desc">A component system map showing packages, examples, research internals, and UI systems.</desc>
   <rect width="1440" height="720" fill="#0b1020"/>
   <rect x="70" y="56" width="1300" height="608" rx="36" fill="#111827" stroke="#334155"/>
-  <text x="118" y="124" fill="#f8fafc" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="42" font-weight="800">Open Shell Component System</text>
+  <text x="118" y="124" fill="#f8fafc" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="42" font-weight="800">Opaline Component System</text>
   <text x="118" y="164" fill="#94a3b8" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20">Readable UI package, Electron example, and research internals wired together with Turborepo.</text>
 
   <g>
     <rect x="118" y="220" width="350" height="320" rx="24" fill="#ecfeff"/>
-    <text x="148" y="270" fill="#0f172a" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="28" font-weight="800">@open-shell/ui</text>
+    <text x="148" y="270" fill="#0f172a" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="28" font-weight="800">@opaline/ui</text>
     <text x="148" y="306" fill="#334155" font-family="ui-sans-serif, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="17">Reusable component library</text>
     <rect x="148" y="348" width="145" height="34" rx="12" fill="#cffafe"/>
     <text x="166" y="371" fill="#155e75" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="15">AppShell</text>

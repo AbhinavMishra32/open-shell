@@ -37,6 +37,7 @@ export type SidebarProps = {
   children?: ReactNode;
   footer?: ReactNode;
   items?: SidebarItem[];
+  onProjectSelect?: (projectId: string) => void;
   primaryItems?: SidebarNavItem[];
   projects?: SidebarProject[];
   renderItem?: (item: SidebarItem, options: { inset: boolean }) => ReactNode;
@@ -52,6 +53,7 @@ export function Sidebar({
   children,
   footer,
   items = [],
+  onProjectSelect,
   primaryItems = [],
   projects = [],
   renderItem,
@@ -71,7 +73,14 @@ export function Sidebar({
         {projects.length > 0 ? (
           <SidebarSection heading={sectionLabels.projects ?? "Projects"}>
             {projects.map((project) => (
-              renderProject?.(project) ?? <SidebarProjectRow key={project.id} project={project} renderItem={renderItem} />
+              renderProject?.(project) ?? (
+                <SidebarProjectRow
+                  key={project.id}
+                  project={project}
+                  renderItem={renderItem}
+                  onSelect={onProjectSelect}
+                />
+              )
             ))}
           </SidebarSection>
         ) : null}
@@ -153,9 +162,11 @@ export function SidebarSection({ children, heading }: { children: ReactNode; hea
 }
 
 export function SidebarProjectRow({
+  onSelect,
   project,
   renderItem,
 }: {
+  onSelect?: (projectId: string) => void;
   project: SidebarProject;
   renderItem?: (item: SidebarItem, options: { inset: boolean }) => ReactNode;
 }) {
@@ -172,7 +183,11 @@ export function SidebarProjectRow({
         projectId: project.id,
       })}
     >
-      <button className="codex-sidebar-project-select" {...appActionAttributes.sidebarProjectSelect}>
+      <button
+        className="codex-sidebar-project-select"
+        onClick={() => onSelect?.(project.id)}
+        {...appActionAttributes.sidebarProjectSelect}
+      >
         {project.icon != null ? (
           <span className="codex-sidebar-project-icon" aria-hidden="true">
             {project.icon}

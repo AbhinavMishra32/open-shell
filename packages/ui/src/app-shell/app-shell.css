@@ -5,7 +5,7 @@
   height: 100vh;
   overflow: hidden;
   background: transparent;
-  --codex-left-panel-width: 300px;
+  --codex-left-panel-width: 260px;
   --codex-left-panel-visible-width: var(--codex-left-panel-width);
   --codex-left-panel-max-width: 520px;
   --codex-left-panel-min-content: 320px;
@@ -29,6 +29,10 @@
   pointer-events: none;
 }
 
+[data-codex-os="darwin"] .codex-shell-chrome-controls {
+  padding-left: 152px;
+}
+
 .codex-shell-chrome-button {
   -webkit-app-region: no-drag;
   position: relative;
@@ -39,14 +43,31 @@
   flex: 0 0 28px;
   place-items: center;
   border: 0;
-  border-radius: 999px;
+  border-radius: 8px;
   padding: 0;
-  color: color-mix(in srgb, var(--codex-text-secondary) 76%, transparent);
+  color: color-mix(in srgb, var(--codex-text-secondary) 78%, transparent);
   background: transparent;
   pointer-events: auto;
   transition:
     background-color var(--transition-duration-basic) var(--cubic-enter),
-    color var(--transition-duration-basic) var(--cubic-enter);
+    box-shadow var(--transition-duration-basic) var(--cubic-enter),
+    color var(--transition-duration-basic) var(--cubic-enter),
+    transform var(--transition-duration-basic) var(--cubic-enter);
+}
+
+.codex-shell-chrome-button:hover {
+  background: color-mix(in srgb, var(--codex-text-primary) 7%, transparent);
+  color: var(--codex-text-primary);
+}
+
+.codex-shell-chrome-button:active {
+  transform: scale(0.9);
+  background: color-mix(in srgb, var(--codex-text-primary) 12%, transparent);
+}
+
+.codex-shell-chrome-button[disabled] {
+  opacity: 0.3 !important;
+  pointer-events: none !important;
 }
 
 .codex-app-shell[data-sidebar-open="false"] .codex-shell-chrome-controls {
@@ -55,36 +76,54 @@
 
 .codex-sidebar-reopen-button {
   -webkit-app-region: no-drag;
-  position: fixed;
+  position: absolute;
   top: 8px;
   left: 96px;
   z-index: 320;
-  display: grid;
-  width: 28px;
-  height: 28px;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: auto;
+  height: auto;
   border: 0;
-  border-radius: 999px;
+  border-radius: 0;
   padding: 0;
   color: color-mix(in srgb, var(--codex-text-secondary) 76%, transparent);
   background: transparent;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-15px);
+  transition:
+    opacity var(--transition-duration-relaxed) cubic-bezier(0.2, 0, 0, 1),
+    transform var(--transition-duration-relaxed) cubic-bezier(0.2, 0, 0, 1);
+}
+
+[data-codex-os="darwin"] .codex-sidebar-reopen-button {
+  left: 80px;
+}
+
+.codex-app-shell[data-sidebar-open="false"] .codex-sidebar-reopen-button {
+  opacity: 1;
   pointer-events: auto;
+  transform: translateX(0);
 }
 
 .codex-sidebar-reopen-trigger {
+  -webkit-app-region: no-drag;
   display: grid;
   width: 28px;
   height: 28px;
   place-items: center;
   border: 0;
-  border-radius: 999px;
+  border-radius: 8px;
   padding: 0;
   color: inherit;
   background: transparent;
   transition:
     background-color var(--transition-duration-basic) var(--cubic-enter),
+    box-shadow var(--transition-duration-basic) var(--cubic-enter),
     color var(--transition-duration-basic) var(--cubic-enter),
-    opacity var(--transition-duration-basic) var(--cubic-enter);
+    transform var(--transition-duration-basic) var(--cubic-enter);
 }
 
 .codex-sidebar-reopen-trigger:hover {
@@ -92,11 +131,25 @@
   color: var(--codex-text-primary);
 }
 
+.codex-sidebar-reopen-trigger:active {
+  transform: scale(0.9);
+  background: color-mix(in srgb, var(--codex-text-primary) 12%, transparent);
+}
+
+.codex-sidebar-reopen-trigger[disabled] {
+  opacity: 0.3 !important;
+  pointer-events: none !important;
+}
+
 .codex-sidebar-reopen-trigger svg,
 .codex-sidebar-reopen-button svg {
-  width: 18px;
-  height: 18px;
-  fill: currentColor;
+  width: 24px;
+  height: 24px;
+}
+
+.codex-sidebar-reopen-button svg circle {
+  fill: #007aff !important;
+  stroke: var(--codex-bg-primary) !important;
 }
 
 .codex-shell-chrome-spacer {
@@ -110,29 +163,9 @@
   color: color-mix(in srgb, var(--codex-text-tertiary) 58%, transparent);
 }
 
-.codex-shell-chrome-button:disabled {
-  color: color-mix(in srgb, var(--codex-text-tertiary) 48%, transparent);
-  pointer-events: none;
-}
-
-.codex-shell-chrome-button:hover {
-  background: color-mix(in srgb, var(--codex-text-primary) 7%, transparent);
-  color: var(--codex-text-primary);
-}
-
 .codex-shell-chrome-button svg {
-  width: 18px;
-  height: 18px;
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.55;
-}
-
-.codex-shell-chrome-button:first-child svg {
-  fill: currentColor;
-  stroke: none;
+  width: 24px;
+  height: 24px;
 }
 
 .codex-app-tab-actions {
@@ -150,10 +183,22 @@
   display: flex;
   height: var(--height-toolbar);
   align-items: center;
-  gap: 10px;
+  gap: 2px;
   padding: 0 14px 0 96px;
   color: color-mix(in srgb, var(--codex-text-secondary) 76%, transparent);
   pointer-events: auto;
+  opacity: 1;
+  transition:
+    opacity var(--transition-duration-basic) var(--cubic-enter);
+}
+
+[data-codex-os="darwin"] .codex-sidebar-chrome {
+  padding-left: 80px;
+}
+
+.codex-left-panel[data-open="false"] .codex-sidebar-chrome {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .codex-app-main {
@@ -274,6 +319,8 @@
   padding: 0 14px 0 16px;
   background: color-mix(in srgb, var(--codex-bg-primary) 94%, transparent);
   user-select: none;
+  transition:
+    padding-left var(--transition-duration-relaxed) cubic-bezier(0.2, 0, 0, 1);
 }
 
 .codex-app-shell[data-sidebar-open="false"] .codex-app-header {
@@ -426,8 +473,7 @@
   gap: 8px;
 }
 
-.codex-header-agent-button,
-.codex-header-tool-button {
+.codex-header-agent-button {
   display: inline-grid;
   place-items: center;
   border: 0;
@@ -437,6 +483,19 @@
     background-color var(--transition-duration-basic) var(--cubic-enter),
     box-shadow var(--transition-duration-basic) var(--cubic-enter),
     color var(--transition-duration-basic) var(--cubic-enter);
+}
+
+.codex-header-tool-button {
+  display: inline-grid;
+  place-items: center;
+  border: 0;
+  color: color-mix(in srgb, var(--codex-text-secondary) 78%, transparent);
+  background: transparent;
+  transition:
+    background-color var(--transition-duration-basic) var(--cubic-enter),
+    box-shadow var(--transition-duration-basic) var(--cubic-enter),
+    color var(--transition-duration-basic) var(--cubic-enter),
+    transform var(--transition-duration-basic) var(--cubic-enter);
 }
 
 .codex-header-agent-button {
@@ -477,9 +536,14 @@
 }
 
 .codex-header-tool-button {
-  width: 34px;
-  height: 34px;
-  border-radius: 13px;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+}
+
+.codex-header-tool-button:active {
+  transform: scale(0.9);
+  background: color-mix(in srgb, var(--codex-text-primary) 12%, transparent);
 }
 
 .codex-header-tool-button[data-active="true"] {
@@ -493,8 +557,8 @@
 
 .codex-header-agent-button svg,
 .codex-header-tool-button svg {
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
@@ -521,7 +585,7 @@
 .codex-right-panel-slot {
   position: relative;
   z-index: 41;
-  width: 292px;
+  width: var(--codex-right-panel-width, 292px);
   min-width: 0;
   height: 100%;
   min-height: 0;
@@ -534,9 +598,14 @@
 }
 
 .codex-right-panel-slot[data-open="false"] {
-  width: 0;
+  width: 0 !important;
   opacity: 0;
   pointer-events: none;
+}
+
+.codex-right-panel-slot[data-resizing="true"] {
+  cursor: col-resize;
+  transition: none;
 }
 
 .codex-main-content-viewport {
@@ -579,9 +648,8 @@
 
 .codex-right-panel {
   position: absolute;
-  inset: 0 auto 0 0;
+  inset: 0;
   display: flex;
-  width: 292px;
   height: 100%;
   min-height: 0;
   min-width: 0;
@@ -592,6 +660,43 @@
   padding: 12px;
   background: var(--codex-bg-fog);
   contain: layout paint;
+}
+
+.codex-right-panel-resize-handle {
+  position: absolute;
+  z-index: 42;
+  top: 0;
+  left: -8px;
+  bottom: 0;
+  display: flex;
+  width: 16px;
+  touch-action: none;
+  cursor: col-resize;
+  user-select: none;
+}
+
+.codex-right-panel-resize-handle[aria-disabled="true"] {
+  pointer-events: none;
+}
+
+.codex-right-panel-resize-handle-line {
+  width: 1px;
+  height: 100%;
+  margin: auto;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    color-mix(in srgb, var(--codex-text-primary) 25%, transparent),
+    transparent
+  );
+  opacity: 0;
+  transition: opacity var(--transition-duration-basic) var(--cubic-enter);
+}
+
+.codex-right-panel-resize-handle:hover .codex-right-panel-resize-handle-line,
+.codex-right-panel-resize-handle:active .codex-right-panel-resize-handle-line,
+.codex-right-panel-slot[data-resizing="true"] .codex-right-panel-resize-handle-line {
+  opacity: 1;
 }
 
 .codex-panel-header {

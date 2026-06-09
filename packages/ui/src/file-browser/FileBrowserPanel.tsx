@@ -13,6 +13,7 @@ export type FileBrowserPanelProps = {
   language?: string;
   pathActions?: ReactNode;
   sidePanel?: ReactNode;
+  sidePanelPosition?: "left" | "right";
   tabIcon?: ReactNode;
   tabs?: ReactNode;
   toolbar?: ReactNode;
@@ -28,6 +29,7 @@ export function FileBrowserPanel({
   language,
   pathActions,
   sidePanel,
+  sidePanelPosition = "right",
   tabIcon,
   tabs,
   toolbar,
@@ -46,7 +48,7 @@ export function FileBrowserPanel({
         </div>
       )}
 
-      <div className="codex-file-browser-body">
+      <div className="codex-file-browser-body" data-side-panel-position={sidePanelPosition}>
         {editor ?? (
           <pre className="codex-file-browser-code" data-language={language}>
             <code>{code}</code>

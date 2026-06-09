@@ -23,11 +23,13 @@
 }
 
 .codex-slot-panel-tabs-container {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 6px;
   min-width: 0;
   flex: 1;
+  overflow: hidden;
 }
 
 .codex-slot-panel-tabs {
@@ -35,6 +37,40 @@
   min-width: 0;
   align-items: center;
   gap: 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.codex-slot-panel-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.codex-slot-panel-scroll-affordance {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  width: 24px;
+  height: 24px;
+  flex: 0 0 24px;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--codex-border-subtle) 72%, transparent);
+  border-radius: 999px;
+  padding: 0;
+  background:
+    linear-gradient(var(--codex-bg-primary), var(--codex-bg-primary)) padding-box,
+    color-mix(in srgb, var(--codex-text-primary) 4%, transparent);
+  color: color-mix(in srgb, var(--codex-text-secondary) 86%, transparent);
+  cursor: default;
+  box-shadow:
+    0 1px 2px #0000000d,
+    0 0 0 3px color-mix(in srgb, var(--codex-bg-primary) 86%, transparent);
+}
+
+.codex-slot-panel-scroll-affordance:hover {
+  background: color-mix(in srgb, var(--codex-text-primary) 7%, var(--codex-bg-primary));
+  color: var(--codex-text-primary);
 }
 
 .codex-slot-panel-tab {
@@ -47,7 +83,7 @@
   gap: 6px;
   overflow: hidden;
   border: 0;
-  border-radius: 9px;
+  border-radius: 8px;
   padding: 0 10px;
   color: var(--codex-text-secondary);
   background: transparent;
@@ -132,7 +168,7 @@
   height: 28px;
   place-items: center;
   border: 0;
-  border-radius: 9px;
+  border-radius: 8px;
   padding: 0;
   background: transparent;
   color: var(--codex-text-secondary);
@@ -162,7 +198,7 @@
   height: 28px;
   place-items: center;
   border: 0;
-  border-radius: 9px;
+  border-radius: 8px;
   background: transparent;
   color: var(--codex-text-secondary);
   cursor: pointer;
@@ -182,6 +218,10 @@
   min-height: 0;
   overflow: hidden;
   height: 100%;
+}
+
+.codex-slot-panel-outlet[hidden] {
+  display: none;
 }
 
 /* Launcher dropdown menu */

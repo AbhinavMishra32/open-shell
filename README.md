@@ -1,4 +1,4 @@
-# Open Shell UI
+# Opaline UI
 
 [![status](https://img.shields.io/badge/status-alpha_component_system-101010?style=for-the-badge)](#status)
 [![docs](https://img.shields.io/badge/docs-live_playground-16A34A?style=for-the-badge)](./apps/docs)
@@ -11,17 +11,17 @@
 [![license](https://img.shields.io/badge/license-MIT-0F172A?style=for-the-badge)](./LICENSE)
 [![prs](https://img.shields.io/badge/PRs-welcome-22C55E?style=for-the-badge)](./CONTRIBUTING.md)
 
-Open Shell UI is a React component system for building agent-native software: translucent desktop shells, dense sidebars, shared back/forward history, settings surfaces, persistent slot tabs, terminals, file trees, review panes, command menus, chat surfaces, and high-context composers.
+Opaline UI is a React component system for building agent-native software: translucent desktop shells, dense sidebars, shared back/forward history, settings surfaces, persistent slot tabs, terminals, file trees, review panes, command menus, chat surfaces, and high-context composers.
 
 It is the UI engine layer you want before you start writing product logic. Instead of another dashboard kit, it gives teams the primitives and shell grammar for modern agent workspaces.
 
-![Open Shell hero](./docs/assets/open-shell-hero.svg)
+![Opaline hero](./docs/assets/opaline-hero.svg)
 
 ## What Changed
 
 This repository is now organized like a serious component-library project:
 
-- `@open-shell/ui` is the public React package.
+- `@opaline/ui` is the public React package.
 - `apps/docs` is a Next/Fumadocs documentation site with live component previews.
 - `examples/electron-shell` is the runnable Electron app that consumes the package.
 - `research/codex-internals` remains the private research/provenance workspace for continuing component-system reconstruction.
@@ -35,10 +35,10 @@ npm install
 npm run docs:dev
 ```
 
-Open the docs at `http://localhost:3001`.
+Open the docs at `http://localhost:3011`.
 
 ```tsx
-import "@open-shell/ui/styles.css";
+import "@opaline/ui/styles.css";
 import {
   AppShell,
   BottomPanel,
@@ -48,7 +48,7 @@ import {
   TerminalSurface,
   ThreadSurface,
   useShellHistory,
-} from "@open-shell/ui";
+} from "@opaline/ui";
 
 export function AgentWorkspace() {
   const history = useShellHistory([
@@ -68,8 +68,8 @@ export function AgentWorkspace() {
             {
               active: true,
               id: "terminal",
-              title: "open-shell",
-              content: <TerminalSurface cwd="~/open-shell">npm run docs:dev</TerminalSurface>,
+              title: "opaline",
+              content: <TerminalSurface cwd="~/opaline">npm run docs:dev</TerminalSurface>,
             },
           ]}
         />
@@ -81,18 +81,40 @@ export function AgentWorkspace() {
 
 ## Install From npm
 
-`@open-shell/ui` now builds as a normal npm package:
+`@opaline/ui` now builds as a normal npm package:
 
 ```sh
-npm install @open-shell/ui react react-dom
+npm install @opaline/ui react react-dom
 ```
 
 Then import the package and stylesheet:
 
 ```tsx
-import { AppShell, Sidebar, useShellHistory } from "@open-shell/ui";
-import "@open-shell/ui/styles.css";
+import { AppShell, Sidebar, useShellHistory } from "@opaline/ui";
+import "@opaline/ui/styles.css";
 ```
+
+## Local Workspace Development
+
+Construct consumes Opaline without publishing by adding `opaline/packages/*` to
+its pnpm workspace and depending on `@opaline/ui` with `workspace:*`.
+
+```yaml
+packages:
+  - app
+  - opaline/packages/*
+```
+
+```json
+{
+  "dependencies": {
+    "@opaline/ui": "workspace:*"
+  }
+}
+```
+
+Use this path while improving components. Build and typecheck Opaline first,
+then typecheck the consuming app.
 
 ## Install Into Another Project
 
@@ -107,15 +129,15 @@ npm run install:ui -- --target ../my-agent-app
 From GitHub raw:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/AbhinavMishra32/open-shell/main/scripts/install-open-shell-ui.mjs | node - --target .
+curl -fsSL https://raw.githubusercontent.com/AbhinavMishra32/opaline/main/scripts/install-opaline-ui.mjs | node - --target .
 ```
 
 Useful options:
 
 ```sh
-node scripts/install-open-shell-ui.mjs \
+node scripts/install-opaline-ui.mjs \
   --target ../my-agent-app \
-  --out-dir src/components/ui/open-shell \
+  --out-dir src/components/ui/opaline \
   --force
 ```
 
@@ -130,12 +152,12 @@ What it does:
 
 | Workspace | Path | Purpose |
 | --- | --- | --- |
-| `@open-shell/docs` | `apps/docs` | Documentation site, component registry, guides, and live previews. |
-| `@open-shell/ui` | `packages/ui` | Reusable React components, CSS tokens, and Radix-backed primitives. |
-| `@open-shell/electron-example` | `examples/electron-shell` | Desktop example app consuming the component package. |
+| `@opaline/docs` | `apps/docs` | Documentation site, component registry, guides, and live previews. |
+| `@opaline/ui` | `packages/ui` | Reusable React components, CSS tokens, and Radix-backed primitives. |
+| `@opaline/electron-example` | `examples/electron-shell` | Desktop example app consuming the component package. |
 | Research internals | `research/codex-internals` | Extraction scripts, inventories, and implementation notes. |
 
-![Open Shell component map](./docs/assets/open-shell-system-map.svg)
+![Opaline component map](./docs/assets/opaline-system-map.svg)
 
 ## Components
 
@@ -148,7 +170,7 @@ What it does:
 | `SettingsPanel` | Shell | Settings main surface with sections, cards, rows, toggles, selects, and option cards. |
 | `Composer` | Input | Attachment menu, permission control, model/reasoning menu, submit. |
 | `SlotPanel` | Shell | Generic tab system for any slot, with controlled active state and mounted inactive tabs. |
-| `BottomPanel` | Shell | Resizable Radix Tabs panel for terminal, files, side chat, logs. |
+| `BottomPanel` | Shell | Resizable wrapper around `SlotPanel` for terminals, logs, file browsers, inspectors, and app-defined tools. |
 | `TerminalSurface` | Data | Monospace process/log surface for bottom-panel slots. |
 | `FileTree` | Data | Searchable file tree with icon, git, and action lanes. |
 | `FileBrowserPanel` | Data | Code viewport plus right-side file tree composition. |

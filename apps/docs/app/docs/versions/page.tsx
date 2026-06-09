@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Versions",
-  description: "Open Shell UI component-system version history.",
+  description: "Opaline UI component-system version history.",
 };
 
 const releases = [
@@ -11,7 +11,7 @@ const releases = [
       "Shared shell history API now powers AppShell back/forward controls across threads, files, settings, and slot tabs.",
       "SlotPanel and BottomPanel keep inactive tab content mounted so terminals and long-running tools stay alive.",
       "Reusable settings surfaces are available for Codex-style settings sidebars, panels, rows, toggles, selects, and option cards.",
-      "@open-shell/ui now builds from dist as a publishable npm package with JS, declarations, and copied CSS assets.",
+      "@opaline/ui now builds from dist as a publishable npm package with JS, declarations, and copied CSS assets.",
     ],
   },
   {
@@ -20,7 +20,7 @@ const releases = [
     notes: [
       "Composer slot is optional in AppShell.",
       "Sidebar chrome exposes native toggle/back/forward controls.",
-      "FileTree now supports tree-view style expansion, selection, line guides, and data-node APIs while preserving the Open Shell visual style.",
+      "FileTree now supports tree-view style expansion, selection, line guides, and data-node APIs while preserving the Opaline visual style.",
       "Docs now track pages/history and release changes.",
     ],
   },
@@ -28,7 +28,7 @@ const releases = [
     version: "0.1.0",
     status: "initial release",
     notes: [
-      "Initial Open Shell UI package with AppShell, Sidebar, Composer, BottomPanel, FileTree, FileBrowserPanel, and overlay primitives.",
+      "Initial Opaline UI package with AppShell, Sidebar, Composer, BottomPanel, FileTree, FileBrowserPanel, and overlay primitives.",
     ],
   },
 ];
