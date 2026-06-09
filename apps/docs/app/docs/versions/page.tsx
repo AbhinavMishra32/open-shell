@@ -10,7 +10,7 @@ const releases = [
     notes: [
       "Shared shell history API now powers AppShell back/forward controls across threads, files, settings, and slot tabs.",
       "SlotPanel and BottomPanel keep inactive tab content mounted so terminals and long-running tools stay alive.",
-      "Reusable settings surfaces are available for Codex-style settings sidebars, panels, rows, toggles, selects, and option cards.",
+      "Reusable settings surfaces are available for Opaline-style settings sidebars, panels, rows, toggles, selects, and option cards.",
       "@opaline/ui now builds from dist as a publishable npm package with JS, declarations, and copied CSS assets.",
     ],
   },

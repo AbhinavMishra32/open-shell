@@ -24,7 +24,7 @@ This repository is now organized like a serious component-library project:
 - `@opaline/ui` is the public React package.
 - `apps/docs` is a Next/Fumadocs documentation site with live component previews.
 - `examples/electron-shell` is the runnable Electron app that consumes the package.
-- `research/codex-internals` remains the private research/provenance workspace for continuing component-system reconstruction.
+- `research/opaline-internals` remains the private research/provenance workspace for continuing component-system reconstruction.
 
 Current release: `0.3.0`.
 
@@ -155,7 +155,7 @@ What it does:
 | `@opaline/docs` | `apps/docs` | Documentation site, component registry, guides, and live previews. |
 | `@opaline/ui` | `packages/ui` | Reusable React components, CSS tokens, and Radix-backed primitives. |
 | `@opaline/electron-example` | `examples/electron-shell` | Desktop example app consuming the component package. |
-| Research internals | `research/codex-internals` | Extraction scripts, inventories, and implementation notes. |
+| Research internals | `research/opaline-internals` | Extraction scripts, inventories, and implementation notes. |
 
 ![Opaline component map](./docs/assets/opaline-system-map.svg)
 
@@ -217,7 +217,7 @@ The Electron example demonstrates:
 - transparent macOS window surface
 - hidden inset titlebar
 - translucent sidebar material
-- Codex-style sidebar collapse, back, and forward controls connected to shared shell history
+- Opaline-style sidebar collapse, back, and forward controls connected to shared shell history
 - settings sidebar/main-mode switching using reusable settings primitives
 - chat thread canvas
 - composer dock
@@ -259,7 +259,7 @@ history.push({
 <AppShell history={history} sidebar={<Sidebar projects={projects} />} main={<CurrentSurface />} />;
 ```
 
-The default sidebar chrome uses that controller for Codex-style back and forward buttons. `SlotPanel` and `BottomPanel` expose `activeTabId`, `onActiveTabChange`, tab lifecycle callbacks, and `keepMounted` so terminal/process surfaces do not reset when another tab becomes active.
+The default sidebar chrome uses that controller for Opaline-style back and forward buttons. `SlotPanel` and `BottomPanel` expose `activeTabId`, `onActiveTabChange`, tab lifecycle callbacks, and `keepMounted` so terminal/process surfaces do not reset when another tab becomes active.
 
 ## Commands
 

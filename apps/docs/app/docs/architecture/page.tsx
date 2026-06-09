@@ -23,7 +23,7 @@ export default function ArchitecturePage() {
 ├─ apps/docs                 # Next + Fumadocs documentation and live previews
 ├─ packages/ui               # Public React component system
 ├─ examples/electron-shell   # Runnable Electron app consuming @opaline/ui
-└─ research/codex-internals  # Reverse-engineering notes and extracted references`}
+└─ research/opaline-internals  # Reverse-engineering notes and extracted references`}
         />
       </section>
 

@@ -29,24 +29,24 @@ export function Composer({
   value?: string;
 }) {
   return (
-    <form className="codex-composer" onSubmit={onSubmit}>
+    <form className="opaline-composer" onSubmit={onSubmit}>
       <textarea aria-label="Prompt" placeholder={placeholder} readOnly={readOnly} rows={2} value={value} />
-      <div className="codex-composer-footer">
+      <div className="opaline-composer-footer">
         {footerLeading ?? (
-          <div className="codex-composer-tools">
+          <div className="opaline-composer-tools">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="codex-composer-round-button" type="button" aria-label="Open attachments menu">
+                <button className="opaline-composer-round-button" type="button" aria-label="Open attachments menu">
                   +
                 </button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="codex-composer-plus-menu" side="top">
+              <DropdownMenuContent align="start" className="opaline-composer-plus-menu" side="top">
                 <DropdownMenuItem>
-                  <span className="codex-menu-icon">⌕</span>
+                  <span className="opaline-menu-icon">⌕</span>
                   <span>Add photos & files</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  <span className="codex-menu-icon">◉</span>
+                  <span className="opaline-menu-icon">◉</span>
                   <span>Attach Electron</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
@@ -63,10 +63,10 @@ export function Composer({
                 </DropdownMenuSub>
               </DropdownMenuContent>
             </DropdownMenu>
-            <button className="codex-composer-access-button" type="button">
-              <span className="codex-composer-shield">!</span>
+            <button className="opaline-composer-access-button" type="button">
+              <span className="opaline-composer-shield">!</span>
               Full access
-              <span className="codex-composer-chevron">⌄</span>
+              <span className="opaline-composer-chevron">⌄</span>
             </button>
           </div>
         )}
@@ -78,18 +78,18 @@ export function Composer({
 
 function DefaultComposerTrailingControls() {
   return (
-    <div className="codex-composer-model-controls">
-      <div className="codex-composer-model-trigger">
+    <div className="opaline-composer-model-controls">
+      <div className="opaline-composer-model-trigger">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <button className="codex-composer-model-button" type="button" aria-label="Select model">
-              <span className="codex-composer-model-version">5.5</span>
-              <span className="codex-composer-model-reasoning">Extra High</span>
+            <button className="opaline-composer-model-button" type="button" aria-label="Select model">
+              <span className="opaline-composer-model-version">5.5</span>
+              <span className="opaline-composer-model-reasoning">Extra High</span>
               <ChevronDownIcon />
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="codex-composer-model-menu" side="top">
-            <div className="codex-composer-menu-label">Reasoning</div>
+          <DropdownMenuContent align="end" className="opaline-composer-model-menu" side="top">
+            <div className="opaline-composer-menu-label">Reasoning</div>
             <DropdownMenuItem>Low</DropdownMenuItem>
             <DropdownMenuItem>Medium</DropdownMenuItem>
             <DropdownMenuItem>High</DropdownMenuItem>
@@ -99,8 +99,8 @@ function DefaultComposerTrailingControls() {
             <DropdownMenuSeparator />
             <DropdownMenuSub>
               <DropdownMenuSubTrigger>GPT-5.5</DropdownMenuSubTrigger>
-              <DropdownMenuSubContent className="codex-composer-model-submenu">
-                <div className="codex-composer-menu-label">Model</div>
+              <DropdownMenuSubContent className="opaline-composer-model-submenu">
+                <div className="opaline-composer-menu-label">Model</div>
                 <DropdownMenuItem>
                   GPT-5.5 <CheckIcon />
                 </DropdownMenuItem>
@@ -117,11 +117,11 @@ function DefaultComposerTrailingControls() {
             </DropdownMenuSub>
           </DropdownMenuContent>
         </DropdownMenu>
-        <span className="codex-composer-model-tooltip">
+        <span className="opaline-composer-model-tooltip">
           Select model <kbd>^⇧M</kbd>
         </span>
       </div>
-      <button className="codex-composer-mic" type="button" aria-label="Dictate">
+      <button className="opaline-composer-mic" type="button" aria-label="Dictate">
         <MicIcon />
       </button>
       <Button type="submit" variant="primary">
@@ -141,7 +141,7 @@ function ChevronDownIcon() {
 
 function CheckIcon() {
   return (
-    <svg className="codex-menu-check" viewBox="0 0 20 20" aria-hidden="true">
+    <svg className="opaline-menu-check" viewBox="0 0 20 20" aria-hidden="true">
       <path d="m4.5 10.5 3.5 3.5 7.5-8" />
     </svg>
   );

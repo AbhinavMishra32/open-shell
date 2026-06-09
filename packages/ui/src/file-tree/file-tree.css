@@ -1,5 +1,5 @@
-.codex-file-tree {
-  --trees-font-family: var(--codex-font-sans);
+.opaline-file-tree {
+  --trees-font-family: var(--opaline-font-sans);
   --trees-font-size: 15px;
   --trees-row-height: 34px;
   --trees-item-padding-x: 10px;
@@ -7,24 +7,24 @@
   --trees-padding-inline: 8px;
   --trees-item-row-gap: 4px;
   --trees-border-radius: 10px;
-  --trees-border-color: var(--codex-border-subtle);
+  --trees-border-color: var(--opaline-border-subtle);
   --trees-bg: transparent;
-  --trees-bg-muted: color-mix(in srgb, var(--codex-text-primary) 5.5%, transparent);
-  --trees-fg: var(--codex-text-primary);
-  --trees-fg-muted: var(--codex-text-secondary);
-  --trees-search-bg: var(--codex-bg-fog);
-  --trees-search-fg: var(--codex-text-primary);
-  --trees-selected-bg: color-mix(in srgb, var(--codex-text-primary) 7.5%, transparent);
-  --trees-selected-fg: var(--codex-text-primary);
+  --trees-bg-muted: color-mix(in srgb, var(--opaline-text-primary) 5.5%, transparent);
+  --trees-fg: var(--opaline-text-primary);
+  --trees-fg-muted: var(--opaline-text-secondary);
+  --trees-search-bg: var(--opaline-bg-fog);
+  --trees-search-fg: var(--opaline-text-primary);
+  --trees-selected-bg: color-mix(in srgb, var(--opaline-text-primary) 7.5%, transparent);
+  --trees-selected-fg: var(--opaline-text-primary);
   --trees-action-lane-width: 22px;
-  --trees-focus-ring-color: color-mix(in srgb, var(--codex-accent) 46%, transparent);
+  --trees-focus-ring-color: color-mix(in srgb, var(--opaline-accent) 46%, transparent);
   --trees-focus-ring-offset: -1px;
   --trees-git-lane-width: 24px;
   --trees-icon-width: 20px;
   --trees-icon-nudge: 1px;
   --tree-indent: 18px;
   --trees-file-icon-color-css: #7b61ff;
-  --trees-file-icon-color-default: var(--codex-text-tertiary);
+  --trees-file-icon-color-default: var(--opaline-text-tertiary);
   --trees-file-icon-color-javascript: #d6a900;
   --trees-file-icon-color-json: #d97706;
   --trees-file-icon-color-markdown: #4d7bbd;
@@ -34,18 +34,18 @@
   color: var(--trees-fg);
 }
 
-.codex-file-tree[data-file-tree-variant="sidebar"] {
+.opaline-file-tree[data-file-tree-variant="sidebar"] {
   --trees-font-size: 14px;
   --trees-row-height: 30px;
   --trees-item-padding-x: 8px;
   --trees-padding-inline: 0px;
   --trees-item-row-gap: 4px;
   --trees-border-radius: 8px;
-  --trees-search-bg: color-mix(in srgb, var(--codex-text-primary) 4%, transparent);
-  --trees-selected-bg: color-mix(in srgb, var(--codex-text-primary) 9%, transparent);
+  --trees-search-bg: color-mix(in srgb, var(--opaline-text-primary) 4%, transparent);
+  --trees-selected-bg: color-mix(in srgb, var(--opaline-text-primary) 9%, transparent);
 }
 
-.codex-file-tree-root {
+.opaline-file-tree-root {
   position: relative;
   display: flex;
   height: 100%;
@@ -62,11 +62,11 @@
   margin-bottom: var(--trees-item-row-gap);
 }
 
-.codex-file-tree[data-file-tree-variant="sidebar"] [data-file-tree-search-container] {
+.opaline-file-tree[data-file-tree-variant="sidebar"] [data-file-tree-search-container] {
   padding-inline: 0;
 }
 
-.codex-file-tree-search-label {
+.opaline-file-tree-search-label {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -75,7 +75,7 @@
   white-space: nowrap;
 }
 
-.codex-file-tree-search-field {
+.opaline-file-tree-search-field {
   position: relative;
   display: flex;
   width: 100%;
@@ -90,12 +90,12 @@
   line-height: 18px;
 }
 
-.codex-file-tree[data-file-tree-variant="sidebar"] .codex-file-tree-search-field {
-  border-color: color-mix(in srgb, var(--codex-border-subtle) 62%, transparent);
+.opaline-file-tree[data-file-tree-variant="sidebar"] .opaline-file-tree-search-field {
+  border-color: color-mix(in srgb, var(--opaline-border-subtle) 62%, transparent);
   box-shadow: none;
 }
 
-.codex-file-tree-search-icon {
+.opaline-file-tree-search-icon {
   width: 18px;
   height: 18px;
   margin-left: 10px;
@@ -127,7 +127,7 @@
   outline: none;
 }
 
-.codex-file-tree-search-field:has([data-file-tree-search-input]:focus-visible) {
+.opaline-file-tree-search-field:has([data-file-tree-search-input]:focus-visible) {
   outline: 2px solid var(--trees-focus-ring-color);
   outline-offset: var(--trees-focus-ring-offset);
 }
@@ -138,7 +138,7 @@
   padding: 2px var(--trees-padding-inline) 8px;
 }
 
-.codex-file-tree[data-file-tree-variant="sidebar"] [data-file-tree-virtualized-scroll] {
+.opaline-file-tree[data-file-tree-variant="sidebar"] [data-file-tree-virtualized-scroll] {
   padding: 0;
 }
 
@@ -152,7 +152,7 @@
   background-color: var(--trees-bg);
 }
 
-.codex-file-tree-row {
+.opaline-file-tree-row {
   position: relative;
   display: flex;
   height: var(--trees-row-height);
@@ -174,19 +174,19 @@
   user-select: none;
 }
 
-.codex-file-tree-row:hover,
-.codex-file-tree-row:focus-visible {
+.opaline-file-tree-row:hover,
+.opaline-file-tree-row:focus-visible {
   background: var(--trees-bg-muted);
   color: var(--trees-fg);
 }
 
-.codex-file-tree-row[data-item-selected="true"] {
+.opaline-file-tree-row[data-item-selected="true"] {
   z-index: 3;
   background-color: var(--trees-selected-bg);
   color: var(--trees-selected-fg);
 }
 
-.codex-file-tree-row[data-file-tree-sticky-row="true"] {
+.opaline-file-tree-row[data-file-tree-sticky-row="true"] {
   font-weight: 600;
 }
 
@@ -234,7 +234,7 @@
   flex: 1 1 auto;
 }
 
-[data-file-tree-has-context-menu-action-lane="false"] .codex-file-tree-row {
+[data-file-tree-has-context-menu-action-lane="false"] .opaline-file-tree-row {
   padding-right: calc(var(--trees-item-padding-x) + 2px);
 }
 
@@ -247,8 +247,8 @@
   pointer-events: none;
 }
 
-.codex-file-tree-row:hover [data-item-section="action"],
-.codex-file-tree-row:focus-visible [data-item-section="action"] {
+.opaline-file-tree-row:hover [data-item-section="action"],
+.opaline-file-tree-row:focus-visible [data-item-section="action"] {
   opacity: 0.85;
 }
 
@@ -272,7 +272,7 @@
   color: var(--trees-file-icon-color-typescript);
 }
 
-.codex-file-tree-chevron-container {
+.opaline-file-tree-chevron-container {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -280,67 +280,67 @@
   width: 12px;
   height: 12px;
   margin-right: 4px;
-  color: var(--codex-text-secondary);
+  color: var(--opaline-text-secondary);
 }
 
-.codex-file-tree-chevron-container svg {
+.opaline-file-tree-chevron-container svg {
   width: 12px;
   height: 12px;
   fill: currentColor;
   transition: transform 0.15s ease;
 }
 
-.codex-file-tree-row[aria-expanded="false"] .codex-file-tree-chevron-container svg {
+.opaline-file-tree-row[aria-expanded="false"] .opaline-file-tree-chevron-container svg {
   transform: rotate(-90deg);
 }
 
-.codex-file-tree-chevron-spacer {
+.opaline-file-tree-chevron-spacer {
   flex: 0 0 auto;
   width: 16px;
 }
-.codex-file-tree-indent-guide {
+.opaline-file-tree-indent-guide {
   position: absolute;
   top: 0;
   bottom: 0;
   left: calc(var(--trees-item-padding-x) + (var(--indent-index) * var(--tree-indent, 18px)) + 6px);
   width: 1px;
   pointer-events: none;
-  background: color-mix(in srgb, var(--codex-text-primary) 20%, transparent);
+  background: color-mix(in srgb, var(--opaline-text-primary) 20%, transparent);
   opacity: 0.5;
   transition: opacity 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), background-color 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 
-.codex-file-tree:hover .codex-file-tree-indent-guide {
+.opaline-file-tree:hover .opaline-file-tree-indent-guide {
   opacity: 0.9;
-  background: color-mix(in srgb, var(--codex-text-primary) 35%, transparent);
+  background: color-mix(in srgb, var(--opaline-text-primary) 35%, transparent);
 }
 
-.codex-file-tree-git-dot {
+.opaline-file-tree-git-dot {
   display: inline-grid;
   min-width: 18px;
   height: 18px;
   place-items: center;
   border-radius: 999px;
   padding: 0 5px;
-  color: var(--codex-text-tertiary);
+  color: var(--opaline-text-tertiary);
   font-size: 10px;
   font-weight: 650;
 }
 
-.codex-file-tree-git-dot[data-git-status="added"] {
-  color: var(--codex-accent);
+.opaline-file-tree-git-dot[data-git-status="added"] {
+  color: var(--opaline-accent);
 }
 
-.codex-file-tree-git-dot[data-git-status="modified"] {
-  color: var(--codex-warning);
+.opaline-file-tree-git-dot[data-git-status="modified"] {
+  color: var(--opaline-warning);
 }
 
-.codex-file-tree-git-dot[data-git-status="deleted"] {
-  color: var(--codex-danger);
+.opaline-file-tree-git-dot[data-git-status="deleted"] {
+  color: var(--opaline-danger);
 }
 
 /* Submenu collapse/expand animations */
-.codex-file-tree-submenu {
+.opaline-file-tree-submenu {
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -351,7 +351,7 @@
     opacity 0.2s cubic-bezier(0.2, 0, 0, 1);
 }
 
-.codex-file-tree-submenu[data-open="false"] {
+.opaline-file-tree-submenu[data-open="false"] {
   max-height: 0;
   opacity: 0;
   pointer-events: none;

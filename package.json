@@ -19,8 +19,8 @@
     "start": "npm run build -w @opaline/ui && npm run start -w @opaline/electron-example",
     "start:example": "npm run build -w @opaline/ui && npm run start -w @opaline/electron-example",
     "typecheck": "turbo run typecheck",
-    "research:refresh": "npm run refresh:components --prefix research/codex-internals",
-    "research:start": "npm run start --prefix research/codex-internals"
+    "research:refresh": "npm run refresh:components --prefix research/opaline-internals",
+    "research:start": "npm run start --prefix research/opaline-internals"
   },
   "devDependencies": {
     "@types/react": "^19.2.16",

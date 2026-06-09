@@ -62,7 +62,7 @@ export function Sidebar({
   sectionLabels = { items: "Items", projects: "Projects" },
 }: SidebarProps) {
   return (
-    <aside className="codex-sidebar">
+    <aside className="opaline-sidebar">
       {primaryItems.length > 0 ? (
         <SidebarPrimary>
           {primaryItems.map((item) => renderNavItem?.(item) ?? <SidebarNavItemRow item={item} key={item.id} />)}
@@ -87,7 +87,7 @@ export function Sidebar({
 
         {items.length > 0 ? (
           <SidebarSection heading={sectionLabels.items ?? "Items"}>
-            <nav className="codex-sidebar-list" aria-label={sectionLabels.items ?? "Items"}>
+            <nav className="opaline-sidebar-list" aria-label={sectionLabels.items ?? "Items"}>
               {items.map((item) => (
                 renderItem?.(item, { inset: false }) ?? <SidebarThreadRow key={item.id} item={item} />
               ))}
@@ -104,7 +104,7 @@ export function Sidebar({
 
 export function SidebarPrimary({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={joinClassNames("codex-sidebar-primary", className)} role="navigation" aria-label="Primary" {...props}>
+    <div className={joinClassNames("opaline-sidebar-primary", className)} role="navigation" aria-label="Primary" {...props}>
       {children}
     </div>
   );
@@ -112,7 +112,7 @@ export function SidebarPrimary({ children, className, ...props }: HTMLAttributes
 
 export function SidebarScroll({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={joinClassNames("codex-sidebar-scroll", className)} {...appActionAttributes.sidebarScroll} {...props}>
+    <div className={joinClassNames("opaline-sidebar-scroll", className)} {...appActionAttributes.sidebarScroll} {...props}>
       {children}
     </div>
   );
@@ -120,7 +120,7 @@ export function SidebarScroll({ children, className, ...props }: HTMLAttributes<
 
 export function SidebarFooter({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <div className={joinClassNames("codex-sidebar-footer", className)} {...props}>
+    <div className={joinClassNames("opaline-sidebar-footer", className)} {...props}>
       {children}
     </div>
   );
@@ -134,14 +134,14 @@ export function SidebarNavItemRow({
 }: ButtonHTMLAttributes<HTMLButtonElement> & { item: SidebarNavItem }) {
   return (
     <button
-      className={joinClassNames("codex-sidebar-nav-item", className)}
+      className={joinClassNames("opaline-sidebar-nav-item", className)}
       data-active={item.active === true ? "true" : undefined}
       onClick={item.onClick}
       type={type}
       {...props}
     >
       {item.icon != null ? (
-        <span className="codex-sidebar-nav-icon" aria-hidden="true">
+        <span className="opaline-sidebar-nav-icon" aria-hidden="true">
           {item.icon}
         </span>
       ) : null}
@@ -152,9 +152,9 @@ export function SidebarNavItemRow({
 
 export function SidebarSection({ children, heading }: { children: ReactNode; heading: string }) {
   return (
-    <section className="codex-sidebar-section" {...appActionAttributes.sidebarSection({ collapsed: false, heading })}>
-      <button className="codex-sidebar-section-header" {...appActionAttributes.sidebarSectionToggle}>
-        <span className="codex-sidebar-section-label">{heading}</span>
+    <section className="opaline-sidebar-section" {...appActionAttributes.sidebarSection({ collapsed: false, heading })}>
+      <button className="opaline-sidebar-section-header" {...appActionAttributes.sidebarSectionToggle}>
+        <span className="opaline-sidebar-section-label">{heading}</span>
       </button>
       {children}
     </section>
@@ -174,7 +174,7 @@ export function SidebarProjectRow({
 
   return (
     <div
-      className="codex-sidebar-project"
+      className="opaline-sidebar-project"
       data-active={project.active === true ? "true" : "false"}
       data-muted={project.muted === true ? "true" : "false"}
       {...appActionAttributes.sidebarProjectRow({
@@ -184,20 +184,20 @@ export function SidebarProjectRow({
       })}
     >
       <button
-        className="codex-sidebar-project-select"
+        className="opaline-sidebar-project-select"
         onClick={() => onSelect?.(project.id)}
         {...appActionAttributes.sidebarProjectSelect}
       >
         {project.icon != null ? (
-          <span className="codex-sidebar-project-icon" aria-hidden="true">
+          <span className="opaline-sidebar-project-icon" aria-hidden="true">
             {project.icon}
           </span>
         ) : null}
-        <span className="codex-sidebar-project-title">{project.label}</span>
+        <span className="opaline-sidebar-project-title">{project.label}</span>
       </button>
       {project.collapsed === true || project.threads == null ? null : (
         <div
-          className="codex-sidebar-project-list"
+          className="opaline-sidebar-project-list"
           {...appActionAttributes.sidebarProjectList({ projectId: project.id, showAll: false })}
         >
           {project.threads.map((item) => (
@@ -216,7 +216,7 @@ export function SidebarThreadRow({ inset = false, item }: { inset?: boolean; ite
 
   return (
     <button
-      className="codex-sidebar-item"
+      className="opaline-sidebar-item"
       data-active={item.active === true ? "true" : "false"}
       data-inset={inset === true ? "true" : "false"}
       {...appActionAttributes.sidebarThreadRow({
@@ -228,9 +228,9 @@ export function SidebarThreadRow({ inset = false, item }: { inset?: boolean; ite
         title,
       })}
     >
-      <span className="codex-sidebar-item-title">{item.title}</span>
+      <span className="opaline-sidebar-item-title">{item.title}</span>
       {trailing != null ? (
-        <span className="codex-sidebar-item-meta" data-kind={trailingKind}>
+        <span className="opaline-sidebar-item-meta" data-kind={trailingKind}>
           {trailing}
         </span>
       ) : null}

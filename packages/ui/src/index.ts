@@ -41,7 +41,7 @@ export { FileTree } from "./file-tree/FileTree";
 export type { FileTreeItem, FileTreeProps, TreeNode } from "./file-tree/FileTree";
 export { FileBrowserBreadcrumbs, FileBrowserPanel, FileBrowserTab } from "./file-browser/FileBrowserPanel";
 export type { FileBrowserPanelProps } from "./file-browser/FileBrowserPanel";
-export { CodexMark } from "./icons/CodexMark";
+export { OpalineMark } from "./icons/OpalineMark";
 export {
   SettingsCard,
   SettingsOptionCard,
@@ -93,7 +93,7 @@ export {
   DialogTitle,
   DialogTrigger,
 } from "./primitives/Dialog";
-export type { CodexDialogContentProps, DialogSize } from "./primitives/Dialog";
+export type { OpalineDialogContentProps, DialogSize } from "./primitives/Dialog";
 export {
   DropdownMenu,
   DropdownMenuCheckboxItem,

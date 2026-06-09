@@ -39,7 +39,7 @@ export default function ThemingPage() {
           with a layered background; Electron builds can let the operating system composition show through.
         </p>
         <CodeBlock
-          code={`html[data-codex-window-type="electron"]:not([data-codex-os="win32"]) body {
+          code={`html[data-opaline-window-type="electron"]:not([data-opaline-os="win32"]) body {
   background: transparent;
 }
 

@@ -193,14 +193,14 @@ textarea {
   box-shadow: var(--docs-shadow);
 }
 
-.landing-shell-card .codex-app-shell {
+.landing-shell-card .opaline-app-shell {
   height: 100%;
   min-height: 100%;
   font-size: 0.78rem;
 }
 
-.landing-shell-card .codex-left-panel {
-  --codex-left-panel-width: 260px;
+.landing-shell-card .opaline-left-panel {
+  --opaline-left-panel-width: 260px;
 }
 
 .landing-section {
@@ -526,8 +526,8 @@ textarea {
   height: 620px;
 }
 
-.docs-shell-demo .codex-app-shell,
-.docs-live-preview .codex-app-shell {
+.docs-shell-demo .opaline-app-shell,
+.docs-live-preview .opaline-app-shell {
   min-height: 100%;
 }
 
@@ -544,7 +544,7 @@ textarea {
   padding: 2rem;
 }
 
-.docs-composer-demo .codex-composer {
+.docs-composer-demo .opaline-composer {
   width: min(720px, 100%);
 }
 

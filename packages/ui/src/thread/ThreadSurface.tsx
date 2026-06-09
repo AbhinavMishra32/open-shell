@@ -29,18 +29,18 @@ export function ThreadSurface({
   title,
 }: ThreadSurfaceProps) {
   return (
-    <div className="codex-thread">
-      <header className="codex-thread-header">
+    <div className="opaline-thread">
+      <header className="opaline-thread-header">
         <div>
           <h1>{title}</h1>
           {subtitle != null ? <span>{subtitle}</span> : null}
         </div>
-        {headerActions != null ? <div className="codex-thread-header-pills">{headerActions}</div> : null}
+        {headerActions != null ? <div className="opaline-thread-header-pills">{headerActions}</div> : null}
       </header>
 
       {beforeMessages}
 
-      <div className="codex-thread-messages">
+      <div className="opaline-thread-messages">
         {messages.map((message, index) => (
           renderMessage?.(message, index) ?? (
             <ThreadMessageRow
@@ -68,20 +68,20 @@ export function ThreadMessageRow({
   renderAssistantActivity?: (message: ThreadMessage, index: number) => ReactNode;
 }) {
   return (
-    <article className="codex-message" data-role={message.role} key={`${message.role}-${index}`}>
+    <article className="opaline-message" data-role={message.role} key={`${message.role}-${index}`}>
       {message.role === "assistant" ? (
         <>
           {renderAssistantActivity != null ? (
             renderAssistantActivity(message, index)
           ) : message.status != null ? (
-            <div className="codex-message-activity">
+            <div className="opaline-message-activity">
               <span>{message.status}</span>
             </div>
           ) : null}
-          <div className="codex-message-copy">{renderBody(message.body)}</div>
+          <div className="opaline-message-copy">{renderBody(message.body)}</div>
         </>
       ) : (
-        <div className="codex-message-user-bubble">{renderBody(message.body)}</div>
+        <div className="opaline-message-user-bubble">{renderBody(message.body)}</div>
       )}
     </article>
   );

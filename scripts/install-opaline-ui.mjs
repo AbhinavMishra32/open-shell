@@ -60,7 +60,7 @@ if (missingDeps.length > 0 && skipInstall) {
 }
 console.log("");
 console.log("Next steps:");
-console.log(`1. Import the token CSS once: import "${toImportPath(args.outDir ?? DEFAULT_OUT_DIR)}/tokens/codex-theme.css";`);
+console.log(`1. Import the token CSS once: import "${toImportPath(args.outDir ?? DEFAULT_OUT_DIR)}/tokens/opaline-theme.css";`);
 console.log(`2. Import components: import { AppShell, Sidebar, Composer } from "${toImportPath(args.outDir ?? DEFAULT_OUT_DIR)}";`);
 console.log("3. Keep these copied files in your app and edit them like your own component system.");
 
@@ -150,7 +150,7 @@ You own these files now. Edit them, theme them, and wire them to your product da
 ## Usage
 
 \`\`\`tsx
-import "${importPath}/tokens/codex-theme.css";
+import "${importPath}/tokens/opaline-theme.css";
 import { AppShell, Composer, Sidebar, ThreadSurface } from "${importPath}";
 \`\`\`
 

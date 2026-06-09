@@ -30,7 +30,7 @@ import "@opaline/ui/styles.css";
 - `DropdownMenu` and Radix-backed menu parts
 - `ContextMenu` and Radix-backed context-menu parts
 - `FileBrowserPanel`
-- `CodexMark`
+- `OpalineMark`
 
 ## History API
 
@@ -61,7 +61,7 @@ history.push({
 
 ## Settings API
 
-Use the settings primitives to build a Codex-style settings route without custom layout work:
+Use the settings primitives to build a Opaline-style settings route without custom layout work:
 
 ```tsx
 <SettingsSidebar
@@ -94,9 +94,9 @@ The docs app renders live examples from this package, including prop tables, slo
 For the translucent sidebar material to work, the Electron host must use a transparent window and the renderer must mark the document:
 
 ```ts
-document.documentElement.dataset.codexWindowType = "electron";
+document.documentElement.dataset.opalineWindowType = "electron";
 document.documentElement.dataset.windowType = "electron";
-document.documentElement.dataset.codexOs = navigator.platform.toLowerCase().includes("win")
+document.documentElement.dataset.opalineOs = navigator.platform.toLowerCase().includes("win")
   ? "win32"
   : "darwin";
 ```

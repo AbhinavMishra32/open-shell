@@ -74,14 +74,14 @@ export function FileTree({
 
   return (
     <div
-      className={joinClassNames("codex-file-tree", className)}
+      className={joinClassNames("opaline-file-tree", className)}
       data-file-tree-colored-icons={coloredIcons ? "true" : undefined}
       data-file-tree-variant={variant}
       style={style}
     >
       <FileTreeIconSprite />
       <div
-        className="codex-file-tree-root"
+        className="opaline-file-tree-root"
         data-file-tree-has-context-menu-action-lane={showActions ? "true" : "false"}
         data-file-tree-has-git-lane={gitLane ? "true" : "false"}
         data-file-tree-virtualized-root="true"
@@ -90,13 +90,13 @@ export function FileTree({
       >
         {search ? (
           <div data-file-tree-search-container="true">
-            <label className="codex-file-tree-search-label" htmlFor="codex-file-tree-search">
+            <label className="opaline-file-tree-search-label" htmlFor="opaline-file-tree-search">
               {searchLabel}
             </label>
-            <div className="codex-file-tree-search-field">
+            <div className="opaline-file-tree-search-field">
               <SearchIcon />
               <input
-                id="codex-file-tree-search"
+                id="opaline-file-tree-search"
                 data-file-tree-search-input="true"
                 placeholder={searchPlaceholder}
                 aria-label={searchAriaLabel}
@@ -152,7 +152,7 @@ function FileTreeRow({
   if (item.isEditing) {
     return (
       <div
-        className="codex-file-tree-row"
+        className="opaline-file-tree-row"
         aria-expanded={isDirectory ? (item.expanded !== false ? "true" : "false") : undefined}
         style={
           {
@@ -165,19 +165,19 @@ function FileTreeRow({
         {Array.from({ length: level - 1 }).map((_, index) => (
           <span
             key={index}
-            className="codex-file-tree-indent-guide"
+            className="opaline-file-tree-indent-guide"
             style={{ "--indent-index": String(index) } as CSSProperties}
             aria-hidden="true"
           />
         ))}
         {isDirectory ? (
-          <span className="codex-file-tree-chevron-container">
+          <span className="opaline-file-tree-chevron-container">
             <svg data-icon-name="file-tree-icon-chevron" aria-hidden="true">
               <use href="#file-tree-icon-chevron" />
             </svg>
           </span>
         ) : (
-          <span className="codex-file-tree-chevron-spacer" />
+          <span className="opaline-file-tree-chevron-spacer" />
         )}
         <span data-item-section="icon">
           {item.icon ?? (
@@ -216,7 +216,7 @@ function FileTreeRow({
 
   const buttonElement = (
     <button
-      className="codex-file-tree-row"
+      className="opaline-file-tree-row"
       data-file-tree-sticky-path={level === 1 ? item.path : undefined}
       data-file-tree-sticky-row={level === 1 && isDirectory ? "true" : undefined}
       data-path={item.path}
@@ -244,19 +244,19 @@ function FileTreeRow({
       {Array.from({ length: level - 1 }).map((_, index) => (
         <span
           key={index}
-          className="codex-file-tree-indent-guide"
+          className="opaline-file-tree-indent-guide"
           style={{ "--indent-index": String(index) } as CSSProperties}
           aria-hidden="true"
         />
       ))}
       {isDirectory ? (
-        <span className="codex-file-tree-chevron-container">
+        <span className="opaline-file-tree-chevron-container">
           <svg data-icon-name="file-tree-icon-chevron" aria-hidden="true">
             <use href="#file-tree-icon-chevron" />
           </svg>
         </span>
       ) : (
-        <span className="codex-file-tree-chevron-spacer" />
+        <span className="opaline-file-tree-chevron-spacer" />
       )}
       <span data-item-section="icon">
         {item.icon ?? (
@@ -294,7 +294,7 @@ function FileTreeRow({
       )}
       {isDirectory ? (
         <div
-          className="codex-file-tree-submenu"
+          className="opaline-file-tree-submenu"
           data-open={item.expanded !== false ? "true" : "false"}
         >
           {item.children?.map((child) => (
@@ -363,7 +363,7 @@ function readRecord(value: unknown): Record<string, unknown> {
 
 function GitDot({ status }: { status: NonNullable<FileTreeItem["gitStatus"]> }) {
   return (
-    <span className="codex-file-tree-git-dot" data-git-status={status}>
+    <span className="opaline-file-tree-git-dot" data-git-status={status}>
       {status.slice(0, 1).toUpperCase()}
     </span>
   );
@@ -397,7 +397,7 @@ function joinClassNames(...classNames: Array<string | undefined>) {
 
 function SearchIcon() {
   return (
-    <svg className="codex-file-tree-search-icon" viewBox="0 0 20 20" aria-hidden="true">
+    <svg className="opaline-file-tree-search-icon" viewBox="0 0 20 20" aria-hidden="true">
       <path
         d="M8.75 3.75a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm4.1 7.1 3.15 3.15"
         fill="none"

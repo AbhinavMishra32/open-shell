@@ -77,7 +77,7 @@ export const BottomPanel = React.forwardRef<SlotPanelHandle, BottomPanelProps>(
     }, [mainContentHeight]);
 
     useEffect(() => {
-      const el = document.querySelector(".codex-app-shell") || document.documentElement;
+      const el = document.querySelector(".opaline-app-shell") || document.documentElement;
       if (el) {
         (el as HTMLElement).style.setProperty("--app-shell-bottom-panel-height", `${panelHeight}px`);
       }
@@ -95,14 +95,14 @@ export const BottomPanel = React.forwardRef<SlotPanelHandle, BottomPanelProps>(
         event.currentTarget.setPointerCapture(event.pointerId);
         const startY = event.clientY;
         const startHeight = panelHeight;
-        document.documentElement.dataset.codexBottomPanelResizing = "true";
+        document.documentElement.dataset.opalineBottomPanelResizing = "true";
 
         function move(pointerEvent: PointerEvent) {
           commitHeight(startHeight + (startY - pointerEvent.clientY));
         }
 
         function stop() {
-          document.documentElement.dataset.codexBottomPanelResizing = "false";
+          document.documentElement.dataset.opalineBottomPanelResizing = "false";
           window.removeEventListener("pointermove", move);
           window.removeEventListener("pointerup", stop);
         }
@@ -115,12 +115,12 @@ export const BottomPanel = React.forwardRef<SlotPanelHandle, BottomPanelProps>(
 
     return (
       <div
-        className="codex-bottom-panel"
+        className="opaline-bottom-panel"
         data-app-shell-focus-area="bottom-panel"
         style={{ "--app-shell-bottom-panel-height": `${panelHeight}px` } as CSSProperties}
       >
         <div
-          className="codex-bottom-panel-resize-handle"
+          className="opaline-bottom-panel-resize-handle"
           aria-label="Resize bottom panel"
           role="separator"
           onPointerDown={startResize}
@@ -161,8 +161,8 @@ export interface TerminalSurfaceProps {
 export function TerminalSurface({ children, className, cwd }: TerminalSurfaceProps) {
   return (
     <div
-      className={`codex-terminal-surface${className ? ` ${className}` : ""}`}
-      data-codex-terminal="true"
+      className={`opaline-terminal-surface${className ? ` ${className}` : ""}`}
+      data-opaline-terminal="true"
     >
       {children}
     </div>

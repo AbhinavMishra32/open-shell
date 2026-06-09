@@ -122,7 +122,7 @@ export const componentDocs: ComponentDoc[] = [
   {
     category: "Navigation",
     description:
-      "Codex-style settings navigation surface with back-to-app control, search, grouped sections, active rows, and caller-owned settings mode switching.",
+      "Opaline-style settings navigation surface with back-to-app control, search, grouped sections, active rows, and caller-owned settings mode switching.",
     importName: "SettingsSidebar",
     props: [
       { name: "sections", type: "SettingsNavSection[]", description: "Grouped settings navigation model." },
@@ -205,7 +205,7 @@ export const componentDocs: ComponentDoc[] = [
   {
     category: "Shell",
     description:
-      "Resizable stateful bottom slot panel featuring Codex-style tabs, inline launcher triggers, interactive Terminal surface, Side Chat, diagnostics logging, and code checklist reviews.",
+      "Resizable stateful bottom slot panel featuring Opaline-style tabs, inline launcher triggers, interactive Terminal surface, Side Chat, diagnostics logging, and code checklist reviews.",
     importName: "BottomPanel",
     props: [
       { name: "tabs", type: "BottomPanelTab[]", description: "Array of tab configurations. A BottomPanelTab contains: id (string), title (string), content (ReactNode), icon (ReactNode), active (boolean), closable (boolean), and shortcut (string)." },

@@ -126,10 +126,10 @@ function renderPreview(slug: string) {
             ]}
             headerActions={(shell) => (
               <>
-                <button className="codex-header-tool-button" type="button" onClick={shell.toggleBottomPanel} aria-label="Toggle bottom panel">
+                <button className="opaline-header-tool-button" type="button" onClick={shell.toggleBottomPanel} aria-label="Toggle bottom panel">
                   _
                 </button>
-                <button className="codex-header-tool-button" type="button" onClick={shell.toggleRightPanel} aria-label="Toggle right panel">
+                <button className="opaline-header-tool-button" type="button" onClick={shell.toggleRightPanel} aria-label="Toggle right panel">
                   []
                 </button>
               </>
@@ -230,8 +230,8 @@ function renderPreview(slug: string) {
               <Button variant="secondary">Open menu</Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>Pin chat <span className="codex-menu-shortcut">⌥⌘P</span></DropdownMenuItem>
-              <DropdownMenuItem>Rename chat <span className="codex-menu-shortcut">⌥⌘R</span></DropdownMenuItem>
+              <DropdownMenuItem>Pin chat <span className="opaline-menu-shortcut">⌥⌘P</span></DropdownMenuItem>
+              <DropdownMenuItem>Rename chat <span className="opaline-menu-shortcut">⌥⌘R</span></DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuCheckboxItem checked={false}>Plan mode</DropdownMenuCheckboxItem>
               <DropdownMenuSub>

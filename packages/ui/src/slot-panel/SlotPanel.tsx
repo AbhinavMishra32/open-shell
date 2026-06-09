@@ -118,7 +118,7 @@ export interface SlotPanelProps {
  * Generic slot-based tab panel. Drop this into any slot — bottom panel,
  * right panel, main area — to get a full tab system with:
  *
- * - Codex-style tab bar with close badges on hover
+ * - Opaline-style tab bar with close badges on hover
  * - `+` button dropdown for quick-adding launcher items
  * - Empty-state launcher grid when no tabs are open
  * - Imperative ref handle for programmatic control
@@ -297,15 +297,15 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
 
     return (
       <Tabs.Root
-        className={`codex-slot-panel${className ? ` ${className}` : ""}`}
+        className={`opaline-slot-panel${className ? ` ${className}` : ""}`}
         value={activeTabId || ""}
         onValueChange={(val) => commitActiveTabId(val || null)}
       >
-        <div className="codex-slot-panel-tabbar">
-          <div className="codex-slot-panel-tabs-container">
+        <div className="opaline-slot-panel-tabbar">
+          <div className="opaline-slot-panel-tabs-container">
             {tabOverflow.canScrollLeft ? (
               <button
-                className="codex-slot-panel-scroll-affordance is-left"
+                className="opaline-slot-panel-scroll-affordance is-left"
                 type="button"
                 aria-label="Scroll tabs left"
                 onClick={() => scrollTabs("left")}
@@ -315,7 +315,7 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
             ) : null}
             <Tabs.List
               ref={tabsRef}
-              className="codex-slot-panel-tabs"
+              className="opaline-slot-panel-tabs"
               aria-label={ariaLabel}
               data-overflow-left={tabOverflow.canScrollLeft ? "true" : undefined}
               data-overflow-right={tabOverflow.canScrollRight ? "true" : undefined}
@@ -324,14 +324,14 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
                 <Tabs.Trigger
                   key={tab.id}
                   value={tab.id}
-                  className="codex-slot-panel-tab"
+                  className="opaline-slot-panel-tab"
                   data-tab-id={tab.id}
                   data-closable={tab.closable === true ? "true" : undefined}
                 >
-                  <span className="codex-slot-panel-tab-icon-wrapper">
+                  <span className="opaline-slot-panel-tab-icon-wrapper">
                     {tab.closable === true ? (
                       <span
-                        className="codex-slot-panel-tab-close"
+                        className="opaline-slot-panel-tab-close"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleCloseTab(tab.id);
@@ -346,16 +346,16 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
                       </span>
                     ) : null}
                     {tab.icon != null ? (
-                      <span className="codex-slot-panel-tab-icon">{tab.icon}</span>
+                      <span className="opaline-slot-panel-tab-icon">{tab.icon}</span>
                     ) : null}
                   </span>
-                  <span className="codex-slot-panel-tab-title">{tab.title}</span>
+                  <span className="opaline-slot-panel-tab-title">{tab.title}</span>
                 </Tabs.Trigger>
               ))}
             </Tabs.List>
             {tabOverflow.canScrollRight ? (
               <button
-                className="codex-slot-panel-scroll-affordance is-right"
+                className="opaline-slot-panel-scroll-affordance is-right"
                 type="button"
                 aria-label="Scroll tabs right"
                 onClick={() => scrollTabs("right")}
@@ -366,16 +366,16 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
             {launcherItems.length > 0 && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="codex-slot-panel-add-action" type="button" aria-label="Add tab">
+                  <button className="opaline-slot-panel-add-action" type="button" aria-label="Add tab">
                     <Plus size={15} strokeWidth={1.8} />
                   </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="codex-slot-panel-launcher-menu" side="bottom">
+                <DropdownMenuContent align="start" className="opaline-slot-panel-launcher-menu" side="bottom">
                   {launcherItems.map((item) => (
                     <DropdownMenuItem key={item.type} onSelect={() => handleLauncherSelect(item)}>
                       {item.icon}
                       <span>{item.title}</span>
-                      {item.shortcut && <span className="codex-slot-panel-launcher-shortcut">{item.shortcut}</span>}
+                      {item.shortcut && <span className="opaline-slot-panel-launcher-shortcut">{item.shortcut}</span>}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -383,9 +383,9 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
             )}
           </div>
           {onClose && (
-            <div className="codex-slot-panel-actions">
+            <div className="opaline-slot-panel-actions">
               <button
-                className="codex-slot-panel-action codex-slot-panel-close-action"
+                className="opaline-slot-panel-action opaline-slot-panel-close-action"
                 type="button"
                 aria-label="Close panel"
                 onClick={onClose}
@@ -397,22 +397,22 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
         </div>
 
         {openTabs.length === 0 && launcherItems.length > 0 ? (
-          <div className="codex-slot-panel-outlet codex-slot-panel-launcher-container">
-            <div className="codex-slot-panel-launcher-grid">
-              <div className="codex-slot-launcher-header">
+          <div className="opaline-slot-panel-outlet opaline-slot-panel-launcher-container">
+            <div className="opaline-slot-panel-launcher-grid">
+              <div className="opaline-slot-launcher-header">
                 <h3>Select a tool to open</h3>
                 <p>Click any option below to initialize the surface.</p>
               </div>
-              <div className="codex-slot-launcher-cards">
+              <div className="opaline-slot-launcher-cards">
                 {launcherItems.map((item) => (
                   <button
                     key={item.type}
                     type="button"
-                    className="codex-slot-launcher-card"
+                    className="opaline-slot-launcher-card"
                     onClick={() => handleLauncherSelect(item)}
                   >
-                    <div className="codex-slot-launcher-card-icon">{item.icon}</div>
-                    <div className="codex-slot-launcher-card-info">
+                    <div className="opaline-slot-launcher-card-icon">{item.icon}</div>
+                    <div className="opaline-slot-launcher-card-info">
                       <h4>{item.title}</h4>
                       {item.description && <p>{item.description}</p>}
                     </div>
@@ -422,9 +422,9 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
             </div>
           </div>
         ) : openTabs.length === 0 ? (
-          <div className="codex-slot-panel-outlet codex-slot-panel-launcher-container">
-            <div className="codex-slot-panel-launcher-grid">
-              <div className="codex-slot-launcher-header">
+          <div className="opaline-slot-panel-outlet opaline-slot-panel-launcher-container">
+            <div className="opaline-slot-panel-launcher-grid">
+              <div className="opaline-slot-launcher-header">
                 <h3>No tabs open</h3>
                 <p>Use the ref handle to open a tab with any content.</p>
               </div>
@@ -435,7 +435,7 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
             <Tabs.Content
               key={tab.id}
               value={tab.id}
-              className="codex-slot-panel-outlet"
+              className="opaline-slot-panel-outlet"
               forceMount={keepMounted ? true : undefined}
               hidden={keepMounted && activeTabId !== tab.id ? true : undefined}
             >

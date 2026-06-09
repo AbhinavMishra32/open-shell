@@ -53,7 +53,7 @@ export default function InstallationPage() {
         </p>
         <CodeBlock
           title="React entry"
-          code={`import "@/components/opaline/tokens/codex-theme.css";
+          code={`import "@/components/opaline/tokens/opaline-theme.css";
 
 import { AppShell, Composer, Sidebar, ThreadSurface } from "@/components/opaline";`}
         />

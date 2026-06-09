@@ -29,7 +29,7 @@ import {
   AppShellHeaderToolButton,
   BottomPanel,
   Button,
-  CodexMark,
+  OpalineMark,
   Composer,
   Dialog,
   DialogBody,
@@ -117,7 +117,7 @@ const messages = [
   {
     role: "assistant" as const,
     body:
-      "The readable component library now carries Codex shell/sidebar/composer/thread primitives plus recovered dialog, bottom panel, terminal, and file-tree systems.",
+      "The readable component library now carries Opaline shell/sidebar/composer/thread primitives plus recovered dialog, bottom panel, terminal, and file-tree systems.",
   },
 ];
 
@@ -174,7 +174,7 @@ const previewFiles = {
   "packages/ui/src/primitives/Dialog.tsx": {
     breadcrumbs: ["opaline", "packages", "ui", "src", "primitives", "Dialog.tsx"],
     code: `export function DialogContent() {
-  return <div className="codex-dialog-surface" />;
+  return <div className="opaline-dialog-surface" />;
 }`,
     fileName: "Dialog.tsx",
     language: "tsx",
@@ -431,8 +431,8 @@ export function App() {
       headerActions={(shell) => (
         <>
           <AppShellHeaderPillButton type="button" aria-label="Current app">
-            <span className="codex-header-agent-icon" aria-hidden="true">
-              <CodexMark className="codex-header-agent-mark" />
+            <span className="opaline-header-agent-icon" aria-hidden="true">
+              <OpalineMark className="opaline-header-agent-mark" />
             </span>
             <ChevronDown size={18} strokeWidth={1.7} />
           </AppShellHeaderPillButton>
@@ -455,7 +455,7 @@ export function App() {
           >
             <PanelRight size={20} strokeWidth={1.7} />
           </AppShellHeaderToolButton>
-          <AppShellHeaderToolButton className="codex-header-tool-button-plain" type="button" aria-label="More actions">
+          <AppShellHeaderToolButton className="opaline-header-tool-button-plain" type="button" aria-label="More actions">
             <Ellipsis size={20} strokeWidth={1.7} />
           </AppShellHeaderToolButton>
         </>
@@ -473,8 +473,8 @@ export function App() {
         ) : (
           <Sidebar
             footer={
-              <button className="codex-sidebar-settings" type="button" onClick={() => openSettings("general")}>
-                <span className="codex-sidebar-footer-icon" aria-hidden="true">
+              <button className="opaline-sidebar-settings" type="button" onClick={() => openSettings("general")}>
+                <span className="opaline-sidebar-footer-icon" aria-hidden="true">
                   <SettingsIcon size={18} strokeWidth={1.7} />
                 </span>
                 <span>Settings</span>
@@ -485,15 +485,15 @@ export function App() {
             projects={projects}
             renderItem={(item, options) => (
               <button
-                className="codex-sidebar-item"
+                className="opaline-sidebar-item"
                 data-active={item.active === true ? "true" : undefined}
                 data-inset={options.inset === true ? "true" : "false"}
                 onClick={() => openThread(item.id)}
                 type="button"
               >
-                <span className="codex-sidebar-item-title">{item.title}</span>
+                <span className="opaline-sidebar-item-title">{item.title}</span>
                 {item.meta != null ? (
-                  <span className="codex-sidebar-item-meta" data-kind="shortcut">
+                  <span className="opaline-sidebar-item-meta" data-kind="shortcut">
                     {item.meta}
                   </span>
                 ) : null}
@@ -516,16 +516,16 @@ export function App() {
             workMode={workMode}
           />
         ) : (
-          <div className="codex-renderer-stack">
+          <div className="opaline-renderer-stack">
             <ThreadSurface title={String(activeThreadTitle)} subtitle="Component-system reconstruction" messages={messages} />
             <Dialog>
               <DialogTrigger asChild>
-                <Button variant="secondary">Open Codex popup primitive</Button>
+                <Button variant="secondary">Open Opaline popup primitive</Button>
               </DialogTrigger>
               <DialogContent size="wide">
                 <DialogHeader
-                  title="Codex dialog primitive"
-                  subtitle="Radix dialog behavior with the recovered Codex overlay, surface, close button, sizes, and measured-height transition."
+                  title="Opaline dialog primitive"
+                  subtitle="Radix dialog behavior with the recovered Opaline overlay, surface, close button, sizes, and measured-height transition."
                 />
                 <DialogBody>
                   <DialogSection>
@@ -541,7 +541,7 @@ export function App() {
           </div>
         )
       }
-      composer={isSettingsOpen ? undefined : <Composer placeholder="Ask Codex to build, inspect, or recreate a component..." />}
+      composer={isSettingsOpen ? undefined : <Composer placeholder="Ask Opaline to build, inspect, or recreate a component..." />}
       rightPanel={
         isSettingsOpen ? undefined : (
           <FileBrowserPanel
@@ -550,7 +550,7 @@ export function App() {
             fileName={selectedFile.fileName}
             language={selectedFile.language}
             sidePanel={
-              <aside className="codex-file-browser-tree-panel" data-app-shell-focus-area="file-tree">
+              <aside className="opaline-file-browser-tree-panel" data-app-shell-focus-area="file-tree">
                 <FileTree
                   items={fileTreeItems}
                   defaultExpandedIds={["opaline", "opaline/packages/ui/src", "opaline/packages/ui/src/lib"]}
@@ -613,7 +613,7 @@ function ExampleSettingsContent({
   return (
     <SettingsPanel title={sectionTitle}>
       <SettingsSection>
-        <div className="codex-settings-work-mode-grid">
+        <div className="opaline-settings-work-mode-grid">
           <SettingsOptionCard
             description="More technical responses and control"
             icon={<TerminalIcon size={18} strokeWidth={1.7} />}
@@ -635,17 +635,17 @@ function ExampleSettingsContent({
         <SettingsCard>
           <SettingsRow
             control={<SettingsToggle checked={defaultPermissions} onCheckedChange={setDefaultPermissions} />}
-            description="By default, Codex can read and edit files in its workspace. It can ask for additional access when needed."
+            description="By default, Opaline can read and edit files in its workspace. It can ask for additional access when needed."
             title="Default permissions"
           />
           <SettingsRow
             control={<SettingsToggle checked={autoReview} onCheckedChange={setAutoReview} />}
-            description="Codex automatically reviews requests for additional access. Auto-review can make mistakes."
+            description="Opaline automatically reviews requests for additional access. Auto-review can make mistakes."
             title="Auto-review"
           />
           <SettingsRow
             control={<SettingsToggle checked={fullAccess} onCheckedChange={setFullAccess} />}
-            description="When Codex runs with full access, it can edit any file on your computer and run commands with network."
+            description="When Opaline runs with full access, it can edit any file on your computer and run commands with network."
             title="Full access"
           />
         </SettingsCard>
