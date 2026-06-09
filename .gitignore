@@ -6,13 +6,13 @@ dist/
 *.tsbuildinfo
 *.log
 
-app.app/
-app-main-CYccuswF.css
-index.html
-main-BJ6Uf5yA.js
+/app.app/
+/app-main-CYccuswF.css
+/index.html
+/main-BJ6Uf5yA.js
 
-research/codex-internals/node_modules/
-research/codex-internals/dist/
-research/codex-internals/.runtime/
-research/codex-internals/.upstream-cache/
-research/codex-internals/.tmp-inspect-asar/
+research/opaline-internals/node_modules/
+research/opaline-internals/dist/
+research/opaline-internals/.runtime/
+research/opaline-internals/.upstream-cache/
+research/opaline-internals/.tmp-inspect-asar/
