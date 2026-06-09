@@ -1,6 +1,6 @@
 # Contributing
 
-Open Shell is a research-heavy UI project, so fidelity matters as much as polish.
+Opaline is a research-heavy UI project, so fidelity matters as much as polish.
 
 ## Development
 
@@ -15,9 +15,9 @@ npm run start:example
 
 - Preserve source boundaries before redesigning internals.
 - Keep readable TypeScript and React code in `packages/ui`.
-- Keep extraction scripts and upstream mirrors in `research/codex-internals`.
+- Keep extraction scripts and upstream mirrors in `research/opaline-internals`.
 - Prefer Radix primitives when the upstream behavior maps to an accessible headless primitive.
-- Document evidence in `codex-ui-component-knowledge-base.md` when a component gains fidelity.
+- Document evidence in `opaline-ui-component-knowledge-base.md` when a component gains fidelity.
 
 ## Pull Requests
 

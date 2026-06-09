@@ -13,6 +13,7 @@ export type FileBrowserPanelProps = {
   language?: string;
   pathActions?: ReactNode;
   sidePanel?: ReactNode;
+  sidePanelPosition?: "left" | "right";
   tabIcon?: ReactNode;
   tabs?: ReactNode;
   toolbar?: ReactNode;
@@ -28,33 +29,34 @@ export function FileBrowserPanel({
   language,
   pathActions,
   sidePanel,
+  sidePanelPosition = "right",
   tabIcon,
   tabs,
   toolbar,
 }: FileBrowserPanelProps) {
   return (
-    <section className="codex-file-browser-panel" data-codex-file-browser-panel="true">
-      <header className="codex-file-browser-topbar">
+    <section className="opaline-file-browser-panel" data-opaline-file-browser-panel="true">
+      <header className="opaline-file-browser-topbar">
         {tabs ?? (fileName != null ? <FileBrowserTab icon={tabIcon} title={fileName} /> : null)}
         {headerActions}
       </header>
 
       {toolbar ?? (
-        <div className="codex-file-browser-toolbar">
+        <div className="opaline-file-browser-toolbar">
           {breadcrumbs.length > 0 ? <FileBrowserBreadcrumbs breadcrumbs={breadcrumbs} /> : null}
           {pathActions}
         </div>
       )}
 
-      <div className="codex-file-browser-body">
+      <div className="opaline-file-browser-body" data-side-panel-position={sidePanelPosition}>
         {editor ?? (
-          <pre className="codex-file-browser-code" data-language={language}>
+          <pre className="opaline-file-browser-code" data-language={language}>
             <code>{code}</code>
           </pre>
         )}
         {sidePanel ?? (
           fileTree != null ? (
-            <aside className="codex-file-browser-tree-panel" data-app-shell-focus-area="file-tree">
+            <aside className="opaline-file-browser-tree-panel" data-app-shell-focus-area="file-tree">
               <FileTree items={fileTree} />
             </aside>
           ) : null
@@ -66,16 +68,16 @@ export function FileBrowserPanel({
 
 export function FileBrowserTab({ icon, title }: { icon?: ReactNode; title: ReactNode }) {
   return (
-    <div className="codex-file-browser-tab" data-active="true">
-      {icon != null ? <span className="codex-file-browser-tab-icon">{icon}</span> : null}
-      <span className="codex-file-browser-tab-title">{title}</span>
+    <div className="opaline-file-browser-tab" data-active="true">
+      {icon != null ? <span className="opaline-file-browser-tab-icon">{icon}</span> : null}
+      <span className="opaline-file-browser-tab-title">{title}</span>
     </div>
   );
 }
 
 export function FileBrowserBreadcrumbs({ breadcrumbs }: { breadcrumbs: string[] }) {
   return (
-    <nav className="codex-file-browser-breadcrumbs" aria-label="File path">
+    <nav className="opaline-file-browser-breadcrumbs" aria-label="File path">
       {breadcrumbs.map((breadcrumb, index) => (
         <span key={`${breadcrumb}-${index}`}>
           {index > 0 ? <span aria-hidden="true">/</span> : null}

@@ -2,7 +2,7 @@ import { CodeBlock } from "@/components/CodeBlock";
 
 export const metadata = {
   title: "Slots System",
-  description: "How shell slots compose in Open Shell UI.",
+  description: "How shell slots compose in Opaline UI.",
 };
 
 export default function SlotsPage() {

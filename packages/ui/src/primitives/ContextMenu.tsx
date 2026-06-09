@@ -18,7 +18,7 @@ export const ContextMenuContent = forwardRef<
     <RadixContextMenu.Portal>
       <RadixContextMenu.Content
         ref={ref}
-        className={["codex-context-menu-content", className].filter(Boolean).join(" ")}
+        className={["opaline-context-menu-content", className].filter(Boolean).join(" ")}
         collisionPadding={collisionPadding}
         {...props}
       />
@@ -33,7 +33,7 @@ export const ContextMenuItem = forwardRef<
   return (
     <RadixContextMenu.Item
       ref={ref}
-      className={["codex-context-menu-item", className].filter(Boolean).join(" ")}
+      className={["opaline-context-menu-item", className].filter(Boolean).join(" ")}
       {...props}
     />
   );
@@ -46,10 +46,10 @@ export const ContextMenuCheckboxItem = forwardRef<
   return (
     <RadixContextMenu.CheckboxItem
       ref={ref}
-      className={["codex-context-menu-item codex-context-menu-checkbox-item", className].filter(Boolean).join(" ")}
+      className={["opaline-context-menu-item opaline-context-menu-checkbox-item", className].filter(Boolean).join(" ")}
       {...props}
     >
-      <RadixContextMenu.ItemIndicator className="codex-context-menu-item-indicator">✓</RadixContextMenu.ItemIndicator>
+      <RadixContextMenu.ItemIndicator className="opaline-context-menu-item-indicator">✓</RadixContextMenu.ItemIndicator>
       {children}
     </RadixContextMenu.CheckboxItem>
   );
@@ -62,11 +62,11 @@ export const ContextMenuSubTrigger = forwardRef<
   return (
     <RadixContextMenu.SubTrigger
       ref={ref}
-      className={["codex-context-menu-item codex-context-menu-sub-trigger", className].filter(Boolean).join(" ")}
+      className={["opaline-context-menu-item opaline-context-menu-sub-trigger", className].filter(Boolean).join(" ")}
       {...props}
     >
-      <span className="codex-context-menu-item-label">{children}</span>
-      <span className="codex-context-menu-chevron">›</span>
+      <span className="opaline-context-menu-item-label">{children}</span>
+      <span className="opaline-context-menu-chevron">›</span>
     </RadixContextMenu.SubTrigger>
   );
 });
@@ -79,7 +79,7 @@ export const ContextMenuSubContent = forwardRef<
     <RadixContextMenu.Portal>
       <RadixContextMenu.SubContent
         ref={ref}
-        className={["codex-context-menu-content", className].filter(Boolean).join(" ")}
+        className={["opaline-context-menu-content", className].filter(Boolean).join(" ")}
         collisionPadding={collisionPadding}
         {...props}
       />
@@ -94,7 +94,7 @@ export const ContextMenuSeparator = forwardRef<
   return (
     <RadixContextMenu.Separator
       ref={ref}
-      className={["codex-context-menu-separator", className].filter(Boolean).join(" ")}
+      className={["opaline-context-menu-separator", className].filter(Boolean).join(" ")}
       {...props}
     />
   );

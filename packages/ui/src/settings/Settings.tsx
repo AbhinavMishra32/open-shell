@@ -87,13 +87,13 @@ export function SettingsSidebar({
     : sections;
 
   return (
-    <aside className={joinClassNames("codex-settings-sidebar", className)} {...props}>
-      <button className="codex-settings-back" type="button" onClick={onBack}>
+    <aside className={joinClassNames("opaline-settings-sidebar", className)} {...props}>
+      <button className="opaline-settings-back" type="button" onClick={onBack}>
         <ArrowLeft size={18} strokeWidth={1.7} />
         <span>{backLabel}</span>
       </button>
 
-      <label className="codex-settings-search">
+      <label className="opaline-settings-search">
         <Search size={17} strokeWidth={1.7} aria-hidden="true" />
         <input
           aria-label="Search settings"
@@ -103,27 +103,27 @@ export function SettingsSidebar({
         />
       </label>
 
-      <div className="codex-settings-nav-scroll">
+      <div className="opaline-settings-nav-scroll">
         {visibleSections.map((section) => (
-          <section className="codex-settings-nav-section" key={section.id}>
-            {section.label != null ? <div className="codex-settings-nav-label">{section.label}</div> : null}
-            <div className="codex-settings-nav-list">
+          <section className="opaline-settings-nav-section" key={section.id}>
+            {section.label != null ? <div className="opaline-settings-nav-label">{section.label}</div> : null}
+            <div className="opaline-settings-nav-list">
               {section.items.map((item) => {
                 const active = item.id === activeItemId;
                 return renderItem != null ? (
                   renderItem(item, { active })
                 ) : (
                   <button
-                    className="codex-settings-nav-item"
+                    className="opaline-settings-nav-item"
                     data-active={active ? "true" : undefined}
                     data-muted={item.muted ? "true" : undefined}
                     key={item.id}
                     type="button"
                     onClick={() => onItemSelect?.(item)}
                   >
-                    {item.icon != null ? <span className="codex-settings-nav-icon">{item.icon}</span> : null}
-                    <span className="codex-settings-nav-title">{item.label}</span>
-                    {item.badge != null ? <span className="codex-settings-nav-badge">{item.badge}</span> : null}
+                    {item.icon != null ? <span className="opaline-settings-nav-icon">{item.icon}</span> : null}
+                    <span className="opaline-settings-nav-title">{item.label}</span>
+                    {item.badge != null ? <span className="opaline-settings-nav-badge">{item.badge}</span> : null}
                   </button>
                 );
               })}
@@ -132,16 +132,16 @@ export function SettingsSidebar({
         ))}
       </div>
 
-      {footer != null ? <div className="codex-settings-sidebar-footer">{footer}</div> : null}
+      {footer != null ? <div className="opaline-settings-sidebar-footer">{footer}</div> : null}
     </aside>
   );
 }
 
 export function SettingsPanel({ children, className, subtitle, title, ...props }: SettingsPanelProps) {
   return (
-    <main className={joinClassNames("codex-settings-panel", className)} {...props}>
-      <div className="codex-settings-panel-inner">
-        <header className="codex-settings-panel-header">
+    <main className={joinClassNames("opaline-settings-panel", className)} {...props}>
+      <div className="opaline-settings-panel-inner">
+        <header className="opaline-settings-panel-header">
           <h1>{title}</h1>
           {subtitle != null ? <p>{subtitle}</p> : null}
         </header>
@@ -153,7 +153,7 @@ export function SettingsPanel({ children, className, subtitle, title, ...props }
 
 export function SettingsSection({ children, className, title, ...props }: SettingsSectionProps) {
   return (
-    <section className={joinClassNames("codex-settings-section", className)} {...props}>
+    <section className={joinClassNames("opaline-settings-section", className)} {...props}>
       {title != null ? <h2>{title}</h2> : null}
       {children}
     </section>
@@ -162,7 +162,7 @@ export function SettingsSection({ children, className, title, ...props }: Settin
 
 export function SettingsCard({ children, className, ...props }: SettingsCardProps) {
   return (
-    <div className={joinClassNames("codex-settings-card", className)} {...props}>
+    <div className={joinClassNames("opaline-settings-card", className)} {...props}>
       {children}
     </div>
   );
@@ -170,13 +170,13 @@ export function SettingsCard({ children, className, ...props }: SettingsCardProp
 
 export function SettingsRow({ children, className, control, description, title, ...props }: SettingsRowProps) {
   return (
-    <div className={joinClassNames("codex-settings-row", className)} {...props}>
-      <div className="codex-settings-row-copy">
-        <span className="codex-settings-row-title">{title}</span>
+    <div className={joinClassNames("opaline-settings-row", className)} {...props}>
+      <div className="opaline-settings-row-copy">
+        <span className="opaline-settings-row-title">{title}</span>
         {description != null ? <p>{description}</p> : null}
         {children}
       </div>
-      {control != null ? <div className="codex-settings-row-control">{control}</div> : null}
+      {control != null ? <div className="opaline-settings-row-control">{control}</div> : null}
     </div>
   );
 }
@@ -192,7 +192,7 @@ export function SettingsToggle({
   return (
     <button
       aria-checked={checked}
-      className={joinClassNames("codex-settings-toggle", className)}
+      className={joinClassNames("opaline-settings-toggle", className)}
       data-checked={checked ? "true" : "false"}
       role="switch"
       type={type}
@@ -221,18 +221,18 @@ export function SettingsOptionCard({
 }: SettingsOptionCardProps) {
   return (
     <button
-      className={joinClassNames("codex-settings-option-card", className)}
+      className={joinClassNames("opaline-settings-option-card", className)}
       data-selected={selected ? "true" : "false"}
       type={type}
       {...props}
     >
-      {icon != null ? <span className="codex-settings-option-icon">{icon}</span> : null}
-      <span className="codex-settings-option-copy">
+      {icon != null ? <span className="opaline-settings-option-icon">{icon}</span> : null}
+      <span className="opaline-settings-option-copy">
         <strong>{title}</strong>
         {description != null ? <span>{description}</span> : null}
         {children}
       </span>
-      <span className="codex-settings-option-check" aria-hidden="true">
+      <span className="opaline-settings-option-check" aria-hidden="true">
         <Check size={16} strokeWidth={2} />
       </span>
     </button>
@@ -240,7 +240,7 @@ export function SettingsOptionCard({
 }
 
 export function SettingsSelect({ className, ...props }: SettingsSelectProps) {
-  return <select className={joinClassNames("codex-settings-select", className)} {...props} />;
+  return <select className={joinClassNames("opaline-settings-select", className)} {...props} />;
 }
 
 function joinClassNames(...classNames: Array<string | undefined>) {

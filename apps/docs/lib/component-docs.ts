@@ -71,7 +71,7 @@ export const componentDocs: ComponentDoc[] = [
     ],
     sourcePath: "packages/ui/src/app-shell/AppShell.tsx",
     title: "AppShell",
-    usage: `import { AppShell, Sidebar, Composer, ThreadSurface } from "@open-shell/ui";
+    usage: `import { AppShell, Sidebar, Composer, ThreadSurface } from "@opaline/ui";
 
 <AppShell
   headerTabs={tabs}
@@ -104,7 +104,7 @@ export const componentDocs: ComponentDoc[] = [
     ],
     sourcePath: "packages/ui/src/sidebar/Sidebar.tsx",
     title: "Sidebar",
-    usage: `import { Sidebar } from "@open-shell/ui";
+    usage: `import { Sidebar } from "@opaline/ui";
 
 <Sidebar
   primaryItems={navItems}
@@ -122,7 +122,7 @@ export const componentDocs: ComponentDoc[] = [
   {
     category: "Navigation",
     description:
-      "Codex-style settings navigation surface with back-to-app control, search, grouped sections, active rows, and caller-owned settings mode switching.",
+      "Opaline-style settings navigation surface with back-to-app control, search, grouped sections, active rows, and caller-owned settings mode switching.",
     importName: "SettingsSidebar",
     props: [
       { name: "sections", type: "SettingsNavSection[]", description: "Grouped settings navigation model." },
@@ -142,7 +142,7 @@ export const componentDocs: ComponentDoc[] = [
     ],
     sourcePath: "packages/ui/src/settings/Settings.tsx",
     title: "SettingsSidebar",
-    usage: `import { SettingsSidebar } from "@open-shell/ui";
+    usage: `import { SettingsSidebar } from "@opaline/ui";
 
 <SettingsSidebar
   activeItemId="general"
@@ -173,7 +173,7 @@ export const componentDocs: ComponentDoc[] = [
     ],
     sourcePath: "packages/ui/src/settings/Settings.tsx",
     title: "SettingsPanel",
-    usage: `import { SettingsCard, SettingsPanel, SettingsRow, SettingsSection, SettingsToggle } from "@open-shell/ui";
+    usage: `import { SettingsCard, SettingsPanel, SettingsRow, SettingsSection, SettingsToggle } from "@opaline/ui";
 
 <SettingsPanel title="General">
   <SettingsSection title="Permissions">
@@ -198,14 +198,14 @@ export const componentDocs: ComponentDoc[] = [
     ],
     sourcePath: "packages/ui/src/composer/Composer.tsx",
     title: "Composer",
-    usage: `import { Composer } from "@open-shell/ui";
+    usage: `import { Composer } from "@opaline/ui";
 
 <Composer placeholder="Ask the agent to build, inspect, or recreate a component..." />`,
   },
   {
     category: "Shell",
     description:
-      "Resizable stateful bottom slot panel featuring Codex-style tabs, inline launcher triggers, interactive Terminal surface, Side Chat, diagnostics logging, and code checklist reviews.",
+      "Resizable stateful bottom slot panel featuring Opaline-style tabs, inline launcher triggers, interactive Terminal surface, Side Chat, diagnostics logging, and code checklist reviews.",
     importName: "BottomPanel",
     props: [
       { name: "tabs", type: "BottomPanelTab[]", description: "Array of tab configurations. A BottomPanelTab contains: id (string), title (string), content (ReactNode), icon (ReactNode), active (boolean), closable (boolean), and shortcut (string)." },
@@ -226,7 +226,7 @@ export const componentDocs: ComponentDoc[] = [
     ],
     sourcePath: "packages/ui/src/bottom-panel/BottomPanel.tsx",
     title: "BottomPanel",
-    usage: `import { BottomPanel, TerminalSurface } from "@open-shell/ui";
+    usage: `import { BottomPanel, TerminalSurface } from "@opaline/ui";
 import { Terminal } from "lucide-react";
 
 <BottomPanel
@@ -267,12 +267,12 @@ import { Terminal } from "lucide-react";
     ],
     sourcePath: "packages/ui/src/file-browser/FileBrowserPanel.tsx",
     title: "FileBrowserPanel",
-    usage: `import { FileBrowserPanel } from "@open-shell/ui";
+    usage: `import { FileBrowserPanel } from "@opaline/ui";
 
 <FileBrowserPanel
   fileName="package.json"
   fileTree={workspaceFiles}
-  breadcrumbs={["open-shell", "package.json"]}
+  breadcrumbs={["opaline", "package.json"]}
 />`,
   },
   {
@@ -304,7 +304,7 @@ import { Terminal } from "lucide-react";
     ],
     sourcePath: "packages/ui/src/file-tree/FileTree.tsx",
     title: "FileTree",
-    usage: `import { FileTree } from "@open-shell/ui";
+    usage: `import { FileTree } from "@opaline/ui";
 
 <FileTree
   variant="sidebar"
@@ -335,7 +335,7 @@ import { Terminal } from "lucide-react";
     ],
     sourcePath: "packages/ui/src/primitives/DropdownMenu.tsx",
     title: "DropdownMenu",
-    usage: `import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@open-shell/ui";
+    usage: `import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@opaline/ui";
 
 <DropdownMenu>
   <DropdownMenuTrigger>Open</DropdownMenuTrigger>
@@ -363,7 +363,7 @@ import { Terminal } from "lucide-react";
     ],
     sourcePath: "packages/ui/src/primitives/ContextMenu.tsx",
     title: "ContextMenu",
-    usage: `import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@open-shell/ui";
+    usage: `import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuTrigger } from "@opaline/ui";
 
 <ContextMenu>
   <ContextMenuTrigger>Right click me</ContextMenuTrigger>
@@ -392,7 +392,7 @@ import { Terminal } from "lucide-react";
     ],
     sourcePath: "packages/ui/src/primitives/Dialog.tsx",
     title: "Dialog",
-    usage: `import { Dialog, DialogBody, DialogContent, DialogHeader, DialogTrigger } from "@open-shell/ui";
+    usage: `import { Dialog, DialogBody, DialogContent, DialogHeader, DialogTrigger } from "@opaline/ui";
 
 <Dialog>
   <DialogTrigger>Open dialog</DialogTrigger>
@@ -421,7 +421,7 @@ import { Terminal } from "lucide-react";
     ],
     sourcePath: "packages/ui/src/primitives/Button.tsx",
     title: "Button",
-    usage: `import { Button, IconButton, Pill, StatusDot } from "@open-shell/ui";
+    usage: `import { Button, IconButton, Pill, StatusDot } from "@opaline/ui";
 
 <Button variant="primary">Run agent</Button>
 <IconButton aria-label="Open inspector">⌘</IconButton>
@@ -447,7 +447,7 @@ import { Terminal } from "lucide-react";
     ],
     sourcePath: "packages/ui/src/thread/ThreadSurface.tsx",
     title: "ThreadSurface",
-    usage: `import { ThreadSurface } from "@open-shell/ui";
+    usage: `import { ThreadSurface } from "@opaline/ui";
 
 <ThreadSurface
   title="Inspect Electron UI"
@@ -474,7 +474,7 @@ import { Terminal } from "lucide-react";
     ],
     sourcePath: "packages/ui/src/bottom-panel/BottomPanel.tsx",
     title: "TerminalSurface",
-    usage: `import { TerminalSurface } from "@open-shell/ui";
+    usage: `import { TerminalSurface } from "@opaline/ui";
 
 <TerminalSurface onData={(data) => pty.write(data)} />`,
   },

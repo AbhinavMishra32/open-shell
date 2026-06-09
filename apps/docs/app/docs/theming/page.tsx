@@ -2,7 +2,7 @@ import { CodeBlock } from "@/components/CodeBlock";
 
 export const metadata = {
   title: "Theming",
-  description: "Token and theme guidance for Open Shell UI.",
+  description: "Token and theme guidance for Opaline UI.",
 };
 
 export default function ThemingPage() {
@@ -17,7 +17,7 @@ export default function ThemingPage() {
 
       <section className="docs-section">
         <h2>Token import</h2>
-        <CodeBlock code={`import "@open-shell/ui/styles.css";`} />
+        <CodeBlock code={`import "@opaline/ui/styles.css";`} />
       </section>
 
       <section className="docs-section">
@@ -39,7 +39,7 @@ export default function ThemingPage() {
           with a layered background; Electron builds can let the operating system composition show through.
         </p>
         <CodeBlock
-          code={`html[data-codex-window-type="electron"]:not([data-codex-os="win32"]) body {
+          code={`html[data-opaline-window-type="electron"]:not([data-opaline-os="win32"]) body {
   background: transparent;
 }
 

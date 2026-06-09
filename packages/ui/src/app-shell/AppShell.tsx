@@ -57,6 +57,9 @@ export type AppShellProps = {
   sidebarMaxWidth?: number;
   sidebarMinWidth?: number;
   showSidebarChrome?: boolean;
+  defaultRightPanelWidth?: number;
+  rightPanelMinWidth?: number;
+  rightPanelMaxWidth?: number;
   onNavigateBack?: () => void;
   onNavigateForward?: () => void;
 };
@@ -74,7 +77,7 @@ export function AppShell({
   defaultBottomPanelOpen,
   defaultRightPanelOpen,
   defaultSidebarOpen = true,
-  defaultSidebarWidth = 300,
+  defaultSidebarWidth = 260,
   headerActions,
   headerTabs = [],
   history,
@@ -88,6 +91,9 @@ export function AppShell({
   sidebarMaxWidth = 520,
   sidebarMinWidth = 240,
   showSidebarChrome = true,
+  defaultRightPanelWidth = 292,
+  rightPanelMinWidth = 240,
+  rightPanelMaxWidth = 600,
   onNavigateBack,
   onNavigateForward,
 }: AppShellProps) {
@@ -95,6 +101,8 @@ export function AppShell({
   const [sidebarWidth, setSidebarWidth] = useState(defaultSidebarWidth);
   const [isSidebarResizing, setIsSidebarResizing] = useState(false);
   const [isRightPanelOpen, setIsRightPanelOpen] = useState(defaultRightPanelOpen ?? rightPanel != null);
+  const [rightPanelWidth, setRightPanelWidth] = useState(defaultRightPanelWidth);
+  const [isRightPanelResizing, setIsRightPanelResizing] = useState(false);
   const [isBottomPanelOpen, setIsBottomPanelOpen] = useState(defaultBottomPanelOpen ?? bottomPanel != null);
   const toggleSidebar = useCallback(() => {
     setIsSidebarOpen((value) => !value);
@@ -112,6 +120,7 @@ export function AppShell({
       onNavigateBack();
       return;
     }
+
     history?.goBack();
   }, [history, onNavigateBack]);
   const navigateForward = useCallback(() => {
@@ -119,8 +128,13 @@ export function AppShell({
       onNavigateForward();
       return;
     }
+
     history?.goForward();
   }, [history, onNavigateForward]);
+
+  // Panels are toggled explicitly by the user — we no longer auto-open
+  // them whenever their content slot changes.
+
   const shellState: AppShellState = {
     canNavigateBack: resolvedCanNavigateBack,
     canNavigateForward: resolvedCanNavigateForward,
@@ -165,25 +179,51 @@ export function AppShell({
     },
     [sidebarMaxWidth, sidebarMinWidth, sidebarWidth],
   );
+  const startRightPanelResize = useCallback(
+    (event: ReactPointerEvent<HTMLDivElement>) => {
+      event.currentTarget.setPointerCapture(event.pointerId);
+      setIsRightPanelResizing(true);
+      const startX = event.clientX;
+      const startWidth = rightPanelWidth;
+
+      function move(pointerEvent: PointerEvent) {
+        const nextWidth = Math.max(0, Math.min(rightPanelMaxWidth, startWidth - (pointerEvent.clientX - startX)));
+        if (nextWidth < rightPanelMinWidth) {
+          setIsRightPanelOpen(false);
+          return;
+        }
+        setIsRightPanelOpen(true);
+        setRightPanelWidth(nextWidth);
+      }
+
+      function stop() {
+        setIsRightPanelResizing(false);
+        window.removeEventListener("pointermove", move);
+        window.removeEventListener("pointerup", stop);
+      }
+
+      window.addEventListener("pointermove", move);
+      window.addEventListener("pointerup", stop, { once: true });
+    },
+    [rightPanelMaxWidth, rightPanelMinWidth, rightPanelWidth],
+  );
 
   const shell = (
     <div
-      className="codex-app-shell"
+      className="opaline-app-shell"
       data-sidebar-open={isSidebarOpen ? "true" : "false"}
       style={
         {
-          "--codex-left-panel-max-width": `${sidebarMaxWidth}px`,
-          "--codex-left-panel-min-content": `${sidebarMinWidth + 80}px`,
-          "--codex-left-panel-width": `${sidebarWidth}px`,
+          "--opaline-left-panel-max-width": `${sidebarMaxWidth}px`,
+          "--opaline-left-panel-min-content": `${sidebarMinWidth + 80}px`,
+          "--opaline-left-panel-width": `${sidebarWidth}px`,
+          "--opaline-right-panel-width": `${rightPanelWidth}px`,
         } as CSSProperties
       }
     >
       {chromeControls != null ? <AppShellChromeControls>{resolveSlot(chromeControls, shellState)}</AppShellChromeControls> : null}
-      {!isSidebarOpen && collapsedSidebarTrigger != null ? (
-        <div className="codex-sidebar-reopen-button">{resolveSlot(collapsedSidebarTrigger, shellState)}</div>
-      ) : null}
       <aside
-        className="codex-left-panel app-shell-left-panel"
+        className="opaline-left-panel app-shell-left-panel"
         data-open={isSidebarOpen ? "true" : "false"}
         data-resizing={isSidebarResizing ? "true" : "false"}
       >
@@ -192,19 +232,22 @@ export function AppShell({
             {sidebarChrome != null ? resolveSlot(sidebarChrome, shellState) : <DefaultSidebarChrome state={shellState} />}
           </AppShellSidebarChrome>
         ) : null}
-        <div className="codex-left-panel-inner">{sidebar}</div>
+        <div className="opaline-left-panel-inner">{sidebar}</div>
         <div
-          className="codex-sidebar-resize-handle"
+          className="opaline-sidebar-resize-handle"
           role="separator"
           aria-orientation="vertical"
           aria-disabled={!isSidebarOpen}
           onPointerDown={isSidebarOpen ? startSidebarResize : undefined}
         >
-          <div className="codex-sidebar-resize-handle-line" />
+          <div className="opaline-sidebar-resize-handle-line" />
         </div>
       </aside>
-      <main className="codex-app-main">
+      <main className="opaline-app-main">
         <AppShellHeader>
+          {collapsedSidebarTrigger != null ? (
+            <div className="opaline-sidebar-reopen-button">{resolveSlot(collapsedSidebarTrigger, shellState)}</div>
+          ) : null}
           <AppShellHeaderContextSurface>
             <AppShellTabStrip>
               {headerTabs.map((tab, index) => (
@@ -229,12 +272,12 @@ export function AppShell({
           ) : null}
         </AppShellHeader>
 
-        <section className="codex-workspace" data-right-panel-open={isRightPanelOpen && rightPanel != null ? "true" : "false"}>
-          <section className="codex-main-content-viewport" data-app-shell-main-content-layout="main">
-            <div className="codex-main-content-frame">
+        <section className="opaline-workspace" data-right-panel-open={isRightPanelOpen && rightPanel != null ? "true" : "false"}>
+          <section className="opaline-main-content-viewport" data-app-shell-main-content-layout="main">
+            <div className="opaline-main-content-frame">
               <div
                 aria-hidden="true"
-                className="codex-app-shell-main-content-top-fade"
+                className="opaline-app-shell-main-content-top-fade"
                 data-app-shell-main-content-top-fade="false"
               />
               <AppShellContent>{main}</AppShellContent>
@@ -243,10 +286,20 @@ export function AppShell({
           </section>
           {rightPanel != null ? (
             <aside
-              className="codex-right-panel-slot"
+              className="opaline-right-panel-slot"
               data-open={isRightPanelOpen ? "true" : "false"}
+              data-resizing={isRightPanelResizing ? "true" : "false"}
               data-app-shell-focus-area="right-panel"
             >
+              <div
+                className="opaline-right-panel-resize-handle"
+                role="separator"
+                aria-orientation="vertical"
+                aria-disabled={!isRightPanelOpen}
+                onPointerDown={isRightPanelOpen ? startRightPanelResize : undefined}
+              >
+                <div className="opaline-right-panel-resize-handle-line" />
+              </div>
               <AppShellRightPanel>{rightPanel}</AppShellRightPanel>
             </aside>
           ) : null}
@@ -254,7 +307,7 @@ export function AppShell({
 
         {bottomPanel != null ? (
           <section
-            className="codex-bottom-panel-slot"
+            className="opaline-bottom-panel-slot"
             data-open={isBottomPanelOpen ? "true" : "false"}
             data-app-shell-focus-area="bottom-panel"
           >
@@ -268,9 +321,17 @@ export function AppShell({
   return history != null ? <ShellHistoryProvider history={history}>{shell}</ShellHistoryProvider> : shell;
 }
 
+export function AppShellChromeControls({ children, className, ...props }: AppShellSlotProps) {
+  return (
+    <div className={joinClassNames("opaline-shell-chrome-controls", className)} {...props}>
+      {children}
+    </div>
+  );
+}
+
 export function AppShellSidebarChrome({ children, className, ...props }: AppShellSlotProps) {
   return (
-    <div className={joinClassNames("codex-sidebar-chrome", className)} {...props}>
+    <div className={joinClassNames("opaline-sidebar-chrome", className)} {...props}>
       {children}
     </div>
   );
@@ -292,25 +353,17 @@ function DefaultSidebarChrome({ state }: { state: AppShellState }) {
   );
 }
 
-export function AppShellChromeControls({ children, className, ...props }: AppShellSlotProps) {
-  return (
-    <div className={joinClassNames("codex-shell-chrome-controls", className)} {...props}>
-      {children}
-    </div>
-  );
-}
-
 export function AppShellChromeButton({ className, type = "button", ...props }: AppShellButtonProps) {
-  return <button className={joinClassNames("codex-shell-chrome-button", className)} type={type} {...props} />;
+  return <button className={joinClassNames("opaline-shell-chrome-button", className)} type={type} {...props} />;
 }
 
 export function AppShellCollapsedSidebarTrigger({ className, type = "button", ...props }: AppShellButtonProps) {
-  return <button className={joinClassNames("codex-sidebar-reopen-trigger", className)} type={type} {...props} />;
+  return <button className={joinClassNames("opaline-sidebar-reopen-trigger", className)} type={type} {...props} />;
 }
 
 export function AppShellHeader({ children, className, ...props }: AppShellSlotProps) {
   return (
-    <header className={joinClassNames("codex-app-header", className)} data-app-shell-header-edge-scroll="false" {...props}>
+    <header className={joinClassNames("opaline-app-header", className)} data-app-shell-header-edge-scroll="false" {...props}>
       {children}
     </header>
   );
@@ -319,7 +372,7 @@ export function AppShellHeader({ children, className, ...props }: AppShellSlotPr
 export function AppShellHeaderContextSurface({ children, className, ...props }: AppShellSlotProps) {
   return (
     <div
-      className={joinClassNames("codex-app-header-context-surface", className)}
+      className={joinClassNames("opaline-app-header-context-surface", className)}
       data-testid="app-shell-header-context-menu-surface"
       {...props}
     >
@@ -330,7 +383,7 @@ export function AppShellHeaderContextSurface({ children, className, ...props }: 
 
 export function AppShellTabStrip({ children, className, ...props }: AppShellSlotProps) {
   return (
-    <div className={joinClassNames("codex-app-tab-strip", className)} data-app-shell-tab-strip-controller="main" {...props}>
+    <div className={joinClassNames("opaline-app-tab-strip", className)} data-app-shell-tab-strip-controller="main" {...props}>
       {children}
     </div>
   );
@@ -338,7 +391,7 @@ export function AppShellTabStrip({ children, className, ...props }: AppShellSlot
 
 export function AppShellTabController({ children, className, ...props }: AppShellSlotProps) {
   return (
-    <div className={joinClassNames("codex-app-tab-controller", className)} data-app-shell-tab-controller="main" {...props}>
+    <div className={joinClassNames("opaline-app-tab-controller", className)} data-app-shell-tab-controller="main" {...props}>
       {children}
     </div>
   );
@@ -354,14 +407,14 @@ export function AppShellTab({
   const active = tab?.active === true;
   const content = children ?? (
     <>
-      {tab?.dirty === true ? <span className="codex-tab-dot" /> : null}
-      <span className="codex-app-tab-title">{tab?.title}</span>
+      {tab?.dirty === true ? <span className="opaline-tab-dot" /> : null}
+      <span className="opaline-app-tab-title">{tab?.title}</span>
     </>
   );
 
   return (
     <button
-      className={joinClassNames("codex-app-tab", className)}
+      className={joinClassNames("opaline-app-tab", className)}
       data-active={active ? "true" : undefined}
       type={type}
       {...props}
@@ -373,35 +426,35 @@ export function AppShellTab({
 
 export function AppShellTabActions({ children, className, ...props }: AppShellSlotProps) {
   return (
-    <div className={joinClassNames("codex-app-tab-actions", className)} {...props}>
+    <div className={joinClassNames("opaline-app-tab-actions", className)} {...props}>
       {children}
     </div>
   );
 }
 
 export function AppShellTabActionButton({ className, type = "button", ...props }: AppShellButtonProps) {
-  return <button className={joinClassNames("codex-app-tab-actions-button", className)} type={type} {...props} />;
+  return <button className={joinClassNames("opaline-app-tab-actions-button", className)} type={type} {...props} />;
 }
 
 export function AppShellHeaderActions({ children, className, ...props }: AppShellSlotProps) {
   return (
-    <div className={joinClassNames("codex-app-header-actions", className)} {...props}>
+    <div className={joinClassNames("opaline-app-header-actions", className)} {...props}>
       {children}
     </div>
   );
 }
 
 export function AppShellHeaderToolButton({ className, type = "button", ...props }: AppShellButtonProps) {
-  return <button className={joinClassNames("codex-header-tool-button", className)} type={type} {...props} />;
+  return <button className={joinClassNames("opaline-header-tool-button", className)} type={type} {...props} />;
 }
 
 export function AppShellHeaderPillButton({ className, type = "button", ...props }: AppShellButtonProps) {
-  return <button className={joinClassNames("codex-header-agent-button", className)} type={type} {...props} />;
+  return <button className={joinClassNames("opaline-header-agent-button", className)} type={type} {...props} />;
 }
 
 export function AppShellContent({ children, className, ...props }: AppShellSlotProps) {
   return (
-    <section className={joinClassNames("codex-content-frame", className)} {...props}>
+    <section className={joinClassNames("opaline-content-frame", className)} {...props}>
       {children}
     </section>
   );
@@ -409,7 +462,7 @@ export function AppShellContent({ children, className, ...props }: AppShellSlotP
 
 export function AppShellComposer({ children, className, ...props }: AppShellSlotProps) {
   return (
-    <section className={joinClassNames("codex-composer-frame", className)} {...props}>
+    <section className={joinClassNames("opaline-composer-frame", className)} {...props}>
       {children}
     </section>
   );
@@ -417,7 +470,7 @@ export function AppShellComposer({ children, className, ...props }: AppShellSlot
 
 export function AppShellRightPanel({ children, className, ...props }: AppShellSlotProps) {
   return (
-    <div className={joinClassNames("codex-right-panel", className)} {...props}>
+    <div className={joinClassNames("opaline-right-panel", className)} {...props}>
       {children}
     </div>
   );
@@ -425,7 +478,7 @@ export function AppShellRightPanel({ children, className, ...props }: AppShellSl
 
 export function AppShellBottomPanel({ children, className, ...props }: AppShellSlotProps) {
   return (
-    <div className={joinClassNames("codex-bottom-panel-slot-inner", className)} {...props}>
+    <div className={joinClassNames("opaline-bottom-panel-slot-inner", className)} {...props}>
       {children}
     </div>
   );

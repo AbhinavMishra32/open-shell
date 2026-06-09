@@ -9,7 +9,7 @@ const nextConfig = {
   turbopack: {
     root: repoRoot,
   },
-  transpilePackages: ["@open-shell/ui"],
+  transpilePackages: ["@opaline/ui"],
 };
 
 export default nextConfig;

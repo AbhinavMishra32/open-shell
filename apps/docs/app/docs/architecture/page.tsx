@@ -2,7 +2,7 @@ import { CodeBlock } from "@/components/CodeBlock";
 
 export const metadata = {
   title: "Architecture",
-  description: "How Open Shell UI is organized.",
+  description: "How Opaline UI is organized.",
 };
 
 export default function ArchitecturePage() {
@@ -11,7 +11,7 @@ export default function ArchitecturePage() {
       <p className="docs-kicker">System design</p>
       <h1>Architecture</h1>
       <p className="docs-lede">
-        Open Shell UI is a monorepo with a reusable package, a docs app, a runnable Electron example, and a research
+        Opaline UI is a monorepo with a reusable package, a docs app, a runnable Electron example, and a research
         folder for implementation notes. The package is the public contract; the example app is proof that the
         contract can carry a full desktop workspace.
       </p>
@@ -19,11 +19,11 @@ export default function ArchitecturePage() {
       <section className="docs-section">
         <h2>Workspace layout</h2>
         <CodeBlock
-          code={`open-shell
+          code={`opaline
 ├─ apps/docs                 # Next + Fumadocs documentation and live previews
 ├─ packages/ui               # Public React component system
-├─ examples/electron-shell   # Runnable Electron app consuming @open-shell/ui
-└─ research/codex-internals  # Reverse-engineering notes and extracted references`}
+├─ examples/electron-shell   # Runnable Electron app consuming @opaline/ui
+└─ research/opaline-internals  # Reverse-engineering notes and extracted references`}
         />
       </section>
 

@@ -1,9 +1,9 @@
 {
-  "name": "@open-shell/docs",
+  "name": "@opaline/docs",
   "version": "0.3.0",
   "private": true,
   "type": "module",
-  "description": "Documentation and interactive component playground for Open Shell UI.",
+  "description": "Documentation and interactive component playground for Opaline UI.",
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1 --port 3011",
     "build": "next build",
@@ -11,7 +11,7 @@
     "typecheck": "tsc --noEmit --pretty false"
   },
   "dependencies": {
-    "@open-shell/ui": "*",
+    "@opaline/ui": "*",
     "fumadocs-core": "^16.9.3",
     "fumadocs-ui": "^16.9.3",
     "next": "^16.2.7",

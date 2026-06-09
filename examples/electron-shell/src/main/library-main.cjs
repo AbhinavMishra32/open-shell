@@ -12,7 +12,7 @@ function createWindow() {
     height: 780,
     minWidth: 860,
     minHeight: 560,
-    title: "Open Shell Example",
+    title: "Opaline Example",
     backgroundColor: "#00000000",
     transparent: true,
     vibrancy: process.platform === "darwin" ? "menu" : undefined,

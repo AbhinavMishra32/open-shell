@@ -2,7 +2,7 @@ import { CodeBlock } from "@/components/CodeBlock";
 
 export const metadata = {
   title: "Pages & History",
-  description: "How Open Shell apps wire pages and navigation history into AppShell.",
+  description: "How Opaline apps wire pages and navigation history into AppShell.",
 };
 
 export default function PagesPage() {

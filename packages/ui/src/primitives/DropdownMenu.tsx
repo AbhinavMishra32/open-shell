@@ -20,7 +20,7 @@ export const DropdownMenuContent = forwardRef<
       ref={ref}
       align={align}
       sideOffset={sideOffset}
-      className={`codex-dropdown-menu-content ${className}`}
+      className={`opaline-dropdown-menu-content ${className}`}
       {...props}
     />
   </DropdownMenuPrimitive.Portal>
@@ -31,7 +31,7 @@ export const DropdownMenuItem = forwardRef<
   ElementRef<typeof DropdownMenuPrimitive.Item>,
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Item>
 >(({ className = "", ...props }, ref) => (
-  <DropdownMenuPrimitive.Item ref={ref} className={`codex-dropdown-menu-item ${className}`} {...props} />
+  <DropdownMenuPrimitive.Item ref={ref} className={`opaline-dropdown-menu-item ${className}`} {...props} />
 ));
 DropdownMenuItem.displayName = "DropdownMenuItem";
 
@@ -41,7 +41,7 @@ export const DropdownMenuCheckboxItem = forwardRef<
 >(({ className = "", ...props }, ref) => (
   <DropdownMenuPrimitive.CheckboxItem
     ref={ref}
-    className={`codex-dropdown-menu-item codex-dropdown-menu-checkbox-item ${className}`}
+    className={`opaline-dropdown-menu-item opaline-dropdown-menu-checkbox-item ${className}`}
     {...props}
   />
 ));
@@ -53,7 +53,7 @@ export const DropdownMenuRadioItem = forwardRef<
 >(({ className = "", ...props }, ref) => (
   <DropdownMenuPrimitive.RadioItem
     ref={ref}
-    className={`codex-dropdown-menu-item codex-dropdown-menu-radio-item ${className}`}
+    className={`opaline-dropdown-menu-item opaline-dropdown-menu-radio-item ${className}`}
     {...props}
   />
 ));
@@ -63,7 +63,7 @@ export const DropdownMenuLabel = forwardRef<
   ElementRef<typeof DropdownMenuPrimitive.Label>,
   ComponentPropsWithoutRef<typeof DropdownMenuPrimitive.Label>
 >(({ className = "", ...props }, ref) => (
-  <DropdownMenuPrimitive.Label ref={ref} className={`codex-dropdown-menu-label ${className}`} {...props} />
+  <DropdownMenuPrimitive.Label ref={ref} className={`opaline-dropdown-menu-label ${className}`} {...props} />
 ));
 DropdownMenuLabel.displayName = "DropdownMenuLabel";
 
@@ -73,7 +73,7 @@ export const DropdownMenuSeparator = forwardRef<
 >(({ className = "", ...props }, ref) => (
   <DropdownMenuPrimitive.Separator
     ref={ref}
-    className={`codex-dropdown-menu-separator ${className}`}
+    className={`opaline-dropdown-menu-separator ${className}`}
     {...props}
   />
 ));
@@ -85,11 +85,11 @@ export const DropdownMenuSubTrigger = forwardRef<
 >(({ children, className = "", ...props }, ref) => (
   <DropdownMenuPrimitive.SubTrigger
     ref={ref}
-    className={`codex-dropdown-menu-item codex-dropdown-menu-sub-trigger ${className}`}
+    className={`opaline-dropdown-menu-item opaline-dropdown-menu-sub-trigger ${className}`}
     {...props}
   >
-    <span className="codex-dropdown-menu-sub-label">{children}</span>
-    <span className="codex-dropdown-menu-chevron">›</span>
+    <span className="opaline-dropdown-menu-sub-label">{children}</span>
+    <span className="opaline-dropdown-menu-chevron">›</span>
   </DropdownMenuPrimitive.SubTrigger>
 ));
 DropdownMenuSubTrigger.displayName = "DropdownMenuSubTrigger";
@@ -102,7 +102,7 @@ export const DropdownMenuSubContent = forwardRef<
     <DropdownMenuPrimitive.SubContent
       ref={ref}
       sideOffset={sideOffset}
-      className={`codex-dropdown-menu-content codex-dropdown-menu-sub-content ${className}`}
+      className={`opaline-dropdown-menu-content opaline-dropdown-menu-sub-content ${className}`}
       {...props}
     />
   </DropdownMenuPrimitive.Portal>

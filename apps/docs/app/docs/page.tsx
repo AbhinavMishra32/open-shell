@@ -6,7 +6,7 @@ export default function DocsIndexPage() {
   return (
     <article className="docs-page-shell">
       <p className="docs-kicker">Documentation</p>
-      <h1>Open Shell UI</h1>
+      <h1>Opaline UI</h1>
       <p className="docs-lede">
         A component system for building agent-native workspaces with the density, responsiveness, and panel grammar
         expected from modern desktop software.
@@ -15,7 +15,7 @@ export default function DocsIndexPage() {
       <div className="docs-callout-grid">
         <div>
           <strong>Package</strong>
-          <span>@open-shell/ui</span>
+          <span>@opaline/ui</span>
         </div>
         <div>
           <strong>Docs app</strong>
@@ -31,10 +31,10 @@ export default function DocsIndexPage() {
         <h2>Quick start</h2>
         <CodeBlock
           title="Install"
-          code={`npm install @open-shell/ui
+          code={`npm install @opaline/ui
 
-import "@open-shell/ui/styles.css";
-import { AppShell, Composer, Sidebar, ThreadSurface } from "@open-shell/ui";`}
+import "@opaline/ui/styles.css";
+import { AppShell, Composer, Sidebar, ThreadSurface } from "@opaline/ui";`}
         />
       </section>
 
