@@ -189,22 +189,25 @@ Every component has a docs page with:
 - source path
 - related components
 
-## Docs
+## Documentation
 
 ```sh
 npm run docs:dev
-npm run docs:build
 ```
 
-The docs app uses a Next + Fumadocs shell and renders the real package exports. This keeps the docs honest: if a component breaks, the docs break too.
+Open `http://127.0.0.1:3011`.
 
-Key docs:
+The docs app is a Fumadocs + Next.js + MDX workspace. It resolves `@opaline/ui`
+directly to `packages/ui/src`, so component and token edits update live without a
+package build or publish step.
 
-- `apps/docs/app/docs/installation/page.tsx`
-- `apps/docs/app/docs/architecture/page.tsx`
-- `apps/docs/app/docs/slots/page.tsx`
-- `apps/docs/app/docs/theming/page.tsx`
-- `apps/docs/app/docs/components/[slug]/page.tsx`
+```sh
+npm run typecheck -w @opaline/docs
+```
+
+Documentation content lives in `apps/docs/content/docs`. Interactive examples
+live in `apps/docs/components/ComponentPreview.tsx` and render the public package
+components rather than screenshots or reimplementations.
 
 ## Electron Example
 

@@ -7,8 +7,9 @@
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1 --port 3011",
     "build": "next build",
+    "generate": "fumadocs-mdx",
     "start": "next start --hostname 127.0.0.1 --port 3011",
-    "typecheck": "tsc --noEmit --pretty false"
+    "typecheck": "npm run generate && tsc --noEmit --pretty false"
   },
   "dependencies": {
     "@opaline/ui": "*",
