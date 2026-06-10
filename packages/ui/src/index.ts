@@ -94,6 +94,10 @@ export {
   DialogTrigger,
 } from "./primitives/Dialog";
 export type { OpalineDialogContentProps, DialogSize } from "./primitives/Dialog";
+export { HoverPreview } from "./primitives/HoverPreview";
+export type { HoverPreviewProps } from "./primitives/HoverPreview";
+export { Timeline } from "./timeline/Timeline";
+export type { TimelineItem, TimelineProps, TimelineStatus } from "./timeline/Timeline";
 export {
   DropdownMenu,
   DropdownMenuCheckboxItem,

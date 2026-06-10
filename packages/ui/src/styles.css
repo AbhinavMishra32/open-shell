@@ -7,7 +7,9 @@
 @import "./primitives/button.css";
 @import "./primitives/context-menu.css";
 @import "./primitives/dialog.css";
+@import "./primitives/hover-preview.css";
 @import "./primitives/dropdown-menu.css";
+@import "./timeline/timeline.css";
 @import "./settings/settings.css";
 @import "./sidebar/sidebar.css";
 @import "./slot-panel/slot-panel.css";
