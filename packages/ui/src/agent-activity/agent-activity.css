@@ -59,12 +59,15 @@
 .opaline-agent-activity-summary > svg.is-open { transform: rotate(90deg); }
 
 .opaline-agent-thinking-content {
-  max-height: 175px;
   margin-top: 8px;
-  overflow: auto;
   color: var(--opaline-text-secondary);
   font-size: 12px;
   line-height: 1.5;
+}
+
+.opaline-agent-thinking-content > :not(.opaline-agent-activity-list) {
+  max-height: 175px;
+  overflow: auto;
   white-space: pre-wrap;
 }
 
@@ -120,6 +123,7 @@
   margin: 10px 0 0 8px;
   border-left: 1px solid var(--opaline-border-subtle);
   padding-left: 17px;
+  text-align: left;
 }
 
 .opaline-agent-activity-entry {

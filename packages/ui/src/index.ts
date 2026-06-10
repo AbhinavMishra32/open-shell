@@ -20,11 +20,12 @@ export {
   AppShellTabStrip,
 } from "./app-shell/AppShell";
 export type { AppShellProps, AppShellState, AppShellTabItem } from "./app-shell/AppShell";
-export { AgentActivity, AgentSuggestion, AgentThinking } from "./agent-activity/AgentActivity";
+export { AgentActivity, AgentActivityList, AgentSuggestion, AgentThinking } from "./agent-activity/AgentActivity";
 export type {
   AgentActivityEntry,
   AgentActivityProps,
   AgentActivityStatus,
+  AgentActivityListProps,
   AgentSuggestionProps,
   AgentThinkingProps,
 } from "./agent-activity/AgentActivity";

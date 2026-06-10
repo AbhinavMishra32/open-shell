@@ -14,7 +14,7 @@ export type AgentActivityEntry = {
   meta?: ReactNode;
 };
 
-export type AgentThinkingProps = HTMLAttributes<HTMLDivElement> & {
+export type AgentThinkingProps = Omit<HTMLAttributes<HTMLDivElement>, "content"> & {
   state?: "thinking" | "thought";
   label?: ReactNode;
   content?: ReactNode;
@@ -66,6 +66,32 @@ export type AgentActivityProps = HTMLAttributes<HTMLDivElement> & {
   onExpandedChange?: (expanded: boolean) => void;
 };
 
+export type AgentActivityListProps = HTMLAttributes<HTMLDivElement> & {
+  entries: AgentActivityEntry[];
+};
+
+export function AgentActivityList({ entries, className = "", ...props }: AgentActivityListProps) {
+  return (
+    <div className={`opaline-agent-activity-list ${className}`} {...props}>
+      {entries.map((entry) => {
+        const entryStatus = entry.status ?? "pending";
+        return (
+          <div className="opaline-agent-activity-entry" data-status={entryStatus} key={entry.id}>
+            <span className="opaline-agent-activity-entry-icon">{entry.icon ?? activityIcon(entryStatus)}</span>
+            <div>
+              <div className="opaline-agent-activity-entry-heading">
+                <strong className={entryStatus === "active" ? "opaline-agent-shimmer" : ""}>{entry.title}</strong>
+                {entry.meta ? <span>{entry.meta}</span> : null}
+              </div>
+              {entry.detail ? <p>{entry.detail}</p> : null}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 export function AgentActivity({
   label,
   detail,
@@ -99,25 +125,7 @@ export function AgentActivity({
         </span>
         {expandable ? <ChevronRight size={14} className={isOpen ? "is-open" : ""} /> : null}
       </button>
-      {expandable && isOpen ? (
-        <div className="opaline-agent-activity-list">
-          {entries.map((entry) => {
-            const entryStatus = entry.status ?? "pending";
-            return (
-              <div className="opaline-agent-activity-entry" data-status={entryStatus} key={entry.id}>
-                <span className="opaline-agent-activity-entry-icon">{entry.icon ?? activityIcon(entryStatus)}</span>
-                <div>
-                  <div className="opaline-agent-activity-entry-heading">
-                    <strong className={entryStatus === "active" ? "opaline-agent-shimmer" : ""}>{entry.title}</strong>
-                    {entry.meta ? <span>{entry.meta}</span> : null}
-                  </div>
-                  {entry.detail ? <p>{entry.detail}</p> : null}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      ) : null}
+      {expandable && isOpen ? <AgentActivityList entries={entries} /> : null}
     </div>
   );
 }
