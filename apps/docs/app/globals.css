@@ -1,3 +1,8 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+@import "../../../packages/ui/src/styles.css";
+
 :root {
   --fd-layout-width: 104rem;
   --fd-sidebar-width: 17rem;
@@ -51,6 +56,7 @@
 
 html,
 body {
+  height: auto;
   min-height: 100%;
 }
 
@@ -58,6 +64,7 @@ body {
   margin: 0;
   font-family: "Avenir Next", "SF Pro Text", "Helvetica Neue", sans-serif;
   letter-spacing: 0;
+  overflow-y: auto;
 }
 
 code,
@@ -218,6 +225,12 @@ pre {
 
 .docs-timeline-demo {
   width: min(36rem, 100%);
+}
+
+.docs-agent-activity-demo {
+  display: grid;
+  width: min(100%, 460px);
+  gap: 14px;
 }
 
 .docs-history-demo {
