@@ -220,6 +220,35 @@ pre {
   width: min(36rem, 100%);
 }
 
+.docs-history-demo {
+  width: min(40rem, 100%);
+  padding: 1.2rem;
+  border: 1px solid rgb(var(--fd-border));
+  border-radius: 8px;
+  background: rgb(var(--fd-card));
+  text-align: center;
+}
+
+.docs-history-demo p {
+  margin: 1rem 0 0.5rem;
+}
+
+.docs-history-demo code {
+  display: block;
+  overflow: hidden;
+  color: rgb(var(--fd-muted-foreground));
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.docs-settings-demo {
+  width: min(48rem, 100%);
+  height: 27rem;
+  overflow: auto;
+  border: 1px solid rgb(var(--fd-border));
+  border-radius: 8px;
+}
+
 .docs-shell-demo,
 .docs-shell-demo .opaline-app-shell {
   width: 100%;

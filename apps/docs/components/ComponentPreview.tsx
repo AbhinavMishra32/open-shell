@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { Check, Clock, FileCode2, Folder, Settings, Terminal } from "lucide-react";
 import {
   AppShell,
   BottomPanel,
@@ -9,300 +11,262 @@ import {
   ContextMenuContent,
   ContextMenuItem,
   ContextMenuSeparator,
-  ContextMenuSub,
-  ContextMenuSubContent,
-  ContextMenuSubTrigger,
   ContextMenuTrigger,
   Dialog,
   DialogBody,
   DialogContent,
   DialogFooter,
   DialogHeader,
+  DialogTitle,
   DialogTrigger,
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
-  FileBrowserPanel,
   FileTree,
+  HoverPreview,
   IconButton,
-  Pill,
+  SettingsCard,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsSelect,
+  SettingsToggle,
   Sidebar,
   SidebarSection,
-  StatusDot,
+  SlotPanel,
   TerminalSurface,
   ThreadSurface,
+  Timeline,
+  useShellHistory,
 } from "@opaline/ui";
-import type { FileTreeItem, SidebarProject, ThreadMessage } from "@opaline/ui";
+import type { FileTreeItem, ShellHistoryEntry, SidebarProject, TimelineItem } from "@opaline/ui";
+
+type PreviewName =
+  | "app-shell"
+  | "buttons"
+  | "composer"
+  | "context-menu"
+  | "dialog"
+  | "dropdown-menu"
+  | "file-tree"
+  | "hover-preview"
+  | "settings"
+  | "shell-history"
+  | "sidebar"
+  | "slot-panel"
+  | "timeline";
 
 const projects: SidebarProject[] = [
   {
-    id: "desktop-agent-app",
-    label: "desktop-agent-app",
-    threads: [{ active: true, id: "inspect", meta: "⌘1", title: "Inspect Electron UI" }],
-  },
-  {
-    id: "application-agent",
-    label: "application-agent",
-    threads: [{ id: "db", meta: "⌘2", title: "Fix dev and DB errors" }],
-  },
-  {
-    id: "fill-agent",
-    label: "fill-agent",
-    muted: true,
+    id: "opaline",
+    label: "opaline",
     threads: [
-      { id: "scrap", meta: "⌘3", title: "okay scrap this. lets use co..." },
-      { id: "browser", meta: "⌘4", title: "Build agent browser extens..." },
+      { active: true, id: "docs", meta: "⌘1", title: "Rebuild component docs" },
+      { id: "history", meta: "⌘2", title: "Design shell history" },
     ],
   },
 ];
 
-const messages: ThreadMessage[] = [
+const files: FileTreeItem[] = [
   {
-    body: "Read the component registry and opened the shell preview. The slot boundaries are now documented as public API.",
-    role: "assistant",
-    status: "Looked at component docs",
-  },
-  {
-    body: "Create a docs site where I can interact with the components.",
-    role: "user",
-  },
-];
-
-const fileTree: FileTreeItem[] = [
-  {
-    children: [
-      {
-        children: [
-          { gitStatus: "modified", name: "AppShell.tsx", path: "packages/ui/src/app-shell/AppShell.tsx" },
-          { gitStatus: "modified", name: "app-shell.css", path: "packages/ui/src/app-shell/app-shell.css" },
-        ],
-        name: "app-shell",
-        path: "packages/ui/src/app-shell",
-        type: "directory",
-      },
-      {
-        children: [
-          { gitStatus: "modified", name: "Sidebar.tsx", path: "packages/ui/src/sidebar/Sidebar.tsx" },
-          { name: "sidebar.css", path: "packages/ui/src/sidebar/sidebar.css" },
-        ],
-        name: "sidebar",
-        path: "packages/ui/src/sidebar",
-        type: "directory",
-      },
-    ],
     name: "packages",
     path: "packages",
     type: "directory",
+    children: [
+      {
+        name: "ui",
+        path: "packages/ui",
+        type: "directory",
+        children: [
+          { gitStatus: "modified", name: "AppShell.tsx", path: "packages/ui/src/app-shell/AppShell.tsx" },
+          { name: "Timeline.tsx", path: "packages/ui/src/timeline/Timeline.tsx" },
+        ],
+      },
+    ],
   },
   { gitStatus: "modified", name: "README.md", path: "README.md", selected: true },
-  { name: "package.json", path: "package.json" },
 ];
 
-const previewCode = `{
-  "name": "@opaline/ui",
-  "description": "Desktop shell primitives with caller-owned content.",
-  "components": ["AppShell", "Sidebar", "FileTree", "Composer"]
-}`;
+const snippets: Record<PreviewName, string> = {
+  "app-shell": `import { AppShell, Sidebar, Composer } from "@opaline/ui";
 
-export function ComponentPreview({ slug }: { slug: string }) {
-  return <div className="docs-live-preview">{renderPreview(slug)}</div>;
+<AppShell
+  sidebar={<Sidebar projects={projects} items={[]} />}
+  main={<Workspace />}
+  composer={<Composer placeholder="Ask the agent..." />}
+  rightPanel={<Inspector />}
+  bottomPanel={<TerminalPanel />}
+/>`,
+  buttons: `import { Button, IconButton } from "@opaline/ui";
+
+<Button variant="primary">Create project</Button>
+<Button variant="secondary">Review changes</Button>
+<IconButton aria-label="Settings"><Settings /></IconButton>`,
+  composer: `import { Composer } from "@opaline/ui";
+
+<Composer placeholder="Ask the agent to inspect this workspace..." />`,
+  "context-menu": `import { ContextMenu, ContextMenuContent, ContextMenuItem } from "@opaline/ui";
+
+<ContextMenu>
+  <ContextMenuTrigger>Right-click this surface</ContextMenuTrigger>
+  <ContextMenuContent>
+    <ContextMenuItem>Open in new tab</ContextMenuItem>
+  </ContextMenuContent>
+</ContextMenu>`,
+  dialog: `import { Dialog, DialogContent, DialogTrigger } from "@opaline/ui";
+
+<Dialog>
+  <DialogTrigger asChild><Button>Open dialog</Button></DialogTrigger>
+  <DialogContent size="compact">...</DialogContent>
+</Dialog>`,
+  "dropdown-menu": `import { DropdownMenu, DropdownMenuContent, DropdownMenuItem } from "@opaline/ui";
+
+<DropdownMenu>
+  <DropdownMenuTrigger asChild><Button>Open menu</Button></DropdownMenuTrigger>
+  <DropdownMenuContent><DropdownMenuItem>Rename</DropdownMenuItem></DropdownMenuContent>
+</DropdownMenu>`,
+  "file-tree": `import { FileTree } from "@opaline/ui";
+
+<FileTree items={workspaceFiles} onSelect={(file) => openFile(file.path)} />`,
+  "hover-preview": `import { HoverPreview } from "@opaline/ui";
+
+<HoverPreview content={<ProjectSummary />}>
+  <button>opaline</button>
+</HoverPreview>`,
+  settings: `import { SettingsPanel, SettingsRow, SettingsToggle } from "@opaline/ui";
+
+<SettingsPanel title="Editor">
+  <SettingsRow title="Format on save" control={<SettingsToggle checked />} />
+</SettingsPanel>`,
+  "shell-history": `const history = useShellHistory([
+  { id: "thread:docs", type: "thread", title: "Docs" },
+]);
+
+history.push({ id: "file:button", type: "file", title: "Button.tsx" });
+history.goBack();`,
+  sidebar: `import { Sidebar, SidebarSection } from "@opaline/ui";
+
+<Sidebar projects={projects} items={navigation}>
+  <SidebarSection heading="Files"><FileTree items={files} /></SidebarSection>
+</Sidebar>`,
+  "slot-panel": `import { SlotPanel } from "@opaline/ui";
+
+<SlotPanel
+  keepMounted
+  tabs={[{ id: "terminal", title: "Terminal", content: <Terminal /> }]}
+/>`,
+  timeline: `import { Timeline } from "@opaline/ui";
+
+<Timeline items={milestones} density="compact" />`,
+};
+
+export function ComponentPreview({ name, slug }: { name?: PreviewName; slug?: PreviewName }) {
+  const previewName = name ?? slug;
+  const [view, setView] = useState<"preview" | "code">("preview");
+
+  if (!previewName) return null;
+
+  return (
+    <div className="docs-live-preview">
+      <div className="docs-preview-toolbar" role="tablist" aria-label={`${previewName} example`}>
+        <button className="docs-preview-tab" data-active={view === "preview"} type="button" onClick={() => setView("preview")}>Preview</button>
+        <button className="docs-preview-tab" data-active={view === "code"} type="button" onClick={() => setView("code")}>Code</button>
+      </div>
+      {view === "preview" ? renderPreview(previewName) : <pre className="docs-preview-code"><code>{snippets[previewName]}</code></pre>}
+    </div>
+  );
 }
 
-function renderPreview(slug: string) {
-  switch (slug) {
-    case "app-shell":
-      return (
-        <div className="docs-shell-demo">
-          <AppShell
-            headerTabs={[
-              { active: true, dirty: true, id: "inspect-electron-ui", title: "Inspect Electron UI" },
-              { id: "component-system", title: "Component system" },
-            ]}
-            headerActions={(shell) => (
-              <>
-                <button className="opaline-header-tool-button" type="button" onClick={shell.toggleBottomPanel} aria-label="Toggle bottom panel">
-                  _
-                </button>
-                <button className="opaline-header-tool-button" type="button" onClick={shell.toggleRightPanel} aria-label="Toggle right panel">
-                  []
-                </button>
-              </>
-            )}
-            sidebar={
-              <Sidebar items={[]} projects={projects}>
-                <SidebarSection heading="Files">
-                  <FileTree items={fileTree} variant="sidebar" />
-                </SidebarSection>
-              </Sidebar>
-            }
-            main={<ThreadSurface messages={messages} subtitle="Component-system reconstruction" title="Inspect Electron UI" />}
-            composer={<Composer placeholder="Ask the agent to inspect, build, or ship..." />}
-            rightPanel={
-              <FileBrowserPanel
-                breadcrumbs={["opaline", "package.json"]}
-                code={previewCode}
-                fileName="package.json"
-                fileTree={fileTree}
-                language="json"
-              />
-            }
-            bottomPanel={
-              <BottomPanel
-                tabs={[
-                  {
-                    active: true,
-                    content: <TerminalSurface />,
-                    id: "terminal",
-                    title: "opaline",
-                  },
-                  {
-                    content: <FileTree items={fileTree} />,
-                    id: "files",
-                    title: "Files",
-                  },
-                ]}
-              />
-            }
-          />
-        </div>
-      );
-    case "sidebar":
-      return (
-        <div className="docs-sidebar-demo">
-          <Sidebar
-            items={[{ id: "knowledge", meta: "notes", title: "Component knowledge base" }]}
-            projects={projects}
-          >
-            <SidebarSection heading="Files">
-              <FileTree items={fileTree} variant="sidebar" />
-            </SidebarSection>
-          </Sidebar>
-        </div>
-      );
-    case "composer":
-      return (
-        <div className="docs-composer-demo">
-          <Composer placeholder="Ask the agent to build, inspect, or recreate a component..." />
-        </div>
-      );
-    case "bottom-panel":
-      return (
-        <BottomPanel
-          mainContentHeight={740}
-          tabs={[
-            {
-              active: true,
-              content: <TerminalSurface />,
-              id: "terminal",
-              title: "opaline",
-            },
-            {
-              content: <FileTree items={fileTree} />,
-              id: "files",
-              title: "Files",
-            },
-          ]}
-        />
-      );
-    case "file-browser-panel":
-      return (
-        <FileBrowserPanel
-          breadcrumbs={["opaline", "package.json"]}
-          code={previewCode}
-          fileName="package.json"
-          fileTree={fileTree}
-          language="json"
-        />
-      );
-    case "file-tree":
-      return <FileTree items={fileTree} />;
+function renderPreview(name: PreviewName) {
+  switch (name) {
+    case "buttons":
+      return <PreviewStage><div className="docs-button-row"><Button variant="primary">Create project</Button><Button variant="secondary">Review changes</Button><Button variant="soft">Later</Button><Button variant="danger">Delete</Button><IconButton aria-label="Settings"><Settings size={16} /></IconButton></div></PreviewStage>;
     case "dropdown-menu":
-      return (
-        <div className="docs-overlay-demo">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary">Open menu</Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem>Pin chat <span className="opaline-menu-shortcut">⌥⌘P</span></DropdownMenuItem>
-              <DropdownMenuItem>Rename chat <span className="opaline-menu-shortcut">⌥⌘R</span></DropdownMenuItem>
-              <DropdownMenuSeparator />
-              <DropdownMenuCheckboxItem checked={false}>Plan mode</DropdownMenuCheckboxItem>
-              <DropdownMenuSub>
-                <DropdownMenuSubTrigger>Copy</DropdownMenuSubTrigger>
-                <DropdownMenuSubContent>
-                  <DropdownMenuItem>Copy markdown</DropdownMenuItem>
-                  <DropdownMenuItem>Copy session ID</DropdownMenuItem>
-                </DropdownMenuSubContent>
-              </DropdownMenuSub>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      );
+      return <PreviewStage><DropdownMenu><DropdownMenuTrigger asChild><Button variant="secondary">Open menu</Button></DropdownMenuTrigger><DropdownMenuContent><DropdownMenuItem>Pin thread</DropdownMenuItem><DropdownMenuItem>Rename</DropdownMenuItem><DropdownMenuSeparator /><DropdownMenuItem>Copy link</DropdownMenuItem></DropdownMenuContent></DropdownMenu></PreviewStage>;
     case "context-menu":
-      return (
-        <div className="docs-context-demo">
-          <ContextMenu>
-            <ContextMenuTrigger asChild>
-              <button type="button">Right-click this thread tab</button>
-            </ContextMenuTrigger>
-            <ContextMenuContent>
-              <ContextMenuItem>Close tab</ContextMenuItem>
-              <ContextMenuItem>Copy link</ContextMenuItem>
-              <ContextMenuSeparator />
-              <ContextMenuSub>
-                <ContextMenuSubTrigger>Move to</ContextMenuSubTrigger>
-                <ContextMenuSubContent>
-                  <ContextMenuItem>New window</ContextMenuItem>
-                  <ContextMenuItem>Side chat</ContextMenuItem>
-                </ContextMenuSubContent>
-              </ContextMenuSub>
-            </ContextMenuContent>
-          </ContextMenu>
-        </div>
-      );
+      return <PreviewStage><ContextMenu><ContextMenuTrigger asChild><button className="opaline-button opaline-button-secondary" type="button">Right-click this surface</button></ContextMenuTrigger><ContextMenuContent><ContextMenuItem>Open in new tab</ContextMenuItem><ContextMenuItem>Reveal in file tree</ContextMenuItem><ContextMenuSeparator /><ContextMenuItem>Copy path</ContextMenuItem></ContextMenuContent></ContextMenu></PreviewStage>;
     case "dialog":
-      return (
-        <div className="docs-overlay-demo">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="primary">Open dialog</Button>
-            </DialogTrigger>
-            <DialogContent size="compact">
-              <DialogHeader title="Create agent run" subtitle="Structured modal primitives for desktop flows." />
-              <DialogBody>
-                <p>Use sections for settings, confirmations, review cards, or file actions.</p>
-              </DialogBody>
-              <DialogFooter>
-                <Button variant="secondary">Cancel</Button>
-                <Button variant="primary">Start</Button>
-              </DialogFooter>
-            </DialogContent>
-          </Dialog>
-        </div>
-      );
-    case "button":
-      return (
-        <div className="docs-button-demo">
-          <Button variant="primary">Run agent</Button>
-          <Button variant="secondary">Review</Button>
-          <Button variant="soft">Attach context</Button>
-          <IconButton aria-label="Open inspector">⌘</IconButton>
-          <Pill>local</Pill>
-          <StatusDot tone="green" />
-        </div>
-      );
-    case "thread-surface":
-      return <ThreadSurface messages={messages} subtitle="Component-system reconstruction" title="Inspect Electron UI" />;
-    case "terminal-surface":
-      return <TerminalSurface />;
-    default:
-      return <p>No preview registered yet.</p>;
+      return <PreviewStage><Dialog><DialogTrigger asChild><Button variant="primary">Open dialog</Button></DialogTrigger><DialogContent size="compact"><DialogHeader><DialogTitle>Create workspace</DialogTitle></DialogHeader><DialogBody>Choose a directory and Opaline will keep the shell state caller-owned.</DialogBody><DialogFooter><Button variant="secondary">Cancel</Button><Button variant="primary">Create</Button></DialogFooter></DialogContent></Dialog></PreviewStage>;
+    case "hover-preview":
+      return <PreviewStage><HoverPreview content={<div className="docs-hover-card"><strong>Opaline documentation</strong><span>Next.js, Fumadocs, MDX, and live package source.</span></div>}><Button variant="secondary">Hover for context</Button></HoverPreview></PreviewStage>;
+    case "timeline":
+      return <PreviewStage><div className="docs-timeline-demo"><Timeline items={timelineItems} density="compact" /></div></PreviewStage>;
+    case "shell-history":
+      return <HistoryDemo />;
+    case "settings":
+      return <SettingsDemo />;
+    case "sidebar":
+      return <PreviewStage size="wide"><div className="docs-sidebar-demo"><Sidebar projects={projects} items={[{ id: "components", title: "Component registry", meta: "24" }]}><SidebarSection heading="Workspace"><FileTree items={files} variant="sidebar" /></SidebarSection></Sidebar></div></PreviewStage>;
+    case "file-tree":
+      return <PreviewStage size="wide"><div className="docs-sidebar-demo"><FileTree items={files} /></div></PreviewStage>;
+    case "composer":
+      return <PreviewStage><div className="docs-composer-demo"><Composer placeholder="Ask the agent to inspect this workspace..." /></div></PreviewStage>;
+    case "slot-panel":
+      return <PreviewStage size="wide"><SlotPanel tabs={[{ id: "terminal", title: "Terminal", icon: <Terminal size={14} />, content: <TerminalSurface cwd="~/opaline">npm run docs:dev</TerminalSurface> }, { id: "files", title: "Files", icon: <Folder size={14} />, content: <FileTree items={files} /> }]} /></PreviewStage>;
+    case "app-shell":
+      return <ShellDemo />;
   }
 }
+
+function PreviewStage({ children, size }: { children: React.ReactNode; size?: "wide" }) {
+  return <div className="docs-preview-stage" data-size={size}>{children}</div>;
+}
+
+function HistoryDemo() {
+  const history = useShellHistory<ShellHistoryEntry>([
+    { id: "thread:docs", type: "thread", title: "Docs architecture" },
+    { id: "file:button", type: "file", title: "Button.tsx" },
+  ]);
+
+  return (
+    <PreviewStage>
+      <div className="docs-history-demo">
+        <div className="docs-button-row">
+          <Button disabled={!history.canGoBack} onClick={history.goBack}>Back</Button>
+          <Button disabled={!history.canGoForward} onClick={history.goForward}>Forward</Button>
+          <Button variant="primary" onClick={() => history.push({ id: `settings:${history.entries.length}`, type: "settings", title: "Settings" })}>Push settings</Button>
+        </div>
+        <p>Current: <strong>{history.current?.title}</strong></p>
+        <code>{history.entries.map((entry) => entry.title).join(" → ")}</code>
+      </div>
+    </PreviewStage>
+  );
+}
+
+function SettingsDemo() {
+  const [enabled, setEnabled] = useState(true);
+  return (
+    <div className="docs-preview-stage" data-size="wide">
+      <div className="docs-settings-demo">
+        <SettingsPanel title="Editor" subtitle="Workspace defaults for code editing.">
+          <SettingsSection title="Behavior"><SettingsCard><SettingsRow title="Format on save" description="Run the configured formatter after writes." control={<SettingsToggle checked={enabled} onCheckedChange={setEnabled} />} /><SettingsRow title="Tab size" control={<SettingsSelect defaultValue="2"><option value="2">2 spaces</option><option value="4">4 spaces</option></SettingsSelect>} /></SettingsCard></SettingsSection>
+        </SettingsPanel>
+      </div>
+    </div>
+  );
+}
+
+function ShellDemo() {
+  return (
+    <div className="docs-preview-stage" data-size="shell">
+      <div className="docs-shell-demo">
+        <AppShell
+          headerTabs={[{ active: true, id: "docs", title: "Opaline docs" }, { id: "button", title: "Button.tsx", dirty: true }]}
+          sidebar={<Sidebar projects={projects} items={[]}><SidebarSection heading="Files"><FileTree items={files} variant="sidebar" /></SidebarSection></Sidebar>}
+          main={<ThreadSurface title="Rebuild component docs" subtitle="Live workspace package" messages={[{ role: "assistant", status: "Updated 14 components", body: "The docs render Opaline directly from packages/ui/src, so component changes appear without publishing or rebuilding the package." }, { role: "user", body: "Make every example interactive and explain the systems behind the shell." }]} />}
+          composer={<Composer placeholder="Ask about the component system..." />}
+          rightPanel={<FileTree items={files} />}
+          bottomPanel={<BottomPanel tabs={[{ id: "terminal", title: "Terminal", active: true, content: <TerminalSurface cwd="~/opaline">npm run docs:dev</TerminalSurface> }]} />}
+        />
+      </div>
+    </div>
+  );
+}
+
+const timelineItems: TimelineItem[] = [
+  { id: "contract", title: "Component contract", description: "Caller-owned state and content slots are defined.", status: "completed", icon: <Check size={12} />, meta: "09:42" },
+  { id: "preview", title: "Interactive preview", description: "The real package export is mounted in MDX.", status: "active", icon: <Clock size={12} />, meta: "now" },
+  { id: "publish", title: "Publish package", description: "Release when the API and docs agree.", status: "pending", icon: <FileCode2 size={12} /> },
+];
