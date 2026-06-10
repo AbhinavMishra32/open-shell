@@ -4,6 +4,8 @@ import { useState } from "react";
 import { Check, Clock, FileCode2, Folder, Settings, Terminal } from "lucide-react";
 import {
   AppShell,
+  AgentActivity,
+  AgentSuggestion,
   BottomPanel,
   Button,
   Composer,
@@ -44,6 +46,7 @@ import {
 import type { FileTreeItem, ShellHistoryEntry, SidebarProject, TimelineItem } from "@opaline/ui";
 
 type PreviewName =
+  | "agent-activity"
   | "app-shell"
   | "buttons"
   | "composer"
@@ -90,6 +93,15 @@ const files: FileTreeItem[] = [
 ];
 
 const snippets: Record<PreviewName, string> = {
+  "agent-activity": `import { AgentActivity, AgentSuggestion } from "@opaline/ui";
+
+<AgentActivity
+  status="active"
+  label="Checking project structure"
+  detail="Building a recoverable block tree"
+  entries={activity}
+/>
+<AgentSuggestion title="Split the large edit" onAction={applyPatch} />`,
   "app-shell": `import { AppShell, Sidebar, Composer } from "@opaline/ui";
 
 <AppShell
@@ -181,6 +193,8 @@ export function ComponentPreview({ name, slug }: { name?: PreviewName; slug?: Pr
 
 function renderPreview(name: PreviewName) {
   switch (name) {
+    case "agent-activity":
+      return <PreviewStage><div className="docs-agent-activity-demo"><AgentActivity status="active" label="Checking project structure" detail="Building a recoverable block tree" defaultOpen entries={[{ id: "read", title: "Read project tape", detail: "3,406 tokens", status: "complete" }, { id: "grammar", title: "Check tape-0.3 grammar", detail: "Applying deterministic repairs", status: "active" }, { id: "review", title: "Prepare optional suggestions", status: "pending" }]} /><AgentSuggestion title="Add a concept card" description="The recall uses WebAuthn before it is introduced." actionLabel="Apply" onAction={() => undefined} /></div></PreviewStage>;
     case "buttons":
       return <PreviewStage><div className="docs-button-row"><Button variant="primary">Create project</Button><Button variant="secondary">Review changes</Button><Button variant="soft">Later</Button><Button variant="danger">Delete</Button><IconButton aria-label="Settings"><Settings size={16} /></IconButton></div></PreviewStage>;
     case "dropdown-menu":

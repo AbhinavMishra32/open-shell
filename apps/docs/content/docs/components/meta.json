@@ -1,4 +1,4 @@
 {
   "title": "Components",
-  "pages": ["index", "primitives", "overlays", "navigation", "workspace", "settings", "timeline"]
+  "pages": ["index", "primitives", "overlays", "navigation", "workspace", "settings", "timeline", "agent-activity"]
 }
