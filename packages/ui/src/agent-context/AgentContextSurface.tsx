@@ -24,6 +24,7 @@ export type AgentContextSurfaceProps = Omit<
   onModeChange?: (mode: AgentContextMode) => void;
   floatingLabel?: string;
   collisionPadding?: number;
+  dismissOnInteractOutside?: boolean;
 };
 
 const spring = { type: "spring" as const, stiffness: 430, damping: 38, mass: 0.82 };
@@ -40,6 +41,7 @@ export function AgentContextSurface({
   onModeChange,
   floatingLabel = "Open as floating card",
   collisionPadding = 12,
+  dismissOnInteractOutside = mode === "anchored",
   className = "",
   ...props
 }: AgentContextSurfaceProps) {
@@ -63,6 +65,7 @@ export function AgentContextSurface({
       if (event.key === "Escape") onDismiss?.();
     };
     const onPointerDown = (event: PointerEvent) => {
+      if (!dismissOnInteractOutside) return;
       if (!surfaceRef.current?.contains(event.target as Node)) onDismiss?.();
     };
     window.addEventListener("keydown", onKeyDown);
@@ -71,7 +74,7 @@ export function AgentContextSurface({
       window.removeEventListener("keydown", onKeyDown);
       window.removeEventListener("pointerdown", onPointerDown, true);
     };
-  }, [open, onDismiss]);
+  }, [dismissOnInteractOutside, open, onDismiss]);
 
   const position = useMemo(() => {
     if (mode === "floating") {
@@ -89,6 +92,12 @@ export function AgentContextSurface({
       : Math.max(collisionPadding, (anchor?.y ?? desiredTop) - measuredSize.height - 8);
     return { left, top };
   }, [anchor?.x, anchor?.y, collisionPadding, measuredSize.height, measuredSize.width, mode]);
+  const dragConstraints = useMemo(() => ({
+    left: collisionPadding - position.left,
+    right: Math.max(0, window.innerWidth - position.left - measuredSize.width - collisionPadding),
+    top: collisionPadding - position.top,
+    bottom: Math.max(0, window.innerHeight - position.top - measuredSize.height - collisionPadding)
+  }), [collisionPadding, measuredSize.height, measuredSize.width, position.left, position.top]);
 
   if (typeof document === "undefined") return null;
 
@@ -110,6 +119,7 @@ export function AgentContextSurface({
           drag={mode === "floating"}
           dragControls={dragControls}
           dragListener={false}
+          dragConstraints={dragConstraints}
           dragMomentum={false}
           dragElastic={0.04}
           {...props}
