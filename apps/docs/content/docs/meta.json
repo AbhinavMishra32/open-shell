@@ -1,4 +1,4 @@
 {
   "title": "Opaline UI",
-  "pages": ["index"]
+  "pages": ["index", "getting-started", "components", "systems", "examples"]
 }

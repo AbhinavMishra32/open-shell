@@ -1,0 +1,32 @@
+---
+title: Installation
+description: Install Opaline from npm and add its shared styles.
+---
+
+## npm package
+
+```bash
+npm install @opaline/ui react react-dom
+```
+
+Import the stylesheet once near the root of your application:
+
+```tsx
+import "@opaline/ui/styles.css";
+```
+
+Then import components from the package boundary:
+
+```tsx
+import { AppShell, Button, Composer, Sidebar } from "@opaline/ui";
+```
+
+Opaline keeps React and React DOM as peer dependencies. Radix, Lucide, motion, and terminal dependencies
+used by the package are installed with `@opaline/ui`.
+
+## Start small
+
+<ComponentPreview name="buttons" />
+
+Every surface accepts normal React props and remains compatible with your state layer, router, data client,
+and application domain.
