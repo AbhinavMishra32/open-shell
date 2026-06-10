@@ -29,6 +29,15 @@ export type {
   AgentSuggestionProps,
   AgentThinkingProps,
 } from "./agent-activity/AgentActivity";
+export { AgentContextAction, AgentContextSources, AgentContextSurface } from "./agent-context/AgentContextSurface";
+export type {
+  AgentContextActionProps,
+  AgentContextAnchor,
+  AgentContextMode,
+  AgentContextSource,
+  AgentContextStage,
+  AgentContextSurfaceProps,
+} from "./agent-context/AgentContextSurface";
 export { SlotPanel } from "./slot-panel/SlotPanel";
 export type { SlotTab, SlotPanelHandle, SlotPanelProps, SlotLauncherItem } from "./slot-panel/SlotPanel";
 export {
