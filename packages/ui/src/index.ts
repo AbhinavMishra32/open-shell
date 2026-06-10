@@ -20,6 +20,14 @@ export {
   AppShellTabStrip,
 } from "./app-shell/AppShell";
 export type { AppShellProps, AppShellState, AppShellTabItem } from "./app-shell/AppShell";
+export { AgentActivity, AgentSuggestion, AgentThinking } from "./agent-activity/AgentActivity";
+export type {
+  AgentActivityEntry,
+  AgentActivityProps,
+  AgentActivityStatus,
+  AgentSuggestionProps,
+  AgentThinkingProps,
+} from "./agent-activity/AgentActivity";
 export { SlotPanel } from "./slot-panel/SlotPanel";
 export type { SlotTab, SlotPanelHandle, SlotPanelProps, SlotLauncherItem } from "./slot-panel/SlotPanel";
 export {
@@ -117,6 +125,7 @@ export {
 } from "./primitives/DropdownMenu";
 export {
   Sidebar,
+  SidebarBottomSlot,
   SidebarFooter,
   SidebarNavItemRow,
   SidebarPrimary,
@@ -126,6 +135,7 @@ export {
   SidebarThreadRow,
 } from "./sidebar/Sidebar";
 export type { SidebarItem, SidebarNavItem, SidebarProject, SidebarProps } from "./sidebar/Sidebar";
+export type { SidebarBottomSlotProps } from "./sidebar/Sidebar";
 export { appActionAttributeNames, appActionAttributes } from "./sidebar/appActionAttributes";
 export { ThreadMessageRow, ThreadSurface } from "./thread/ThreadSurface";
 export type { ThreadMessage, ThreadSurfaceProps } from "./thread/ThreadSurface";

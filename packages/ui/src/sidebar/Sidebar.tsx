@@ -1,4 +1,5 @@
-import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode } from "react";
+import type { ButtonHTMLAttributes, CSSProperties, HTMLAttributes, PointerEvent as ReactPointerEvent, ReactNode } from "react";
+import { useRef, useState } from "react";
 import { appActionAttributes } from "./appActionAttributes";
 import "./sidebar.css";
 
@@ -122,6 +123,81 @@ export function SidebarFooter({ children, className, ...props }: HTMLAttributes<
   return (
     <div className={joinClassNames("opaline-sidebar-footer", className)} {...props}>
       {children}
+    </div>
+  );
+}
+
+export type SidebarBottomSlotProps = HTMLAttributes<HTMLDivElement> & {
+  children: ReactNode;
+  collapsed?: boolean;
+  defaultCollapsed?: boolean;
+  defaultHeight?: number;
+  header: ReactNode;
+  maxHeight?: number;
+  minHeight?: number;
+  onCollapsedChange?: (collapsed: boolean) => void;
+};
+
+export function SidebarBottomSlot({
+  children,
+  className,
+  collapsed,
+  defaultCollapsed = false,
+  defaultHeight = 240,
+  header,
+  maxHeight = 520,
+  minHeight = 120,
+  onCollapsedChange,
+  style,
+  ...props
+}: SidebarBottomSlotProps) {
+  const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
+  const [height, setHeight] = useState(defaultHeight);
+  const dragRef = useRef<{ pointerId: number; startHeight: number; startY: number } | null>(null);
+  const isControlled = collapsed !== undefined;
+  const isCollapsed = isControlled ? collapsed : internalCollapsed;
+
+  function setCollapsed(next: boolean) {
+    if (!isControlled) setInternalCollapsed(next);
+    onCollapsedChange?.(next);
+  }
+
+  function beginResize(event: ReactPointerEvent<HTMLDivElement>) {
+    if (isCollapsed) return;
+    dragRef.current = { pointerId: event.pointerId, startHeight: height, startY: event.clientY };
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function resize(event: ReactPointerEvent<HTMLDivElement>) {
+    const drag = dragRef.current;
+    if (!drag || drag.pointerId !== event.pointerId) return;
+    setHeight(Math.max(minHeight, Math.min(maxHeight, drag.startHeight + drag.startY - event.clientY)));
+  }
+
+  function endResize(event: ReactPointerEvent<HTMLDivElement>) {
+    if (dragRef.current?.pointerId !== event.pointerId) return;
+    dragRef.current = null;
+    event.currentTarget.releasePointerCapture(event.pointerId);
+  }
+
+  return (
+    <div
+      className={joinClassNames("opaline-sidebar-bottom-slot", className)}
+      data-collapsed={isCollapsed ? "true" : "false"}
+      style={{ ...style, "--opaline-sidebar-slot-height": `${height}px` } as CSSProperties}
+      {...props}
+    >
+      <div
+        className="opaline-sidebar-bottom-slot-resize"
+        onPointerDown={beginResize}
+        onPointerMove={resize}
+        onPointerCancel={endResize}
+        onPointerUp={endResize}
+      />
+      <button className="opaline-sidebar-bottom-slot-header" type="button" aria-expanded={!isCollapsed} onClick={() => setCollapsed(!isCollapsed)}>
+        {header}
+      </button>
+      <div className="opaline-sidebar-bottom-slot-content">{children}</div>
     </div>
   );
 }
