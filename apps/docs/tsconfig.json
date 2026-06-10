@@ -25,6 +25,12 @@
     "paths": {
       "@/*": [
         "./*"
+      ],
+      "@opaline/ui": [
+        "../../packages/ui/src/index.ts"
+      ],
+      "collections/*": [
+        "./.source/*"
       ]
     }
   },
@@ -34,6 +40,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
+    ,
+    ".source/**/*.ts"
   ],
   "exclude": [
     "node_modules"

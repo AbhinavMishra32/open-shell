@@ -12,8 +12,8 @@
   "scripts": {
     "build": "turbo run build",
     "dev": "npm run build -w @opaline/ui && turbo run dev --filter=@opaline/electron-example",
-    "docs:build": "npm run build -w @opaline/ui && npm run build -w @opaline/docs",
-    "docs:dev": "npm run build -w @opaline/ui && npm run dev -w @opaline/docs",
+    "docs:build": "npm run build -w @opaline/docs",
+    "docs:dev": "npm run dev -w @opaline/docs",
     "docs:start": "npm run start -w @opaline/docs",
     "install:ui": "node scripts/install-opaline-ui.mjs",
     "start": "npm run build -w @opaline/ui && npm run start -w @opaline/electron-example",

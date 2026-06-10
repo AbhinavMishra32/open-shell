@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { RootProvider } from "fumadocs-ui/provider/next";
 import "fumadocs-ui/css/neutral.css";
 import "fumadocs-ui/css/preset.css";
-import "@opaline/ui/styles.css";
+import "../../../packages/ui/src/styles.css";
 import "./globals.css";
 
 export const metadata: Metadata = {

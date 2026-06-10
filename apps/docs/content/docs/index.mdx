@@ -1,0 +1,26 @@
+---
+title: Opaline UI
+description: Desktop-grade React primitives and shell systems for agentic software.
+---
+
+Opaline is a component system for building high-context applications: agent workspaces, editors,
+review surfaces, operational tools, and desktop shells. Components are designed to compose into a
+product rather than dictate one.
+
+## Start here
+
+```bash
+npm install @opaline/ui
+```
+
+```tsx
+import { Button } from "@opaline/ui";
+import "@opaline/ui/styles.css";
+
+export function SaveAction() {
+  return <Button>Save changes</Button>;
+}
+```
+
+The examples in these docs render the same source files used by the npm package. During local
+development, edits under `packages/ui/src` appear here immediately.

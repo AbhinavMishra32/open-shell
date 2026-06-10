@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
-import { docsTree } from "@/lib/docs-tree";
+import { source } from "@/lib/source";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
     <DocsLayout
-      tree={docsTree}
+      tree={source.getPageTree()}
       nav={{
         title: (
           <span className="docs-brand-lockup">
