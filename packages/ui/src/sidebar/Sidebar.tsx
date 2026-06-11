@@ -1,5 +1,6 @@
 import type { ButtonHTMLAttributes, CSSProperties, HTMLAttributes, PointerEvent as ReactPointerEvent, ReactNode } from "react";
 import { useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { appActionAttributes } from "./appActionAttributes";
 import "./sidebar.css";
 
@@ -246,7 +247,10 @@ export function SidebarProjectRow({
   project: SidebarProject;
   renderItem?: (item: SidebarItem, options: { inset: boolean }) => ReactNode;
 }) {
+  const reduceMotion = useReducedMotion();
   const label = typeof project.label === "string" ? project.label : project.labelForAttributes ?? project.id;
+  const expanded = project.collapsed !== true && project.threads != null;
+  const transition = reduceMotion ? { duration: 0 } : { type: "spring" as const, duration: 0.28, bounce: 0.02 };
 
   return (
     <div
@@ -271,16 +275,27 @@ export function SidebarProjectRow({
         ) : null}
         <span className="opaline-sidebar-project-title">{project.label}</span>
       </button>
-      {project.collapsed === true || project.threads == null ? null : (
-        <div
-          className="opaline-sidebar-project-list"
-          {...appActionAttributes.sidebarProjectList({ projectId: project.id, showAll: false })}
-        >
-          {project.threads.map((item) => (
-            renderItem?.(item, { inset: true }) ?? <SidebarThreadRow key={item.id} item={item} inset />
-          ))}
-        </div>
-      )}
+      <AnimatePresence initial={false}>
+        {expanded ? (
+          <motion.div
+            key={`${project.id}:items`}
+            className="opaline-sidebar-project-list-shell"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={transition}
+          >
+            <div
+              className="opaline-sidebar-project-list"
+              {...appActionAttributes.sidebarProjectList({ projectId: project.id, showAll: false })}
+            >
+              {project.threads?.map((item) => (
+                renderItem?.(item, { inset: true }) ?? <SidebarThreadRow key={item.id} item={item} inset />
+              ))}
+            </div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
     </div>
   );
 }

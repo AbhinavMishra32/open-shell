@@ -1,4 +1,5 @@
 import type { CSSProperties, ReactNode } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ContextMenu, ContextMenuTrigger } from "../primitives/ContextMenu";
 import "./file-tree.css";
 
@@ -145,7 +146,12 @@ function FileTreeRow({
   showActions: boolean;
   renderRowContextMenu?: (item: FileTreeItem) => ReactNode;
 }) {
+  const reduceMotion = useReducedMotion();
   const isDirectory = item.type === "directory" || item.children != null;
+  const isExpanded = item.expanded !== false;
+  const disclosureTransition = reduceMotion
+    ? { duration: 0 }
+    : { type: "spring" as const, duration: 0.28, bounce: 0.02 };
   const iconName = isDirectory ? "file-tree-icon-chevron" : item.locked === true ? "file-tree-icon-lock" : "file-tree-icon-file";
   const iconToken = getIconToken(item.name, isDirectory);
 
@@ -251,9 +257,11 @@ function FileTreeRow({
       ))}
       {isDirectory ? (
         <span className="opaline-file-tree-chevron-container">
-          <svg data-icon-name="file-tree-icon-chevron" aria-hidden="true">
-            <use href="#file-tree-icon-chevron" />
-          </svg>
+          <motion.span initial={false} animate={{ rotate: isExpanded ? 0 : -90 }} transition={disclosureTransition}>
+            <svg data-icon-name="file-tree-icon-chevron" aria-hidden="true">
+              <use href="#file-tree-icon-chevron" />
+            </svg>
+          </motion.span>
         </span>
       ) : (
         <span className="opaline-file-tree-chevron-spacer" />
@@ -293,24 +301,34 @@ function FileTreeRow({
         buttonElement
       )}
       {isDirectory ? (
-        <div
-          className="opaline-file-tree-submenu"
-          data-open={item.expanded !== false ? "true" : "false"}
-        >
-          {item.children?.map((child) => (
-            <FileTreeRow
-              gitLane={gitLane}
-              key={child.path}
-              item={child}
-              level={level + 1}
-              onNodeClick={onNodeClick}
-              onSelectionChange={onSelectionChange}
-              onSelectPath={onSelectPath}
-              showActions={showActions}
-              renderRowContextMenu={renderRowContextMenu}
-            />
-          ))}
-        </div>
+        <AnimatePresence initial={false}>
+          {isExpanded ? (
+            <motion.div
+              key={`${item.path}:children`}
+              className="opaline-file-tree-submenu"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: "auto", opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={disclosureTransition}
+            >
+              <div className="opaline-file-tree-submenu-content">
+                {item.children?.map((child) => (
+                  <FileTreeRow
+                    gitLane={gitLane}
+                    key={child.path}
+                    item={child}
+                    level={level + 1}
+                    onNodeClick={onNodeClick}
+                    onSelectionChange={onSelectionChange}
+                    onSelectPath={onSelectPath}
+                    showActions={showActions}
+                    renderRowContextMenu={renderRowContextMenu}
+                  />
+                ))}
+              </div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>
       ) : null}
     </>
   );
