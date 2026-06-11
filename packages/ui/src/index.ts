@@ -38,6 +38,16 @@ export type {
   AgentContextStage,
   AgentContextSurfaceProps,
 } from "./agent-context/AgentContextSurface";
+export {
+  AdaptiveSidecarLayout,
+  AdaptiveSidecarSurface,
+  getAdaptiveSidecarMode,
+} from "./adaptive-sidecar/AdaptiveSidecar";
+export type {
+  AdaptiveSidecarLayoutProps,
+  AdaptiveSidecarMode,
+  AdaptiveSidecarSurfaceProps,
+} from "./adaptive-sidecar/AdaptiveSidecar";
 export { SlotPanel } from "./slot-panel/SlotPanel";
 export type { SlotTab, SlotPanelHandle, SlotPanelProps, SlotLauncherItem } from "./slot-panel/SlotPanel";
 export {
