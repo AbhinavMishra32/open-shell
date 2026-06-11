@@ -1,6 +1,6 @@
 import { AnimatePresence, motion, useDragControls, useReducedMotion } from "framer-motion";
 import { ChevronDown, ChevronUp, Pin, PinOff, X } from "lucide-react";
-import type { HTMLAttributes, PointerEvent as ReactPointerEvent, ReactNode, RefObject } from "react";
+import type { CSSProperties, HTMLAttributes, PointerEvent as ReactPointerEvent, ReactNode, RefObject } from "react";
 import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from "react";
 import "./adaptive-sidecar.css";
 
@@ -105,7 +105,7 @@ export function AdaptiveSidecarLayout({
         ...style,
         "--opaline-sidecar-width": `${sidecarWidth}px`,
         "--opaline-sidecar-gap": `${gap}px`,
-      } as React.CSSProperties}
+      } as CSSProperties}
       {...props}
     >
       <motion.div
