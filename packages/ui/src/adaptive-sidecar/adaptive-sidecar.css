@@ -35,6 +35,8 @@
   position: absolute;
   top: 12px;
   right: 12px;
+  bottom: 12px;
+  max-height: none;
 }
 
 .opaline-adaptive-sidecar-layout[data-mode="gutter"] .opaline-adaptive-sidecar-rail[data-inline="true"] {
@@ -57,9 +59,12 @@
   border-radius: 24px;
   color: var(--opaline-text-primary);
   background: var(--opaline-bg-elevated);
-  box-shadow: var(--opaline-shadow-md, 0 3px 10px rgb(0 0 0 / 0.12));
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.09), 0 0 0 0.5px rgb(0 0 0 / 0.025);
   user-select: none;
 }
+
+.opaline-adaptive-sidecar-surface[data-draggable="true"] .opaline-adaptive-sidecar-header { cursor: grab; touch-action: none; }
+.opaline-adaptive-sidecar-surface[data-draggable="true"] .opaline-adaptive-sidecar-header:active { cursor: grabbing; }
 
 .opaline-adaptive-sidecar-header {
   display: flex;

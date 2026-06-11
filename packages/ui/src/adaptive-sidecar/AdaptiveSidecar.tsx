@@ -1,7 +1,7 @@
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { AnimatePresence, motion, useDragControls, useReducedMotion } from "framer-motion";
 import { ChevronDown, ChevronUp, Pin, PinOff, X } from "lucide-react";
-import type { HTMLAttributes, ReactNode } from "react";
-import { useLayoutEffect, useMemo, useRef, useState } from "react";
+import type { HTMLAttributes, PointerEvent as ReactPointerEvent, ReactNode, RefObject } from "react";
+import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from "react";
 import "./adaptive-sidecar.css";
 
 export type AdaptiveSidecarMode = "overlay" | "shift" | "gutter";
@@ -29,6 +29,7 @@ export type AdaptiveSidecarSurfaceProps = Omit<
   footer?: ReactNode;
   collapsed?: boolean;
   pinned?: boolean;
+  draggable?: boolean;
   onCollapsedChange?: (collapsed: boolean) => void;
   onPinnedChange?: (pinned: boolean) => void;
   onClose?: () => void;
@@ -44,6 +45,7 @@ const SIDE_GAP = 16;
 const OVERLAY_THRESHOLD = 1096;
 const GUTTER_THRESHOLD = 1536;
 const panelSpring = { type: "spring" as const, duration: 0.3, bounce: 0.01 };
+const SidecarBoundsContext = createContext<RefObject<HTMLElement | null> | null>(null);
 
 export function getAdaptiveSidecarMode(
   width: number,
@@ -70,6 +72,7 @@ export function AdaptiveSidecarLayout({
   ...props
 }: AdaptiveSidecarLayoutProps) {
   const rootRef = useRef<HTMLDivElement | null>(null);
+  const railRef = useRef<HTMLElement | null>(null);
   const [width, setWidth] = useState(0);
   const reduceMotion = useReducedMotion();
 
@@ -113,21 +116,24 @@ export function AdaptiveSidecarLayout({
         {children}
       </motion.div>
       {keepMounted || open ? (
-        <motion.aside
-          className="opaline-adaptive-sidecar-rail"
-          data-inline={inline ? "true" : "false"}
-          data-visible={open ? "true" : "false"}
-          aria-hidden={!open}
-          initial={false}
-          animate={{
-            opacity: open ? 1 : 0,
-            translateX: open ? 0 : "100%",
-            scale: open ? 1 : 0.8,
-          }}
-          transition={transition}
-        >
-          {sidecar}
-        </motion.aside>
+        <SidecarBoundsContext.Provider value={railRef}>
+          <motion.aside
+            ref={railRef}
+            className="opaline-adaptive-sidecar-rail"
+            data-inline={inline ? "true" : "false"}
+            data-visible={open ? "true" : "false"}
+            aria-hidden={!open}
+            initial={false}
+            animate={{
+              opacity: open ? 1 : 0,
+              translateX: open ? 0 : "100%",
+              scale: open ? 1 : 0.8,
+            }}
+            transition={transition}
+          >
+            {sidecar}
+          </motion.aside>
+        </SidecarBoundsContext.Provider>
       ) : null}
     </div>
   );
@@ -141,6 +147,7 @@ export function AdaptiveSidecarSurface({
   footer,
   collapsed = false,
   pinned = false,
+  draggable = false,
   onCollapsedChange,
   onPinnedChange,
   onClose,
@@ -153,6 +160,8 @@ export function AdaptiveSidecarSurface({
   ...props
 }: AdaptiveSidecarSurfaceProps) {
   const reduceMotion = useReducedMotion();
+  const dragControls = useDragControls();
+  const dragBounds = useContext(SidecarBoundsContext);
   const transition = reduceMotion ? { duration: 0 } : panelSpring;
 
   return (
@@ -161,10 +170,22 @@ export function AdaptiveSidecarSurface({
       className={`opaline-adaptive-sidecar-surface ${className}`.trim()}
       data-collapsed={collapsed ? "true" : "false"}
       data-pinned={pinned ? "true" : "false"}
+      data-draggable={draggable ? "true" : "false"}
       transition={transition}
+      drag={draggable ? "y" : false}
+      dragControls={dragControls}
+      dragListener={false}
+      dragMomentum={false}
+      dragElastic={0.035}
+      dragConstraints={dragBounds ?? undefined}
       {...props}
     >
-      <header className="opaline-adaptive-sidecar-header">
+      <header
+        className="opaline-adaptive-sidecar-header"
+        onPointerDown={(event: ReactPointerEvent<HTMLElement>) => {
+          if (draggable && !(event.target as HTMLElement).closest("button, a")) dragControls.start(event);
+        }}
+      >
         <div className="opaline-adaptive-sidecar-heading">
           {eyebrow ? <span>{eyebrow}</span> : null}
           <strong>{title}</strong>
