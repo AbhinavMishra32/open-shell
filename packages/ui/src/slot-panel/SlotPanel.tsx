@@ -7,7 +7,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../primitives/DropdownMenu";
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
 import "./slot-panel.css";
 
 // ---------------------------------------------------------------------------
@@ -94,6 +94,8 @@ export interface SlotPanelProps {
   className?: string;
   /** Keep inactive content mounted so terminals and long-running tools continue. */
   keepMounted?: boolean;
+  /** Render one persistent content outlet driven by the active tab. */
+  outlet?: ReactNode;
   /** Optional close button handler. If provided, a close `×` button is shown in the tab bar. */
   onClose?: () => void;
   /** Callback fired when the active tab changes (user clicks a different tab). */
@@ -142,6 +144,7 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
     launcherItems = [],
     className,
     keepMounted = true,
+    outlet,
     onClose,
     onTabChange,
     onActiveTabChange,
@@ -390,7 +393,7 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
                 aria-label="Close panel"
                 onClick={onClose}
               >
-                ×
+                <X size={14} strokeWidth={1.9} />
               </button>
             </div>
           )}
@@ -430,6 +433,8 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
               </div>
             </div>
           </div>
+        ) : outlet !== undefined ? (
+          <div className="opaline-slot-panel-outlet">{outlet}</div>
         ) : (
           openTabs.map((tab) => (
             <Tabs.Content

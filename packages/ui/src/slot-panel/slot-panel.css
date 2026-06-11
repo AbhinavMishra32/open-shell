@@ -196,6 +196,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  margin-left: auto;
 }
 
 .opaline-slot-panel-close-action {
@@ -208,10 +209,13 @@
   background: transparent;
   color: var(--opaline-text-secondary);
   cursor: pointer;
-  font-size: 16px;
   transition:
     background-color var(--transition-duration-basic, 120ms) var(--cubic-enter, ease),
     color var(--transition-duration-basic, 120ms) var(--cubic-enter, ease);
+}
+
+.opaline-slot-panel-close-action svg {
+  pointer-events: none;
 }
 
 .opaline-slot-panel-close-action:hover {

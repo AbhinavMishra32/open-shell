@@ -218,7 +218,7 @@ function renderPreview(name: PreviewName) {
     case "composer":
       return <PreviewStage><div className="docs-composer-demo"><Composer placeholder="Ask the agent to inspect this workspace..." /></div></PreviewStage>;
     case "slot-panel":
-      return <PreviewStage size="wide"><SlotPanel tabs={[{ id: "terminal", title: "Terminal", icon: <Terminal size={14} />, content: <TerminalSurface cwd="~/opaline">npm run docs:dev</TerminalSurface> }, { id: "files", title: "Files", icon: <Folder size={14} />, content: <FileTree items={files} /> }]} /></PreviewStage>;
+      return <PreviewStage size="wide"><SlotPanel tabs={[{ id: "terminal", title: "Terminal", icon: <Terminal size={14} />, content: <TerminalSurface cwd="~/opaline">npm run docs:dev</TerminalSurface> }, { id: "files", title: "Files", icon: <Folder size={14} />, content: <FileTree items={files} /> }]} onClose={() => undefined} /></PreviewStage>;
     case "app-shell":
       return <ShellDemo />;
   }

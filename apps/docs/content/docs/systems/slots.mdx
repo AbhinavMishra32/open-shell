@@ -11,3 +11,15 @@ preview, database inspector, documentation, or an application-specific tool.
 The imperative handle supports `addTab`, `closeTab`, `setActiveTab`, and `getTabs`. Controlled active state
 and callbacks let applications connect slots to shell history. `keepMounted` preserves expensive or
 stateful tools while another tab is visible.
+
+Use `outlet` when many tabs drive one persistent surface, such as a code editor switching document
+models. Leave it unset when each tab owns independent state, such as terminal sessions.
+
+```tsx
+<SlotPanel
+  activeTabId={activeDocumentId}
+  tabs={documents}
+  outlet={<CodeEditor documentId={activeDocumentId} />}
+  onClose={() => setEditorOpen(false)}
+/>
+```
