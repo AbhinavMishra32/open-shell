@@ -25,6 +25,7 @@ export type AdaptiveSidecarSurfaceProps = Omit<
   title: ReactNode;
   eyebrow?: ReactNode;
   children?: ReactNode;
+  actions?: ReactNode;
   footer?: ReactNode;
   collapsed?: boolean;
   pinned?: boolean;
@@ -136,6 +137,7 @@ export function AdaptiveSidecarSurface({
   title,
   eyebrow,
   children,
+  actions,
   footer,
   collapsed = false,
   pinned = false,
@@ -168,6 +170,7 @@ export function AdaptiveSidecarSurface({
           <strong>{title}</strong>
         </div>
         <div className="opaline-adaptive-sidecar-actions">
+          {actions}
           {onCollapsedChange ? (
             <button
               type="button"
