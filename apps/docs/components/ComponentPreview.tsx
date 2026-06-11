@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Clock, FileCode2, Folder, Settings, Terminal } from "lucide-react";
+import { Bookmark, Check, Clock, FileCode2, Folder, Settings, Terminal } from "lucide-react";
 import {
+  AdaptiveSidecarLayout,
+  AdaptiveSidecarSurface,
   AppShell,
   AgentActivity,
   AgentSuggestion,
@@ -47,6 +49,7 @@ import type { FileTreeItem, ShellHistoryEntry, SidebarProject, TimelineItem } fr
 
 type PreviewName =
   | "agent-activity"
+  | "adaptive-sidecar"
   | "app-shell"
   | "buttons"
   | "composer"
@@ -93,6 +96,25 @@ const files: FileTreeItem[] = [
 ];
 
 const snippets: Record<PreviewName, string> = {
+  "adaptive-sidecar": `import { AdaptiveSidecarLayout, AdaptiveSidecarSurface } from "@opaline/ui";
+
+<AdaptiveSidecarLayout
+  open={open}
+  pinned={pinned}
+  sidecar={
+    <AdaptiveSidecarSurface
+      eyebrow="Knowledge"
+      title="Runtime validation"
+      pinned={pinned}
+      onPinnedChange={setPinned}
+      onClose={() => setOpen(false)}
+    >
+      Model-generated arguments remain untrusted until the runtime validates them.
+    </AdaptiveSidecarSurface>
+  }
+>
+  <Workspace />
+</AdaptiveSidecarLayout>`,
   "agent-activity": `import { AgentActivity, AgentSuggestion } from "@opaline/ui";
 
 <AgentActivity
@@ -193,6 +215,8 @@ export function ComponentPreview({ name, slug }: { name?: PreviewName; slug?: Pr
 
 function renderPreview(name: PreviewName) {
   switch (name) {
+    case "adaptive-sidecar":
+      return <AdaptiveSidecarDemo />;
     case "agent-activity":
       return <PreviewStage><div className="docs-agent-activity-demo"><AgentActivity status="active" label="Checking project structure" detail="Building a recoverable block tree" defaultOpen entries={[{ id: "read", title: "Read project tape", detail: "3,406 tokens", status: "complete" }, { id: "grammar", title: "Check tape-0.3 grammar", detail: "Applying deterministic repairs", status: "active" }, { id: "review", title: "Prepare optional suggestions", status: "pending" }]} /><AgentSuggestion title="Add a concept card" description="The recall uses WebAuthn before it is introduced." actionLabel="Apply" onAction={() => undefined} /></div></PreviewStage>;
     case "buttons":
@@ -222,6 +246,45 @@ function renderPreview(name: PreviewName) {
     case "app-shell":
       return <ShellDemo />;
   }
+}
+
+function AdaptiveSidecarDemo() {
+  const [open, setOpen] = useState(true);
+  const [pinned, setPinned] = useState(true);
+  const [collapsed, setCollapsed] = useState(false);
+  return (
+    <div className="docs-preview-stage docs-sidecar-stage" data-size="wide">
+      <AdaptiveSidecarLayout
+        open={open}
+        pinned={pinned}
+        className="docs-sidecar-layout"
+        sidecar={(
+          <AdaptiveSidecarSurface
+            eyebrow="Knowledge"
+            title="Runtime validation"
+            collapsed={collapsed}
+            pinned={pinned}
+            onCollapsedChange={setCollapsed}
+            onPinnedChange={setPinned}
+            onClose={() => setOpen(false)}
+            footer={<Button variant="secondary" onClick={() => setOpen(false)}><Bookmark size={14} /> Save concept</Button>}
+          >
+            <p>Model-generated arguments remain untrusted until the runtime validates them against an executable schema.</p>
+            <hr />
+            <strong>Why it matters</strong>
+            <p>The schema is the boundary between probabilistic model output and real application code.</p>
+          </AdaptiveSidecarSurface>
+        )}
+      >
+        <div className="docs-sidecar-workspace">
+          <span>Workspace</span>
+          <h3>Validated tool contracts</h3>
+          <p>The main surface shifts only when enough room exists. Narrow layouts use an overlay automatically.</p>
+          {!open ? <Button variant="primary" onClick={() => setOpen(true)}>Open knowledge</Button> : null}
+        </div>
+      </AdaptiveSidecarLayout>
+    </div>
+  );
 }
 
 function PreviewStage({ children, size }: { children: React.ReactNode; size?: "wide" }) {

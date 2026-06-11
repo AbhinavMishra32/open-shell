@@ -15,6 +15,7 @@ export type AdaptiveSidecarLayoutProps = HTMLAttributes<HTMLDivElement> & {
   gap?: number;
   overlayThreshold?: number;
   gutterThreshold?: number;
+  keepMounted?: boolean;
 };
 
 export type AdaptiveSidecarSurfaceProps = Omit<
@@ -62,6 +63,7 @@ export function AdaptiveSidecarLayout({
   gap = SIDE_GAP,
   overlayThreshold = OVERLAY_THRESHOLD,
   gutterThreshold = GUTTER_THRESHOLD,
+  keepMounted = true,
   className = "",
   style,
   ...props
@@ -109,21 +111,23 @@ export function AdaptiveSidecarLayout({
       >
         {children}
       </motion.div>
-      <AnimatePresence initial={false}>
-        {open ? (
-          <motion.aside
-            key={`${mode}:${inline ? "inline" : "overlay"}`}
-            className="opaline-adaptive-sidecar-rail"
-            data-inline={inline ? "true" : "false"}
-            initial={{ opacity: 0, x: 12, scale: 0.985 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 8, scale: 0.99 }}
-            transition={transition}
-          >
-            {sidecar}
-          </motion.aside>
-        ) : null}
-      </AnimatePresence>
+      {keepMounted || open ? (
+        <motion.aside
+          className="opaline-adaptive-sidecar-rail"
+          data-inline={inline ? "true" : "false"}
+          data-visible={open ? "true" : "false"}
+          aria-hidden={!open}
+          initial={false}
+          animate={{
+            opacity: open ? 1 : 0,
+            translateX: open ? 0 : "100%",
+            scale: open ? 1 : 0.8,
+          }}
+          transition={transition}
+        >
+          {sidecar}
+        </motion.aside>
+      ) : null}
     </div>
   );
 }

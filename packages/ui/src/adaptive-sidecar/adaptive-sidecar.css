@@ -24,7 +24,11 @@
   max-height: calc(100% - 24px);
   align-self: start;
   justify-self: end;
+  transform-origin: top right;
+  pointer-events: none;
 }
+
+.opaline-adaptive-sidecar-rail[data-visible="true"] { pointer-events: auto; }
 
 .opaline-adaptive-sidecar-rail[data-inline="false"],
 .opaline-adaptive-sidecar-layout[data-mode="shift"] .opaline-adaptive-sidecar-rail {

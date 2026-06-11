@@ -160,6 +160,15 @@ pre {
   min-height: 25rem;
 }
 
+.docs-sidecar-stage { display: block; width: 100%; padding: 1rem; }
+.docs-sidecar-layout { min-height: 25rem; border: 1px solid rgb(var(--fd-border)); border-radius: 8px; background: rgb(var(--fd-card)); }
+.docs-sidecar-workspace { display: grid; min-height: 25rem; align-content: center; gap: 0.7rem; padding: 3rem; }
+.docs-sidecar-workspace > span { color: rgb(var(--fd-muted-foreground)); font-size: 0.78rem; font-weight: 650; text-transform: uppercase; }
+.docs-sidecar-workspace h3, .docs-sidecar-workspace p { max-width: 30rem; margin: 0; }
+.docs-sidecar-workspace p, .opaline-adaptive-sidecar-scroll p { color: var(--opaline-text-secondary); line-height: 1.55; }
+.opaline-adaptive-sidecar-scroll hr { border: 0; border-top: 1px solid var(--opaline-border-subtle); margin: 1rem 0; }
+.opaline-adaptive-sidecar-footer .opaline-button { width: 100%; }
+
 .docs-preview-toolbar {
   display: flex;
   align-items: center;
