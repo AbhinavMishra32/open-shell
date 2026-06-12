@@ -6,9 +6,10 @@
   display: grid;
   height: 100%;
   min-height: 0;
-  grid-template-rows: 36px minmax(0, 1fr);
+  grid-template-rows: 34px minmax(0, 1fr);
   overflow: hidden;
   contain: layout paint;
+  background: transparent;
 }
 
 .opaline-slot-panel-tabbar {
@@ -16,9 +17,9 @@
   min-width: 0;
   align-items: center;
   justify-content: space-between;
-  height: 36px;
-  padding: 0 10px 0 12px;
-  background: transparent;
+  height: 34px;
+  padding: 0 8px 0 10px;
+  background: color-mix(in srgb, var(--opaline-bg-primary) 95%, var(--opaline-bg-secondary));
   user-select: none;
 }
 
@@ -26,7 +27,7 @@
   position: relative;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 4px;
   min-width: 0;
   flex: 1;
   overflow: hidden;
@@ -77,14 +78,14 @@
   position: relative;
   display: inline-flex;
   max-width: 140px;
-  height: 28px;
+  height: 26px;
   min-width: 0;
   align-items: center;
   gap: 6px;
   overflow: hidden;
   border: 0;
   border-radius: 8px;
-  padding: 0 10px;
+  padding: 0 9px;
   color: var(--opaline-text-secondary);
   background: transparent;
   cursor: pointer;
@@ -100,7 +101,7 @@
 
 .opaline-slot-panel-tab[data-state="active"],
 .opaline-slot-panel-tab[data-active="true"] {
-  background: color-mix(in srgb, var(--opaline-text-primary) 7%, transparent);
+  background: color-mix(in srgb, var(--opaline-text-primary) 6%, transparent);
   color: var(--opaline-text-primary);
   box-shadow: none;
 }
@@ -131,25 +132,27 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
-  width: 17px;
-  height: 17px;
+  width: 20px;
+  height: 20px;
   border-radius: 999px;
-  background: color-mix(in srgb, var(--opaline-text-primary) 18%, transparent);
-  color: color-mix(in srgb, var(--opaline-text-primary) 72%, transparent);
+  background: transparent;
+  color: color-mix(in srgb, var(--opaline-text-primary) 74%, transparent);
   cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .opaline-slot-panel-tab-close:hover {
-  background: color-mix(in srgb, var(--opaline-text-primary) 28%, transparent);
+  background: color-mix(in srgb, var(--opaline-text-primary) 16%, transparent);
   color: var(--opaline-text-primary);
 }
 
 .opaline-slot-panel-tab-close svg {
-  width: 9px;
-  height: 9px;
+  width: 7px;
+  height: 7px;
 }
 
 .opaline-slot-panel-tab[data-closable="true"]:hover .opaline-slot-panel-tab-icon {
@@ -157,7 +160,8 @@
 }
 
 .opaline-slot-panel-tab[data-closable="true"]:hover .opaline-slot-panel-tab-close {
-  display: flex;
+  opacity: 1;
+  pointer-events: auto;
 }
 
 .opaline-slot-panel-tab-title {
@@ -170,8 +174,8 @@
 /* Add button */
 .opaline-slot-panel-add-action {
   display: grid;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   place-items: center;
   border: 0;
   border-radius: 8px;
@@ -195,14 +199,14 @@
 .opaline-slot-panel-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   margin-left: auto;
 }
 
 .opaline-slot-panel-close-action {
   display: inline-grid;
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   place-items: center;
   border: 0;
   border-radius: 8px;

@@ -11,6 +11,7 @@ export {
   AppShellHeaderContextSurface,
   AppShellHeaderPillButton,
   AppShellHeaderToolButton,
+  AppShellNavigationControls,
   AppShellRightPanel,
   AppShellSidebarChrome,
   AppShellTab,

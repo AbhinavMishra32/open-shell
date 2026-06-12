@@ -19,12 +19,14 @@ export type AppShellTabItem = {
 export type AppShellState = {
   canNavigateBack: boolean;
   canNavigateForward: boolean;
+  canNavigateHome: boolean;
   history?: ShellHistoryController<any>;
   isBottomPanelOpen: boolean;
   isRightPanelOpen: boolean;
   isSidebarOpen: boolean;
   navigateBack: () => void;
   navigateForward: () => void;
+  navigateHome: () => void;
   setBottomPanelOpen: (open: boolean) => void;
   setRightPanelOpen: (open: boolean) => void;
   setSidebarOpen: (open: boolean) => void;
@@ -62,6 +64,7 @@ export type AppShellProps = {
   rightPanelMaxWidth?: number;
   onNavigateBack?: () => void;
   onNavigateForward?: () => void;
+  onNavigateHome?: () => void;
 };
 
 export type AppShellSlotProps = HTMLAttributes<HTMLDivElement>;
@@ -96,6 +99,7 @@ export function AppShell({
   rightPanelMaxWidth = 600,
   onNavigateBack,
   onNavigateForward,
+  onNavigateHome,
 }: AppShellProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(defaultSidebarOpen);
   const [sidebarWidth, setSidebarWidth] = useState(defaultSidebarWidth);
@@ -131,6 +135,9 @@ export function AppShell({
 
     history?.goForward();
   }, [history, onNavigateForward]);
+  const navigateHome = useCallback(() => {
+    onNavigateHome?.();
+  }, [onNavigateHome]);
 
   // Panels are toggled explicitly by the user — we no longer auto-open
   // them whenever their content slot changes.
@@ -138,12 +145,14 @@ export function AppShell({
   const shellState: AppShellState = {
     canNavigateBack: resolvedCanNavigateBack,
     canNavigateForward: resolvedCanNavigateForward,
+    canNavigateHome: onNavigateHome != null,
     history,
     isBottomPanelOpen,
     isRightPanelOpen,
     isSidebarOpen,
     navigateBack,
     navigateForward,
+    navigateHome,
     setBottomPanelOpen: setIsBottomPanelOpen,
     setRightPanelOpen: setIsRightPanelOpen,
     setSidebarOpen: setIsSidebarOpen,
@@ -338,17 +347,41 @@ export function AppShellSidebarChrome({ children, className, ...props }: AppShel
 }
 
 function DefaultSidebarChrome({ state }: { state: AppShellState }) {
+  return <AppShellNavigationControls state={state} />;
+}
+
+export function AppShellNavigationControls({
+  onHome,
+  state,
+  variant = "sidebar",
+}: {
+  onHome?: () => void;
+  state: AppShellState;
+  variant?: "collapsed" | "sidebar";
+}) {
+  const Control = variant === "collapsed" ? AppShellCollapsedSidebarTrigger : AppShellChromeButton;
+
   return (
     <>
-      <AppShellChromeButton aria-label={state.isSidebarOpen ? "Hide sidebar" : "Show sidebar"} onClick={state.toggleSidebar}>
+      <Control
+        aria-label={state.isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+        onClick={state.toggleSidebar}
+      >
         <SidebarToggleIcon />
-      </AppShellChromeButton>
-      <AppShellChromeButton aria-label="Back" disabled={!state.canNavigateBack} onClick={state.navigateBack}>
+      </Control>
+      <Control
+        aria-label="Home"
+        disabled={onHome == null && !state.canNavigateHome}
+        onClick={onHome ?? state.navigateHome}
+      >
+        <HomeIcon />
+      </Control>
+      <Control aria-label="Back" disabled={!state.canNavigateBack} onClick={state.navigateBack}>
         <BackIcon />
-      </AppShellChromeButton>
-      <AppShellChromeButton aria-label="Forward" disabled={!state.canNavigateForward} onClick={state.navigateForward}>
+      </Control>
+      <Control aria-label="Forward" disabled={!state.canNavigateForward} onClick={state.navigateForward}>
         <ForwardIcon />
-      </AppShellChromeButton>
+      </Control>
     </>
   );
 }
@@ -492,6 +525,15 @@ function SidebarToggleIcon() {
   return (
     <svg viewBox="0 0 20 20" aria-hidden="true">
       <path d="M6.83 4c-.45 0-.82.01-1.14.04-.39.03-.66.08-.88.16a2.9 2.9 0 0 0-1.56 1.47c-.13.25-.21.56-.25 1.08-.04.52-.04 1.19-.04 2.13v2.24c0 .94 0 1.61.04 2.13.04.52.12.83.25 1.08.3.59.78 1.06 1.37 1.34.22.08.49.13.88.16.32.03.69.04 1.14.04V4Zm1.33 11.99h3.97c.94 0 1.61 0 2.13-.04.52-.04.83-.12 1.08-.25.42-.22.76-.56.98-.98.13-.25.21-.56.25-1.08.04-.52.04-1.19.04-2.13V8.49c0-.94 0-1.61-.04-2.13-.04-.52-.12-.83-.25-1.08a2.6 2.6 0 0 0-.98-.98c-.25-.13-.56-.21-1.08-.25-.52-.04-1.19-.04-2.13-.04H8.16v11.98Z" />
+    </svg>
+  );
+}
+
+function HomeIcon() {
+  return (
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <path d="M3.5 9.25 10 4l6.5 5.25" />
+      <path d="M5.25 8.9v6.35c0 .2.16.36.36.36h2.82V11.6c0-.2.16-.36.36-.36h2.42c.2 0 .36.16.36.36v4.01h2.82c.2 0 .36-.16.36-.36V8.9" />
     </svg>
   );
 }

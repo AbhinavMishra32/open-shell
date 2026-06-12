@@ -9,13 +9,13 @@ import type { SlotTab, SlotPanelHandle, SlotLauncherItem } from "../slot-panel/S
 
 export { SlotPanel };
 
-const DEFAULT_BOTTOM_PANEL_HEIGHT = 280;
+const DEFAULT_BOTTOM_PANEL_HEIGHT = 240;
 
 /**
  * Clamps the bottom panel height between min/max limits based on current viewport height.
  */
 export function clampBottomPanelHeight(height: number, mainContentHeight: number) {
-  return Number.isFinite(height) ? Math.max(160, Math.min(height, mainContentHeight * 0.5)) : DEFAULT_BOTTOM_PANEL_HEIGHT;
+  return Number.isFinite(height) ? Math.max(140, Math.min(height, mainContentHeight * 0.45)) : DEFAULT_BOTTOM_PANEL_HEIGHT;
 }
 
 export interface BottomPanelProps {
