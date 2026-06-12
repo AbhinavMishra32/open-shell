@@ -1,7 +1,13 @@
 "use client";
 
 import type { ButtonHTMLAttributes, HTMLAttributes, ReactNode, SelectHTMLAttributes } from "react";
-import { ArrowLeft, Check, Search } from "lucide-react";
+import { ArrowLeft, Check, ChevronDown, Search } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "../primitives/DropdownMenu";
 import "./settings.css";
 
 export type SettingsNavItem = {
@@ -61,6 +67,22 @@ export type SettingsOptionCardProps = ButtonHTMLAttributes<HTMLButtonElement> & 
 };
 
 export type SettingsSelectProps = SelectHTMLAttributes<HTMLSelectElement>;
+
+export type SettingsChoiceOption = {
+  description?: ReactNode;
+  disabled?: boolean;
+  label: ReactNode;
+  value: string;
+};
+
+export type SettingsChoiceProps = {
+  className?: string;
+  disabled?: boolean;
+  onValueChange?: (value: string) => void;
+  options: SettingsChoiceOption[];
+  placeholder?: ReactNode;
+  value?: string;
+};
 
 export function SettingsSidebar({
   activeItemId,
@@ -241,6 +263,48 @@ export function SettingsOptionCard({
 
 export function SettingsSelect({ className, ...props }: SettingsSelectProps) {
   return <select className={joinClassNames("opaline-settings-select", className)} {...props} />;
+}
+
+export function SettingsChoice({
+  className,
+  disabled = false,
+  onValueChange,
+  options,
+  placeholder = "Select",
+  value
+}: SettingsChoiceProps) {
+  const selected = options.find((option) => option.value === value);
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild disabled={disabled}>
+        <button
+          className={joinClassNames("opaline-settings-choice", className)}
+          data-placeholder={selected == null ? "true" : undefined}
+          disabled={disabled}
+          type="button"
+        >
+          <span className="opaline-settings-choice-label">{selected?.label ?? placeholder}</span>
+          <ChevronDown size={15} strokeWidth={1.8} aria-hidden="true" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="opaline-settings-choice-menu">
+        {options.map((option) => (
+          <DropdownMenuItem
+            disabled={option.disabled}
+            key={option.value}
+            onSelect={() => onValueChange?.(option.value)}
+          >
+            <span className="opaline-settings-choice-item">
+              <span>{option.label}</span>
+              {option.description != null ? <small>{option.description}</small> : null}
+            </span>
+            {option.value === value ? <Check size={14} strokeWidth={2} /> : null}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
 }
 
 function joinClassNames(...classNames: Array<string | undefined>) {

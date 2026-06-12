@@ -4,8 +4,8 @@
   min-width: 100%;
   height: 100%;
   flex-direction: column;
-  gap: 12px;
-  padding: 18px 12px 12px;
+  gap: 10px;
+  padding: 16px 10px 10px;
   color: var(--opaline-text-primary);
   background: color-mix(in srgb, var(--opaline-bg-secondary) 82%, transparent);
 }
@@ -13,7 +13,7 @@
 .opaline-settings-back {
   display: inline-flex;
   width: max-content;
-  height: 30px;
+  height: 28px;
   align-items: center;
   gap: 10px;
   border: 0;
@@ -22,7 +22,7 @@
   color: var(--opaline-text-tertiary);
   background: transparent;
   cursor: default;
-  font-size: 14px;
+  font-size: 13.5px;
 }
 
 .opaline-settings-back:hover {
@@ -32,7 +32,7 @@
 
 .opaline-settings-search {
   display: flex;
-  height: 34px;
+  height: 32px;
   align-items: center;
   gap: 8px;
   border: 1px solid var(--opaline-border-subtle);
@@ -51,7 +51,7 @@
   padding: 0;
   color: var(--opaline-text-primary);
   background: transparent;
-  font-size: 14px;
+  font-size: 13.5px;
 }
 
 .opaline-settings-search input::placeholder {
@@ -63,7 +63,7 @@
   min-height: 0;
   flex: 1;
   flex-direction: column;
-  gap: 18px;
+  gap: 16px;
   overflow: auto;
   padding: 4px 0 12px;
 }
@@ -76,7 +76,7 @@
 .opaline-settings-nav-label {
   padding: 0 10px;
   color: var(--opaline-text-tertiary);
-  font-size: 13px;
+  font-size: 12.5px;
   line-height: 18px;
 }
 
@@ -87,17 +87,17 @@
 
 .opaline-settings-nav-item {
   display: grid;
-  min-height: 34px;
-  grid-template-columns: 22px minmax(0, 1fr) auto;
+  min-height: 31px;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
   border: 0;
-  border-radius: 10px;
-  padding: 0 10px;
+  border-radius: 9px;
+  padding: 0 9px;
   color: color-mix(in srgb, var(--opaline-text-primary) 92%, transparent);
   background: transparent;
   cursor: default;
-  font-size: 14px;
+  font-size: 13.5px;
   line-height: 20px;
   text-align: left;
 }
@@ -115,15 +115,15 @@
 
 .opaline-settings-nav-icon {
   display: inline-grid;
-  width: 22px;
-  height: 22px;
+  width: 20px;
+  height: 20px;
   place-items: center;
   color: color-mix(in srgb, currentColor 86%, transparent);
 }
 
 .opaline-settings-nav-icon svg {
-  width: 18px;
-  height: 18px;
+  width: 17px;
+  height: 17px;
   fill: none;
   stroke: currentColor;
   stroke-linecap: round;
@@ -156,35 +156,35 @@
 .opaline-settings-panel-inner {
   width: min(820px, calc(100% - 72px));
   margin: 0 auto;
-  padding: 64px 0 96px;
+  padding: 56px 0 88px;
 }
 
 .opaline-settings-panel-header {
   display: grid;
-  gap: 8px;
-  margin-bottom: 56px;
+  gap: 6px;
+  margin-bottom: 44px;
 }
 
 .opaline-settings-panel-header h1 {
   margin: 0;
   color: var(--opaline-text-primary);
-  font-size: 22px;
+  font-size: 21px;
   font-weight: 650;
-  line-height: 30px;
+  line-height: 28px;
 }
 
 .opaline-settings-panel-header p {
   max-width: 620px;
   margin: 0;
   color: var(--opaline-text-tertiary);
-  font-size: 14px;
-  line-height: 21px;
+  font-size: 13.5px;
+  line-height: 20px;
 }
 
 .opaline-settings-section {
   display: grid;
-  gap: 16px;
-  margin-top: 36px;
+  gap: 12px;
+  margin-top: 30px;
 }
 
 .opaline-settings-section:first-of-type {
@@ -194,7 +194,7 @@
 .opaline-settings-section h2 {
   margin: 0;
   color: var(--opaline-text-primary);
-  font-size: 15px;
+  font-size: 14.5px;
   font-weight: 600;
   line-height: 22px;
 }
@@ -202,18 +202,18 @@
 .opaline-settings-card {
   overflow: hidden;
   border: 1px solid var(--opaline-border-subtle);
-  border-radius: 12px;
+  border-radius: 11px;
   background: var(--opaline-bg-primary);
 }
 
 .opaline-settings-row {
   display: grid;
-  min-height: 72px;
+  min-height: 62px;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 24px;
+  gap: 20px;
   border-top: 1px solid var(--opaline-border-subtle);
-  padding: 14px 18px;
+  padding: 11px 16px;
 }
 
 .opaline-settings-row:first-child {
@@ -228,7 +228,7 @@
 
 .opaline-settings-row-title {
   color: var(--opaline-text-primary);
-  font-size: 14px;
+  font-size: 13.5px;
   font-weight: 500;
   line-height: 20px;
 }
@@ -236,14 +236,77 @@
 .opaline-settings-row-copy p {
   margin: 0;
   color: var(--opaline-text-tertiary);
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 13.5px;
+  line-height: 19px;
 }
 
 .opaline-settings-row-control {
   display: inline-flex;
   align-items: center;
   justify-content: flex-end;
+}
+
+.opaline-settings-choice {
+  display: inline-flex;
+  width: min(320px, 42vw);
+  min-width: 190px;
+  height: 32px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  border: 0;
+  border-radius: 10px;
+  padding: 0 10px 0 12px;
+  color: var(--opaline-text-primary);
+  background: color-mix(in srgb, var(--opaline-text-primary) 6%, transparent);
+  cursor: default;
+  font-size: 13.5px;
+  line-height: 18px;
+  outline: none;
+}
+
+.opaline-settings-choice:hover,
+.opaline-settings-choice:focus-visible,
+.opaline-settings-choice[data-state="open"] {
+  background: color-mix(in srgb, var(--opaline-text-primary) 9%, transparent);
+}
+
+.opaline-settings-choice:disabled {
+  opacity: 0.55;
+}
+
+.opaline-settings-choice[data-placeholder="true"] {
+  color: var(--opaline-text-tertiary);
+}
+
+.opaline-settings-choice-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.opaline-settings-choice-menu {
+  width: min(360px, calc(100vw - 32px));
+}
+
+.opaline-settings-choice-item {
+  display: grid;
+  min-width: 0;
+  gap: 1px;
+}
+
+.opaline-settings-choice-item span,
+.opaline-settings-choice-item small {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.opaline-settings-choice-item small {
+  color: var(--opaline-text-tertiary);
+  font-size: 12px;
 }
 
 .opaline-settings-toggle {

@@ -72,6 +72,7 @@ export type { FileBrowserPanelProps } from "./file-browser/FileBrowserPanel";
 export { OpalineMark } from "./icons/OpalineMark";
 export {
   SettingsCard,
+  SettingsChoice,
   SettingsOptionCard,
   SettingsPanel,
   SettingsRow,
@@ -82,6 +83,8 @@ export {
 } from "./settings/Settings";
 export type {
   SettingsCardProps,
+  SettingsChoiceOption,
+  SettingsChoiceProps,
   SettingsNavItem,
   SettingsNavSection,
   SettingsOptionCardProps,
