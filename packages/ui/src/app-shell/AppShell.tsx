@@ -292,6 +292,15 @@ export function AppShell({
               <AppShellContent>{main}</AppShellContent>
               {composer != null ? <AppShellComposer>{composer}</AppShellComposer> : null}
             </div>
+            {bottomPanel != null ? (
+              <section
+                className="opaline-bottom-panel-slot"
+                data-open={isBottomPanelOpen ? "true" : "false"}
+                data-app-shell-focus-area="bottom-panel"
+              >
+                <AppShellBottomPanel>{resolveSlot(bottomPanel, shellState)}</AppShellBottomPanel>
+              </section>
+            ) : null}
           </section>
           {rightPanel != null ? (
             <aside
@@ -313,16 +322,6 @@ export function AppShell({
             </aside>
           ) : null}
         </section>
-
-        {bottomPanel != null ? (
-          <section
-            className="opaline-bottom-panel-slot"
-            data-open={isBottomPanelOpen ? "true" : "false"}
-            data-app-shell-focus-area="bottom-panel"
-          >
-            <AppShellBottomPanel>{resolveSlot(bottomPanel, shellState)}</AppShellBottomPanel>
-          </section>
-        ) : null}
       </main>
     </div>
   );
