@@ -73,6 +73,33 @@
   --padding-row-x: calc(var(--spacing) * 2);
   --height-token-nav-row: calc(var(--text-base) * 1.5 + var(--padding-row-y) * 2);
   --radius-lg: 8px;
+  --background: var(--opaline-bg-primary);
+  --foreground: var(--opaline-text-primary);
+  --card: var(--opaline-bg-elevated);
+  --card-foreground: var(--opaline-text-primary);
+  --popover: var(--color-background-elevated-primary-opaque);
+  --popover-foreground: var(--opaline-text-primary);
+  --primary: var(--opaline-text-primary);
+  --primary-foreground: var(--opaline-bg-primary);
+  --secondary: var(--opaline-bg-tertiary);
+  --secondary-foreground: var(--opaline-text-primary);
+  --muted: var(--opaline-bg-secondary);
+  --muted-foreground: var(--opaline-text-secondary);
+  --accent: var(--opaline-bg-tertiary);
+  --accent-foreground: var(--opaline-text-primary);
+  --destructive: var(--opaline-danger);
+  --border: var(--opaline-border-subtle);
+  --input: var(--opaline-border-strong);
+  --ring: var(--opaline-border-strong);
+  --radius: 10px;
+  --sidebar: var(--opaline-bg-secondary);
+  --sidebar-foreground: var(--opaline-text-primary);
+  --sidebar-primary: var(--opaline-text-primary);
+  --sidebar-primary-foreground: var(--opaline-bg-primary);
+  --sidebar-accent: var(--opaline-bg-tertiary);
+  --sidebar-accent-foreground: var(--opaline-text-primary);
+  --sidebar-border: var(--opaline-border-subtle);
+  --sidebar-ring: var(--opaline-border-strong);
 }
 
 @supports (color: color-mix(in lab, red, red)) {
