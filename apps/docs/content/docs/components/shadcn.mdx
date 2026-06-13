@@ -1,0 +1,70 @@
+---
+title: Base shadcn
+description: The official shadcn/Base UI component layer inside @opaline/ui.
+---
+
+Opaline ships the full shadcn Base UI registry as editable source under `@opaline/ui/shadcn`.
+Use this layer for new application controls, forms, menus, status surfaces, and keyboard affordances.
+The older `@opaline/ui` shell exports remain for Construct-style chrome, slots, sidebar, file tree,
+settings layout, thread surfaces, and recovered app systems.
+
+```tsx
+import { Button, Item, ItemContent, ItemTitle, Kbd, ToggleGroup } from "@opaline/ui/shadcn";
+import "@opaline/ui/styles.css";
+```
+
+## Component Rules
+
+- Use `Item` for settings rows, dense preference rows, object rows, and menu-like detail lists.
+- Use `Kbd` or `KbdGroup` every time a visible keyboard shortcut is displayed.
+- Use `ToggleGroup` for two or more mutually exclusive or panel-visibility controls.
+- Use `Field`, `InputGroup`, `Select`, `Checkbox`, `Switch`, `RadioGroup`, and `Slider` for forms.
+- Use `Badge`, `Alert`, `Empty`, `Progress`, `Skeleton`, `Spinner`, and `sonner` for feedback.
+- Use Opaline shell components from `@opaline/ui` when the UI is app chrome: `AppShell`, `Sidebar`,
+  `SlotPanel`, `BottomPanel`, `FileTree`, `ThreadSurface`, `Composer`, and `SettingsPanel`.
+
+## Tailwind Contract
+
+The shadcn layer is source code, not a precompiled CSS bundle. Consuming apps must compile Tailwind
+against Opaline source:
+
+```css
+@import "tailwindcss";
+@source "../node_modules/@opaline/ui/dist";
+@source "../opaline/packages/ui/src";
+```
+
+Construct uses the workspace path so local Opaline edits are reflected immediately. Published apps can
+scan the package distribution path instead.
+
+## Theme Contract
+
+Opaline maps shadcn semantic tokens onto its own palette:
+
+```css
+:root {
+  --background: var(--opaline-bg-primary);
+  --foreground: var(--opaline-text-primary);
+  --card: var(--opaline-bg-elevated);
+  --muted: var(--opaline-bg-tertiary);
+  --primary: var(--opaline-accent);
+  --ring: var(--opaline-focus-ring);
+}
+```
+
+Prefer semantic classes such as `bg-background`, `text-muted-foreground`, and `border-border`. Add
+component-specific CSS only for layout and product chrome that shadcn variants do not model.
+
+## Construct Migration Map
+
+| Construct need | Opaline component |
+| --- | --- |
+| App frame, tabs, sidebar, bottom panel | `@opaline/ui` shell exports |
+| Settings rows | `SettingsRow`, backed by shadcn `Item` |
+| Top-right panel buttons | `ToggleGroup` and `ToggleGroupItem` |
+| Keyboard shortcut labels | `Kbd` and `KbdGroup` |
+| Forms and preference controls | `Field`, `InputGroup`, `Switch`, `Select`, `Checkbox` |
+| Status chips and metadata | `Badge`, `ItemActions`, `ItemDescription` |
+
+When a Construct screen needs a new primitive, add or adapt it in Opaline first, then consume it from
+Construct. Construct should own workflow data and product decisions, not one-off component markup.

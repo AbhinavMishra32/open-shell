@@ -13,6 +13,12 @@ import { AppShell, Sidebar, ThreadSurface, Composer, useShellHistory } from "@op
 import "@opaline/ui/styles.css";
 ```
 
+For the official shadcn/Base UI component layer:
+
+```tsx
+import { Button, Item, Kbd, ToggleGroup } from "@opaline/ui/shadcn";
+```
+
 ## Exports
 
 - `AppShell`
@@ -31,6 +37,32 @@ import "@opaline/ui/styles.css";
 - `ContextMenu` and Radix-backed context-menu parts
 - `FileBrowserPanel`
 - `OpalineMark`
+- Base UI shadcn components from `@opaline/ui/shadcn`: Accordion, Alert, AlertDialog, Avatar, Badge,
+  Breadcrumb, Button, Calendar, Card, Chart, Checkbox, Collapsible, Combobox, Command, ContextMenu,
+  Dialog, Drawer, DropdownMenu, Empty, Field, HoverCard, Input, InputGroup, InputOTP, Item, Kbd,
+  Menubar, NativeSelect, NavigationMenu, Pagination, Popover, Progress, RadioGroup, Resizable,
+  ScrollArea, Select, Separator, Sheet, Sidebar, Skeleton, Slider, Sonner, Spinner, Switch, Table,
+  Tabs, Textarea, Toggle, ToggleGroup, Tooltip, and Direction.
+
+## shadcn/Base UI Layer
+
+New app UI should prefer `@opaline/ui/shadcn` for controls and composition, then use classic Opaline
+components for shell-level systems. The shadcn layer uses Base UI, not Radix, and keeps source files in
+`packages/ui/src/shadcn` so projects can inspect and adapt behavior.
+
+Consumers must compile Tailwind against Opaline source or package output:
+
+```css
+@import "tailwindcss";
+@source "../opaline/packages/ui/src";
+```
+
+Construct-specific rules:
+
+- Use `Item` for settings and preference rows.
+- Use `Kbd` for every visible shortcut key.
+- Use `ToggleGroup` for panel icon groups.
+- Add reusable component changes in Opaline first, then consume them in Construct.
 
 ## History API
 
@@ -113,7 +145,9 @@ backdrop-filter: blur(var(--blur-md));
 The current ports preserve important upstream contracts:
 
 - `Sidebar` keeps `app-shell-left-panel` and `data-app-action-sidebar-*`.
-- `Dialog` is rebuilt on `@radix-ui/react-dialog`.
-- `DropdownMenu` is rebuilt on `@radix-ui/react-dropdown-menu`.
+- Legacy `Dialog` is rebuilt on `@radix-ui/react-dialog`; new app dialogs can use Base UI `Dialog` from
+  `@opaline/ui/shadcn`.
+- Legacy `DropdownMenu` is rebuilt on `@radix-ui/react-dropdown-menu`; new app menus can use Base UI
+  `DropdownMenu` from `@opaline/ui/shadcn`.
 - `BottomPanel` is rebuilt on `@radix-ui/react-tabs` and keeps inactive tab content mounted by default.
 - `FileTree` keeps `data-file-tree-*` attributes.

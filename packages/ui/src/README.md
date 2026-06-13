@@ -16,6 +16,12 @@ Use this layer for the copy app:
 - `Dialog` and `DialogContent` for the shared popup/dialog primitive
 - `Button`, `IconButton`, `Pill`, and `StatusDot` for shared controls
 - `opaline-theme.css` for Opaline-like tokens and upstream-compatible CSS aliases
+- `shadcn` for the official Base UI shadcn registry export. New app controls should import from
+  `@opaline/ui/shadcn` and use `Item` for settings rows, `Kbd` for visible shortcuts, and
+  `ToggleGroup` for grouped panel or mode buttons.
+
+Consumers that use `@opaline/ui/shadcn` must compile Tailwind against this package source or package
+output because those components are intentionally shipped as readable source-level classes.
 
 Sidebar transparency requirement:
 

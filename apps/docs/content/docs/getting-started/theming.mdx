@@ -25,3 +25,31 @@ Use `color-scheme` and your own theme class to coordinate native controls and Op
 
 The docs themselves are an example: Fumadocs layout tokens are mapped onto a restrained Opaline palette,
 while every live preview uses the package stylesheet directly.
+
+## shadcn Tokens
+
+The Base UI shadcn components exported from `@opaline/ui/shadcn` read the standard shadcn semantic
+variables. Opaline maps those variables to its own palette in `opaline-theme.css`, so app code should
+prefer semantic classes rather than hard-coded color utilities:
+
+```css
+:root {
+  --background: var(--opaline-bg-primary);
+  --foreground: var(--opaline-text-primary);
+  --card: var(--opaline-bg-elevated);
+  --popover: var(--opaline-bg-elevated);
+  --muted: var(--opaline-bg-tertiary);
+  --accent: var(--opaline-accent-soft);
+  --primary: var(--opaline-accent);
+  --ring: var(--opaline-focus-ring);
+  --radius: var(--opaline-radius-md);
+}
+```
+
+Consumers must also compile Tailwind against the Opaline package source or distribution when using the
+shadcn export:
+
+```css
+@import "tailwindcss";
+@source "../opaline/packages/ui/src";
+```
