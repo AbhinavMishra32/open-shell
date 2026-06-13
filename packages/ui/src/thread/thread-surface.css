@@ -99,6 +99,12 @@
   line-height: 1.55;
 }
 
+.opaline-message-parts {
+  display: grid;
+  max-width: 860px;
+  gap: 14px;
+}
+
 .opaline-message-copy p,
 .opaline-message-user-bubble p {
   margin: 0;
@@ -119,6 +125,91 @@
   font-size: 16px;
   line-height: 1.55;
   box-shadow: var(--opaline-shadow-card);
+}
+
+.opaline-thread-thinking {
+  max-width: 860px;
+}
+
+.opaline-thread-thinking .opaline-agent-thinking-content {
+  margin-top: 10px;
+}
+
+.opaline-thread-tool-card,
+.opaline-thread-code-block {
+  display: grid;
+  gap: 10px;
+  max-width: 860px;
+  border: 1px solid var(--opaline-border-subtle);
+  border-radius: var(--opaline-radius-xl);
+  padding: 14px 16px;
+  background: color-mix(in srgb, var(--opaline-bg-elevated) 90%, transparent);
+  box-shadow: var(--opaline-shadow-card);
+}
+
+.opaline-thread-tool-card[data-status="running"] {
+  border-color: color-mix(in srgb, var(--opaline-accent) 32%, var(--opaline-border-subtle));
+}
+
+.opaline-thread-tool-card[data-status="warning"] {
+  border-color: color-mix(in srgb, var(--opaline-warning) 34%, var(--opaline-border-subtle));
+}
+
+.opaline-thread-tool-card[data-status="error"] {
+  border-color: color-mix(in srgb, var(--opaline-danger) 34%, var(--opaline-border-subtle));
+}
+
+.opaline-thread-tool-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.opaline-thread-tool-card__header > div {
+  display: grid;
+  gap: 3px;
+}
+
+.opaline-thread-tool-card__header strong,
+.opaline-thread-code-block strong {
+  color: var(--opaline-text-primary);
+  font-size: 14px;
+  font-weight: 580;
+}
+
+.opaline-thread-tool-card__header span,
+.opaline-thread-tool-card__header small {
+  color: var(--opaline-text-tertiary);
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.opaline-thread-tool-card__section {
+  display: grid;
+  gap: 6px;
+}
+
+.opaline-thread-tool-card__section label {
+  color: var(--opaline-text-tertiary);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.opaline-thread-tool-card__code,
+.opaline-thread-code-block > div {
+  overflow: auto;
+  border-radius: calc(var(--opaline-radius-lg) - 2px);
+  padding: 11px 12px;
+  background: color-mix(in srgb, var(--opaline-bg-primary) 78%, black 22%);
+  color: var(--opaline-text-secondary);
+  font-family: var(--opaline-font-mono);
+  font-size: 12px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-word;
 }
 
 .opaline-run-card {

@@ -15,3 +15,32 @@
 @import "./sidebar/sidebar.css";
 @import "./slot-panel/slot-panel.css";
 @import "./thread/thread-surface.css";
+
+@supports (corner-shape: squircle) {
+  :where(
+    .opaline-button,
+    .opaline-pill,
+    .opaline-shell-chrome-button,
+    .opaline-sidebar-reopen-trigger,
+    .opaline-app-tab-actions-button,
+    .opaline-header-agent-button,
+    .opaline-header-tool-button,
+    .opaline-header-tool-button-plain,
+    .opaline-composer-round-button,
+    .opaline-composer-access-button,
+    .opaline-composer-model-button
+  ) {
+    corner-shape: var(--opaline-corner-shape);
+  }
+}
+
+:where(
+  .opaline-shell-chrome-button,
+  .opaline-sidebar-reopen-trigger,
+  .opaline-app-tab-actions-button,
+  .opaline-header-agent-button,
+  .opaline-header-tool-button,
+  .opaline-header-tool-button-plain
+) {
+  clip-path: polygon(8% 0%, 92% 0%, 96% 1%, 99% 4%, 100% 8%, 100% 92%, 99% 96%, 96% 99%, 92% 100%, 8% 100%, 4% 99%, 1% 96%, 0% 92%, 0% 8%, 1% 4%, 4% 1%);
+}

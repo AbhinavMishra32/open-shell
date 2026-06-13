@@ -1,6 +1,6 @@
 :root {
   color-scheme: light;
-  --opaline-font-sans: "Geist Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --opaline-font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", sans-serif;
   --opaline-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   --opaline-bg-primary: #ffffff;
   --opaline-bg-secondary: #f7f7f6;
@@ -26,6 +26,7 @@
   --opaline-radius-lg: 12px;
   --opaline-radius-xl: 16px;
   --opaline-radius-composer: 24px;
+  --opaline-corner-shape: squircle;
   --opaline-shadow-float: 0 12px 36px #00000016;
   --opaline-shadow-card: 0 1px 2px #00000008;
   --shadow-xl: 0px 8px 16px -4px #0000001f;
@@ -179,6 +180,9 @@ body {
   font-family: var(--opaline-font-sans);
   font-size: 14px;
   line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 [data-opaline-window-type="electron"] body {

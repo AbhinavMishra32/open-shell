@@ -21,6 +21,18 @@ export {
   AppShellTabStrip,
 } from "./app-shell/AppShell";
 export type { AppShellProps, AppShellState, AppShellTabItem } from "./app-shell/AppShell";
+export {
+  AgentSessionComposer,
+  AgentSessionSurface,
+} from "./agent-session/AgentSessionSurface";
+export type {
+  AgentSessionComposerProps,
+  AgentSessionMessage,
+  AgentSessionMessagePart,
+  AgentSessionSurfaceProps,
+  AgentSessionToolEntry,
+  AgentSessionToolStatus,
+} from "./agent-session/AgentSessionSurface";
 export { AgentActivity, AgentActivityList, AgentSuggestion, AgentThinking } from "./agent-activity/AgentActivity";
 export type {
   AgentActivityEntry,
@@ -162,4 +174,4 @@ export type { SidebarItem, SidebarNavItem, SidebarProject, SidebarProps } from "
 export type { SidebarBottomSlotProps } from "./sidebar/Sidebar";
 export { appActionAttributeNames, appActionAttributes } from "./sidebar/appActionAttributes";
 export { ThreadMessageRow, ThreadSurface } from "./thread/ThreadSurface";
-export type { ThreadMessage, ThreadSurfaceProps } from "./thread/ThreadSurface";
+export type { ThreadMessage, ThreadMessagePart, ThreadSurfaceProps } from "./thread/ThreadSurface";
