@@ -8,6 +8,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "../primitives/DropdownMenu";
+import {
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemTitle,
+} from "../shadcn";
 import "./settings.css";
 
 export type SettingsNavItem = {
@@ -192,14 +199,14 @@ export function SettingsCard({ children, className, ...props }: SettingsCardProp
 
 export function SettingsRow({ children, className, control, description, title, ...props }: SettingsRowProps) {
   return (
-    <div className={joinClassNames("opaline-settings-row", className)} {...props}>
-      <div className="opaline-settings-row-copy">
-        <span className="opaline-settings-row-title">{title}</span>
-        {description != null ? <p>{description}</p> : null}
+    <Item className={joinClassNames("opaline-settings-row", className)} {...props}>
+      <ItemContent className="opaline-settings-row-copy">
+        <ItemTitle className="opaline-settings-row-title">{title}</ItemTitle>
+        {description != null ? <ItemDescription>{description}</ItemDescription> : null}
         {children}
-      </div>
-      {control != null ? <div className="opaline-settings-row-control">{control}</div> : null}
-    </div>
+      </ItemContent>
+      {control != null ? <ItemActions className="opaline-settings-row-control">{control}</ItemActions> : null}
+    </Item>
   );
 }
 

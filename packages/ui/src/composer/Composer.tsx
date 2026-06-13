@@ -11,6 +11,7 @@ import {
   DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "../primitives/DropdownMenu";
+import { Kbd } from "../shadcn";
 import "./composer.css";
 
 export function Composer({
@@ -118,7 +119,7 @@ function DefaultComposerTrailingControls() {
           </DropdownMenuContent>
         </DropdownMenu>
         <span className="opaline-composer-model-tooltip">
-          Select model <kbd>^⇧M</kbd>
+          Select model <Kbd>^⇧M</Kbd>
         </span>
       </div>
       <button className="opaline-composer-mic" type="button" aria-label="Dictate">

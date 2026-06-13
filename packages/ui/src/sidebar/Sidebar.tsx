@@ -1,5 +1,5 @@
 import type { ButtonHTMLAttributes, CSSProperties, HTMLAttributes, PointerEvent as ReactPointerEvent, ReactNode } from "react";
-import { useRef, useState } from "react";
+import { Fragment, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { appActionAttributes } from "./appActionAttributes";
 import "./sidebar.css";
@@ -90,9 +90,14 @@ export function Sidebar({
         {items.length > 0 ? (
           <SidebarSection heading={sectionLabels.items ?? "Items"}>
             <nav className="opaline-sidebar-list" aria-label={sectionLabels.items ?? "Items"}>
-              {items.map((item) => (
-                renderItem?.(item, { inset: false }) ?? <SidebarThreadRow key={item.id} item={item} />
-              ))}
+              {items.map((item) => {
+                const renderedItem = renderItem?.(item, { inset: false });
+                return renderedItem != null ? (
+                  <Fragment key={item.id}>{renderedItem}</Fragment>
+                ) : (
+                  <SidebarThreadRow key={item.id} item={item} />
+                );
+              })}
             </nav>
           </SidebarSection>
         ) : null}
@@ -289,9 +294,14 @@ export function SidebarProjectRow({
               className="opaline-sidebar-project-list"
               {...appActionAttributes.sidebarProjectList({ projectId: project.id, showAll: false })}
             >
-              {project.threads?.map((item) => (
-                renderItem?.(item, { inset: true }) ?? <SidebarThreadRow key={item.id} item={item} inset />
-              ))}
+              {project.threads?.map((item) => {
+                const renderedItem = renderItem?.(item, { inset: true });
+                return renderedItem != null ? (
+                  <Fragment key={item.id}>{renderedItem}</Fragment>
+                ) : (
+                  <SidebarThreadRow key={item.id} item={item} inset />
+                );
+              })}
             </div>
           </motion.div>
         ) : null}
