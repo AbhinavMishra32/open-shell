@@ -53,6 +53,19 @@ import {
   ThreadSurface,
   useShellHistory,
 } from "@opaline/ui";
+import {
+  Badge,
+  Item,
+  ItemActions,
+  ItemContent,
+  ItemDescription,
+  ItemGroup,
+  ItemMedia,
+  ItemTitle,
+  Kbd,
+  ToggleGroup,
+  ToggleGroupItem,
+} from "@opaline/ui/shadcn";
 import type {
   SettingsNavItem,
   SettingsNavSection,
@@ -360,11 +373,12 @@ export function App() {
 
   const handleFileTreeNodeClick = useCallback(
     (node: TreeNode) => {
-      if (node.data?.type === "directory") {
+      const data = node.data as { path?: string; type?: string } | undefined;
+      if (data?.type === "directory") {
         return;
       }
-      if (typeof node.data?.path === "string") {
-        openFile(node.data.path);
+      if (typeof data?.path === "string") {
+        openFile(data.path);
       }
     },
     [openFile],
@@ -436,25 +450,32 @@ export function App() {
             </span>
             <ChevronDown size={18} strokeWidth={1.7} />
           </AppShellHeaderPillButton>
-          <AppShellHeaderToolButton type="button" aria-label="Thread outline">
+          <AppShellHeaderToolButton className="opaline-header-tool-button-plain" type="button" aria-label="Thread outline">
             <ListTree size={20} strokeWidth={1.7} />
           </AppShellHeaderToolButton>
-          <AppShellHeaderToolButton
-            type="button"
-            onClick={shell.toggleBottomPanel}
-            aria-label="Toggle bottom panel"
-            data-active={shell.isBottomPanelOpen ? "true" : undefined}
+          <ToggleGroup
+            aria-label="Panel visibility"
+            className="opaline-example-panel-toggles"
+            size="sm"
+            spacing={1}
           >
-            <PanelBottom size={20} strokeWidth={1.7} />
-          </AppShellHeaderToolButton>
-          <AppShellHeaderToolButton
-            type="button"
-            onClick={shell.toggleRightPanel}
-            aria-label="Toggle right panel"
-            data-active={shell.isRightPanelOpen ? "true" : undefined}
-          >
-            <PanelRight size={20} strokeWidth={1.7} />
-          </AppShellHeaderToolButton>
+            <ToggleGroupItem
+              aria-label="Toggle bottom panel"
+              className="opaline-example-panel-toggle"
+              onClick={shell.toggleBottomPanel}
+              pressed={shell.isBottomPanelOpen}
+            >
+              <PanelBottom size={20} strokeWidth={1.7} />
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              aria-label="Toggle right panel"
+              className="opaline-example-panel-toggle"
+              onClick={shell.toggleRightPanel}
+              pressed={shell.isRightPanelOpen}
+            >
+              <PanelRight size={20} strokeWidth={1.7} />
+            </ToggleGroupItem>
+          </ToggleGroup>
           <AppShellHeaderToolButton className="opaline-header-tool-button-plain" type="button" aria-label="More actions">
             <Ellipsis size={20} strokeWidth={1.7} />
           </AppShellHeaderToolButton>
@@ -493,9 +514,9 @@ export function App() {
               >
                 <span className="opaline-sidebar-item-title">{item.title}</span>
                 {item.meta != null ? (
-                  <span className="opaline-sidebar-item-meta" data-kind="shortcut">
+                  <Kbd className="opaline-sidebar-item-meta opaline-example-sidebar-kbd" data-kind="shortcut">
                     {item.meta}
-                  </span>
+                  </Kbd>
                 ) : null}
               </button>
             )}
@@ -518,6 +539,7 @@ export function App() {
         ) : (
           <div className="opaline-renderer-stack">
             <ThreadSurface title={String(activeThreadTitle)} subtitle="Component-system reconstruction" messages={messages} />
+            <ExampleShadcnSurface />
             <Dialog>
               <DialogTrigger asChild>
                 <Button variant="secondary">Open Opaline popup primitive</Button>
@@ -577,6 +599,42 @@ export function App() {
             )
       }
     />
+  );
+}
+
+function ExampleShadcnSurface() {
+  return (
+    <ItemGroup className="opaline-example-shadcn-panel">
+      <Item className="opaline-example-shadcn-item" variant="muted">
+        <ItemMedia variant="icon">
+          <OpalineMark className="opaline-header-agent-mark" />
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle>Official Opaline shadcn layer</ItemTitle>
+          <ItemDescription>
+            Base UI components are exported from @opaline/ui/shadcn and themed through Opaline tokens.
+          </ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <Badge variant="secondary">Base UI</Badge>
+          <Kbd>⌘K</Kbd>
+        </ItemActions>
+      </Item>
+      <Item className="opaline-example-shadcn-item" variant="outline">
+        <ItemMedia variant="icon">
+          <PanelRight size={18} strokeWidth={1.7} />
+        </ItemMedia>
+        <ItemContent>
+          <ItemTitle>Construct shell pattern</ItemTitle>
+          <ItemDescription>
+            Use ToggleGroup for panel buttons, Item for settings rows, and Kbd for every displayed shortcut.
+          </ItemDescription>
+        </ItemContent>
+        <ItemActions>
+          <Badge variant="outline">Codex-like</Badge>
+        </ItemActions>
+      </Item>
+    </ItemGroup>
   );
 }
 

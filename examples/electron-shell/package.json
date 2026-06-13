@@ -20,8 +20,10 @@
     "vite": "^7.2.6"
   },
   "devDependencies": {
+    "@tailwindcss/vite": "^4.3.0",
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
+    "tailwindcss": "^4.3.0",
     "typescript": "^5.9.3"
   }
 }

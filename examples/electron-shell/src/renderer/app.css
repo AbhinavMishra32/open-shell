@@ -1,3 +1,7 @@
+@import "tailwindcss";
+@source ".";
+@source "../../../../packages/ui/src";
+
 .opaline-app-shell {
   animation: opaline-shell-enter 180ms ease-out both;
 }
@@ -9,6 +13,65 @@
   align-items: center;
   gap: 16px;
   padding-bottom: 24px;
+}
+
+.opaline-example-panel-toggles {
+  -webkit-app-region: no-drag;
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--opaline-text-primary) 4%, transparent);
+  padding: 2px;
+}
+
+.opaline-example-panel-toggle {
+  width: 34px;
+  height: 34px;
+  min-width: 34px;
+  border-radius: 11px;
+  color: var(--opaline-text-secondary);
+}
+
+.opaline-example-panel-toggle:hover,
+.opaline-example-panel-toggle[data-pressed] {
+  background: color-mix(in srgb, var(--opaline-text-primary) 8%, transparent);
+  color: var(--opaline-text-primary);
+}
+
+.opaline-example-shadcn-panel {
+  width: min(760px, calc(100% - 32px));
+  border: 1px solid var(--opaline-border-subtle);
+  border-radius: 20px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--opaline-bg-elevated) 94%, transparent);
+  box-shadow: var(--opaline-shadow-card);
+}
+
+.opaline-example-shadcn-item {
+  border-radius: 14px;
+}
+
+.opaline-example-shadcn-item [data-slot="item-media"] {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--opaline-text-primary) 6%, transparent);
+  color: var(--opaline-text-secondary);
+}
+
+.opaline-example-shadcn-item [data-slot="item-title"] {
+  color: var(--opaline-text-primary);
+  font-size: 14px;
+}
+
+.opaline-example-shadcn-item [data-slot="item-description"] {
+  color: var(--opaline-text-tertiary);
+  font-size: 13px;
+}
+
+.opaline-example-sidebar-kbd {
+  height: 22px;
+  min-width: 28px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--opaline-text-primary) 7%, transparent);
 }
 
 @keyframes opaline-shell-enter {
