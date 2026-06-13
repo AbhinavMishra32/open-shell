@@ -1,5 +1,6 @@
 import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from "react";
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import { Maximize2, Minimize2 } from "lucide-react";
 import "./bottom-panel.css";
 
 // Re-export SlotPanel types with Bottom-panel aliases for backwards compat
@@ -15,7 +16,7 @@ const DEFAULT_BOTTOM_PANEL_HEIGHT = 240;
  * Clamps the bottom panel height between min/max limits based on current viewport height.
  */
 export function clampBottomPanelHeight(height: number, mainContentHeight: number) {
-  return Number.isFinite(height) ? Math.max(140, Math.min(height, mainContentHeight * 0.45)) : DEFAULT_BOTTOM_PANEL_HEIGHT;
+  return Number.isFinite(height) ? Math.max(140, Math.min(height, mainContentHeight)) : DEFAULT_BOTTOM_PANEL_HEIGHT;
 }
 
 export interface BottomPanelProps {
@@ -74,6 +75,8 @@ export const BottomPanel = React.forwardRef<SlotPanelHandle, BottomPanelProps>(
     ref,
   ) {
     const [panelHeight, setPanelHeight] = useState(() => clampBottomPanelHeight(height, mainContentHeight));
+    const [isFullscreen, setIsFullscreen] = useState(false);
+    const lastWindowedHeightRef = useRef(panelHeight);
 
     useEffect(() => {
       setPanelHeight((h) => clampBottomPanelHeight(h, mainContentHeight));
@@ -88,8 +91,26 @@ export const BottomPanel = React.forwardRef<SlotPanelHandle, BottomPanelProps>(
 
     function commitHeight(next: number) {
       const clamped = clampBottomPanelHeight(next, mainContentHeight);
+      lastWindowedHeightRef.current = clamped;
+      setIsFullscreen(false);
       setPanelHeight(clamped);
       onHeightChange?.(clamped);
+    }
+
+    function toggleFullscreen() {
+      if (isFullscreen) {
+        const restored = clampBottomPanelHeight(lastWindowedHeightRef.current, mainContentHeight);
+        setIsFullscreen(false);
+        setPanelHeight(restored);
+        onHeightChange?.(restored);
+        return;
+      }
+
+      lastWindowedHeightRef.current = panelHeight;
+      const fullHeight = clampBottomPanelHeight(mainContentHeight, mainContentHeight);
+      setIsFullscreen(true);
+      setPanelHeight(fullHeight);
+      onHeightChange?.(fullHeight);
     }
 
     const startResize = useCallback(
@@ -120,6 +141,7 @@ export const BottomPanel = React.forwardRef<SlotPanelHandle, BottomPanelProps>(
       <div
         className="opaline-bottom-panel"
         data-app-shell-focus-area="bottom-panel"
+        data-fullscreen={isFullscreen ? "true" : "false"}
         style={{ "--app-shell-bottom-panel-height": `${panelHeight}px` } as CSSProperties}
       >
         <div
@@ -128,6 +150,15 @@ export const BottomPanel = React.forwardRef<SlotPanelHandle, BottomPanelProps>(
           role="separator"
           onPointerDown={startResize}
         />
+        <button
+          type="button"
+          className="opaline-bottom-panel-fullscreen-action"
+          aria-label={isFullscreen ? "Restore bottom panel height" : "Maximize bottom panel"}
+          title={isFullscreen ? "Restore bottom panel height" : "Maximize bottom panel"}
+          onClick={toggleFullscreen}
+        >
+          {isFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
+        </button>
         <SlotPanel
           ref={ref}
           activeTabId={activeTabId}

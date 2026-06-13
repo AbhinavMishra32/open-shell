@@ -37,6 +37,28 @@ html[data-opaline-bottom-panel-resizing="true"] .opaline-bottom-panel-resize-han
   background: color-mix(in srgb, var(--opaline-accent) 72%, var(--opaline-border-subtle));
 }
 
+.opaline-bottom-panel-fullscreen-action {
+  position: absolute;
+  top: 5px;
+  right: 34px;
+  z-index: 4;
+  display: grid;
+  width: 24px;
+  height: 24px;
+  place-items: center;
+  border: 0;
+  border-radius: 8px;
+  padding: 0;
+  color: var(--opaline-text-secondary);
+  background: transparent;
+}
+
+.opaline-bottom-panel-fullscreen-action:hover,
+.opaline-bottom-panel[data-fullscreen="true"] .opaline-bottom-panel-fullscreen-action {
+  color: var(--opaline-text-primary);
+  background: color-mix(in srgb, var(--opaline-text-primary) 7%, transparent);
+}
+
 /* ==========================================================================
    Terminal Tab Styles (xterm.js)
    ========================================================================== */
