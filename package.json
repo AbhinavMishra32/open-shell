@@ -18,6 +18,8 @@
     "install:ui": "node scripts/install-opaline-ui.mjs",
     "start": "npm run build -w @opaline/ui && npm run start -w @opaline/electron-example",
     "start:example": "npm run build -w @opaline/ui && npm run start -w @opaline/electron-example",
+    "start:example-v2": "npm run build -w @opaline/ui && npm run start -w @opaline/electron-example-v2",
+    "dev:example-v2": "npm run build -w @opaline/ui && turbo run dev --filter=@opaline/electron-example-v2",
     "typecheck": "turbo run typecheck",
     "research:refresh": "npm run refresh:components --prefix research/opaline-internals",
     "research:start": "npm run start --prefix research/opaline-internals"

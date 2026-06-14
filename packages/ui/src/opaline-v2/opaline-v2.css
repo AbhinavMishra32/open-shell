@@ -1,0 +1,826 @@
+.opaline-v2-shell {
+  position: relative;
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+  background: var(--sidebar);
+  color: var(--foreground);
+  --opaline-v2-sidebar-width: 260px;
+  --opaline-v2-sidebar-visible-width: var(--opaline-v2-sidebar-width);
+  --opaline-v2-sidebar-max-width: 520px;
+  --opaline-v2-sidebar-min-content: 336px;
+  --opaline-v2-titlebar-height: 44px;
+  --opaline-v2-control-size: 30px;
+  --opaline-v2-radius-control: var(--radius-lg, 14px);
+  --opaline-v2-radius-item: var(--radius-md, 12px);
+  --opaline-v2-radius-surface: var(--radius-2xl, 26px);
+  --opaline-v2-ease-spring: cubic-bezier(0.2, 0, 0, 1);
+  --opaline-v2-ease-control: cubic-bezier(0.19, 1, 0.22, 1);
+  --opaline-v2-sidebar-glass: color-mix(in oklab, var(--background) 58%, transparent);
+  --opaline-v2-sidebar-foreground: color-mix(in oklch, var(--foreground) 88%, transparent);
+  --opaline-v2-sidebar-muted: color-mix(in oklch, var(--muted-foreground) 82%, transparent);
+  --opaline-v2-sidebar-selected: color-mix(in oklch, var(--foreground) 7%, transparent);
+}
+
+.dark .opaline-v2-shell,
+:root.dark .opaline-v2-shell,
+:root[data-construct-theme="dark"] .opaline-v2-shell {
+  --opaline-v2-sidebar-glass: color-mix(in oklab, var(--background) 62%, transparent);
+  --opaline-v2-sidebar-foreground: color-mix(in oklch, var(--foreground) 90%, transparent);
+  --opaline-v2-sidebar-muted: color-mix(in oklch, var(--muted-foreground) 76%, transparent);
+  --opaline-v2-sidebar-selected: color-mix(in oklch, white 10%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+  .opaline-v2-shell {
+    --opaline-v2-sidebar-glass: color-mix(in oklab, var(--background) 62%, transparent);
+    --opaline-v2-sidebar-foreground: color-mix(in oklch, var(--foreground) 90%, transparent);
+    --opaline-v2-sidebar-muted: color-mix(in oklch, var(--muted-foreground) 76%, transparent);
+    --opaline-v2-sidebar-selected: color-mix(in oklch, white 10%, transparent);
+  }
+}
+
+.opaline-v2-shell[data-sidebar-open="false"] {
+  --opaline-v2-sidebar-visible-width: 0px;
+}
+
+.opaline-v2-sidebar-shell {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  width: var(--opaline-v2-sidebar-visible-width);
+  min-width: 0;
+  max-width: min(var(--opaline-v2-sidebar-max-width), calc(100vw - var(--opaline-v2-sidebar-min-content)));
+  height: 100%;
+  flex: 0 0 auto;
+  overflow: visible;
+  padding-top: var(--opaline-v2-titlebar-height);
+  background: var(--opaline-v2-sidebar-glass);
+  color: var(--opaline-v2-sidebar-foreground);
+  -webkit-backdrop-filter: blur(24px) saturate(145%);
+  backdrop-filter: blur(24px) saturate(145%);
+  transition:
+    width 300ms var(--opaline-v2-ease-spring),
+    opacity 150ms var(--opaline-v2-ease-control);
+}
+
+[data-opaline-window-type="electron"]:not([data-opaline-os="win32"]) .opaline-v2-sidebar-shell {
+  background: color-mix(in oklab, var(--sidebar) 84%, transparent);
+}
+
+.dark [data-opaline-window-type="electron"]:not([data-opaline-os="win32"]) .opaline-v2-sidebar-shell,
+:root.dark [data-opaline-window-type="electron"]:not([data-opaline-os="win32"]) .opaline-v2-sidebar-shell,
+:root[data-construct-theme="dark"] [data-opaline-window-type="electron"]:not([data-opaline-os="win32"]) .opaline-v2-sidebar-shell {
+  background: color-mix(in oklab, var(--sidebar) 72%, transparent);
+}
+
+.opaline-v2-sidebar-shell[data-open="false"] {
+  pointer-events: none;
+}
+
+.opaline-v2-sidebar-shell[data-resizing="true"] {
+  cursor: col-resize;
+  transition: none;
+}
+
+.opaline-v2-sidebar {
+  position: relative;
+  display: flex;
+  width: var(--opaline-v2-sidebar-width);
+  min-width: var(--opaline-v2-sidebar-width);
+  height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border-right: 1px solid color-mix(in oklch, var(--border), transparent 34%);
+  opacity: 1;
+  transition:
+    opacity 150ms var(--opaline-v2-ease-control),
+    transform 300ms var(--opaline-v2-ease-spring);
+}
+
+.opaline-v2-sidebar-shell[data-open="false"] .opaline-v2-sidebar {
+  opacity: 0;
+  transform: translateX(-14px);
+}
+
+.opaline-v2-sidebar-chrome {
+  -webkit-app-region: drag;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 55;
+  display: flex;
+  height: var(--opaline-v2-titlebar-height);
+  align-items: center;
+  gap: 3px;
+  padding: 0 14px 0 96px;
+  color: var(--opaline-v2-sidebar-muted);
+  pointer-events: auto;
+  transition: opacity 150ms var(--opaline-v2-ease-control);
+}
+
+[data-opaline-os="darwin"] .opaline-v2-sidebar-chrome {
+  padding-left: 80px;
+}
+
+.opaline-v2-sidebar-shell[data-open="false"] .opaline-v2-sidebar-chrome {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.opaline-v2-chrome-button,
+.opaline-v2-collapsed-trigger-button {
+  -webkit-app-region: no-drag;
+  display: grid;
+  width: var(--opaline-v2-control-size);
+  height: var(--opaline-v2-control-size);
+  flex: 0 0 var(--opaline-v2-control-size);
+  place-items: center;
+  border: 0;
+  border-radius: var(--opaline-v2-radius-control) !important;
+  corner-shape: squircle;
+  padding: 0;
+  background: transparent;
+  color: inherit;
+  cursor: default;
+  transition: none;
+}
+
+.opaline-v2-header-tool-button {
+  -webkit-app-region: no-drag;
+  display: grid;
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+  place-items: center;
+  border: 0;
+  border-radius: var(--opaline-v2-radius-control) !important;
+  padding: 0;
+  background: transparent;
+  color: color-mix(in oklch, var(--muted-foreground) 88%, transparent);
+  cursor: default;
+  corner-shape: squircle;
+  transition: none;
+}
+
+.opaline-v2-chrome-button:hover,
+.opaline-v2-collapsed-trigger-button:hover,
+.opaline-v2-header-tool-button:hover,
+.opaline-v2-header-tool-button[aria-pressed="true"],
+.opaline-v2-header-tool-button[data-state="open"] {
+  background: color-mix(in oklch, var(--foreground) 8%, transparent);
+  color: var(--foreground);
+}
+
+.opaline-v2-chrome-button:active,
+.opaline-v2-collapsed-trigger-button:active,
+.opaline-v2-header-tool-button:active {
+  transform: scale(0.91);
+  background: color-mix(in oklch, var(--foreground) 12%, transparent);
+}
+
+.opaline-v2-chrome-button[disabled],
+.opaline-v2-collapsed-trigger-button[disabled],
+.opaline-v2-header-tool-button[disabled] {
+  opacity: 0.32;
+  pointer-events: none;
+}
+
+.opaline-v2-chrome-button svg,
+.opaline-v2-collapsed-trigger-button svg {
+  width: 18px;
+  height: 18px;
+}
+
+.opaline-v2-header-tool-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+.opaline-v2-app-sidebar {
+  display: flex;
+  width: 100%;
+  min-height: 0;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  background: transparent;
+  color: var(--sidebar-foreground);
+}
+
+.opaline-v2-app-sidebar-primary,
+.opaline-v2-app-sidebar-footer {
+  display: grid;
+  gap: 2px;
+  padding: 8px;
+}
+
+.opaline-v2-app-sidebar-footer {
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+}
+
+.opaline-v2-app-sidebar-separator {
+  width: auto;
+  margin: 0 10px;
+  background: color-mix(in oklch, var(--sidebar-border) 72%, transparent);
+}
+
+.opaline-v2-app-sidebar-scroll {
+  min-height: 0;
+  flex: 1;
+}
+
+.opaline-v2-app-sidebar-scroll-content {
+  display: grid;
+  gap: 10px;
+  padding: 8px;
+}
+
+.opaline-v2-app-sidebar-nav-item,
+.opaline-v2-app-sidebar-project-select,
+.opaline-v2-app-sidebar-item {
+  width: 100%;
+  justify-content: flex-start;
+  border-radius: var(--opaline-v2-radius-control);
+  corner-shape: squircle;
+  transition: none !important;
+}
+
+.opaline-v2-app-sidebar-nav-item {
+  min-height: 34px;
+  gap: 9px;
+  padding: 0 9px;
+  color: color-mix(in oklch, var(--sidebar-foreground) 90%, transparent);
+  font-size: 13px;
+}
+
+.opaline-v2-app-sidebar-nav-item:hover,
+.opaline-v2-app-sidebar-nav-item[data-active="true"],
+.opaline-v2-app-sidebar-project-select:hover,
+.opaline-v2-app-sidebar-item:hover,
+.opaline-v2-app-sidebar-item[data-active="true"] {
+  background: var(--sidebar-accent);
+  color: var(--sidebar-accent-foreground);
+}
+
+.opaline-v2-app-sidebar-nav-icon {
+  display: grid;
+  width: 18px;
+  place-items: center;
+  color: var(--muted-foreground);
+}
+
+.opaline-v2-app-sidebar-section {
+  display: grid;
+  gap: 3px;
+}
+
+.opaline-v2-app-sidebar-section + .opaline-v2-app-sidebar-section {
+  margin-top: 8px;
+}
+
+.opaline-v2-app-sidebar-section-label {
+  padding: 4px 8px 3px;
+  color: color-mix(in oklch, var(--muted-foreground) 78%, transparent);
+  font-size: 10px;
+  font-weight: 650;
+  letter-spacing: 0.055em;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.opaline-v2-app-sidebar-list,
+.opaline-v2-app-sidebar-project {
+  display: grid;
+  gap: 2px;
+}
+
+.opaline-v2-app-sidebar-project-select,
+.opaline-v2-app-sidebar-item {
+  min-height: 30px;
+  padding: 0 8px;
+  font-size: 12px;
+}
+
+.opaline-v2-app-sidebar-item[data-inset="true"] {
+  padding-left: 28px;
+}
+
+.opaline-v2-app-sidebar-item-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.opaline-v2-app-sidebar-item-meta {
+  margin-left: auto;
+  color: var(--muted-foreground);
+  font-size: 10px;
+}
+
+.opaline-v2-sidebar-bottom-slot {
+  position: relative;
+  display: flex;
+  height: var(--opaline-v2-sidebar-slot-height);
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border-top: 1px solid var(--sidebar-border);
+}
+
+.opaline-v2-sidebar-bottom-slot[data-collapsed="true"] {
+  height: 34px !important;
+}
+
+.opaline-v2-sidebar-bottom-slot-header {
+  width: calc(100% - 12px);
+  min-height: 30px;
+  justify-content: flex-start;
+  margin: 4px 6px 0;
+  border-radius: var(--opaline-v2-radius-control);
+  corner-shape: squircle;
+  transition: none !important;
+}
+
+.opaline-v2-sidebar-bottom-slot-content {
+  min-height: 0;
+  flex: 1;
+  overflow: auto;
+}
+
+.opaline-v2-sidebar-bottom-slot[data-collapsed="true"] .opaline-v2-sidebar-bottom-slot-content,
+.opaline-v2-sidebar-bottom-slot[data-collapsed="true"] .opaline-v2-sidebar-bottom-slot-resize {
+  display: none;
+}
+
+.opaline-v2-sidebar-bottom-slot-resize {
+  position: absolute;
+  top: -3px;
+  right: 0;
+  left: 0;
+  z-index: 2;
+  height: 6px;
+  cursor: row-resize;
+}
+
+.opaline-v2-collapsed-sidebar-trigger {
+  -webkit-app-region: no-drag;
+  position: absolute;
+  top: 7px;
+  left: 96px;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(-14px);
+  transition:
+    opacity 300ms var(--opaline-v2-ease-spring),
+    transform 300ms var(--opaline-v2-ease-spring);
+}
+
+[data-opaline-os="darwin"] .opaline-v2-collapsed-sidebar-trigger {
+  left: 80px;
+}
+
+.opaline-v2-shell[data-sidebar-open="false"] .opaline-v2-collapsed-sidebar-trigger {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateX(0);
+}
+
+.opaline-v2-sidebar-header {
+  -webkit-app-region: drag;
+  display: flex;
+  min-height: 26px;
+  align-items: center;
+  padding: 8px 14px 6px;
+}
+
+.opaline-v2-sidebar-header > *,
+.opaline-v2-sidebar-scroll,
+.opaline-v2-sidebar-footer {
+  -webkit-app-region: no-drag;
+}
+
+.opaline-v2-sidebar-title {
+  min-width: 0;
+  color: var(--opaline-v2-sidebar-foreground);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.opaline-v2-sidebar-subtitle {
+  margin-top: 2px;
+  color: var(--opaline-v2-sidebar-muted);
+  font-size: 12px;
+  line-height: 1.25;
+}
+
+.opaline-v2-sidebar-scroll {
+  min-height: 0;
+  flex: 1;
+  padding: 0 10px 10px;
+}
+
+.opaline-v2-sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-block: 6px;
+}
+
+.opaline-v2-sidebar-section-label {
+  padding: 6px 8px 4px;
+  color: var(--opaline-v2-sidebar-muted);
+  font-size: 11px;
+  font-weight: 450;
+  line-height: 16px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.opaline-v2-sidebar-item {
+  display: grid;
+  width: 100%;
+  min-height: 28px;
+  height: auto;
+  grid-template-columns: 18px minmax(0, 1fr) auto;
+  align-items: center;
+  justify-content: stretch;
+  gap: 8px;
+  border-radius: var(--opaline-v2-radius-item) !important;
+  corner-shape: squircle;
+  padding: 4px 8px;
+  color: var(--opaline-v2-sidebar-foreground);
+  cursor: default;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 18px;
+  text-align: left;
+}
+
+.opaline-v2-sidebar-item:hover,
+.opaline-v2-sidebar-item[data-active="true"] {
+  background: var(--opaline-v2-sidebar-selected);
+  color: var(--foreground);
+}
+
+.opaline-v2-sidebar-item-icon {
+  display: inline-grid;
+  width: 18px;
+  height: 18px;
+  place-items: center;
+  color: inherit;
+}
+
+.opaline-v2-sidebar-item-icon svg {
+  width: 15px;
+  height: 15px;
+}
+
+.opaline-v2-sidebar-item-label,
+.opaline-v2-sidebar-item-meta {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.opaline-v2-sidebar-item-meta {
+  color: var(--opaline-v2-sidebar-muted);
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.opaline-v2-sidebar-footer {
+  -webkit-app-region: no-drag;
+  display: flex;
+  min-height: 46px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 14px 10px;
+}
+
+.opaline-v2-sidebar-resize-handle,
+.opaline-v2-inspector-resize-handle {
+  position: absolute;
+  z-index: 58;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  width: 16px;
+  touch-action: none;
+  cursor: col-resize;
+  user-select: none;
+}
+
+.opaline-v2-sidebar-resize-handle {
+  right: -8px;
+}
+
+.opaline-v2-inspector-resize-handle {
+  left: -8px;
+}
+
+.opaline-v2-sidebar-resize-handle[aria-disabled="true"],
+.opaline-v2-inspector-resize-handle[aria-disabled="true"] {
+  pointer-events: none;
+}
+
+.opaline-v2-resize-handle-line {
+  width: 1px;
+  height: 100%;
+  margin: auto;
+  background: linear-gradient(to bottom, transparent, color-mix(in oklch, var(--foreground) 24%, transparent), transparent);
+  opacity: 0;
+  transition: opacity 150ms var(--opaline-v2-ease-control);
+}
+
+.opaline-v2-sidebar-resize-handle:hover .opaline-v2-resize-handle-line,
+.opaline-v2-inspector-resize-handle:hover .opaline-v2-resize-handle-line,
+.opaline-v2-sidebar-shell[data-resizing="true"] .opaline-v2-resize-handle-line,
+.opaline-v2-inspector-shell[data-resizing="true"] .opaline-v2-resize-handle-line {
+  opacity: 1;
+}
+
+.opaline-v2-main {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+  border-top-left-radius: var(--opaline-v2-radius-surface);
+  border-bottom-left-radius: var(--opaline-v2-radius-surface);
+  corner-shape: squircle;
+  background: var(--background);
+  box-shadow: none;
+  transition: border-radius 300ms var(--opaline-v2-ease-spring);
+}
+
+.opaline-v2-shell[data-sidebar-open="false"] .opaline-v2-main {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  box-shadow: none;
+}
+
+.opaline-v2-titlebar {
+  -webkit-app-region: drag;
+  position: relative;
+  z-index: 30;
+  display: flex;
+  height: var(--opaline-v2-titlebar-height);
+  min-height: var(--opaline-v2-titlebar-height);
+  min-width: 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  border-bottom: 1px solid color-mix(in oklch, var(--border), transparent 42%);
+  padding: 0 12px 0 12px;
+  background: color-mix(in oklch, var(--background) 94%, transparent);
+  user-select: none;
+  transition: padding-left 300ms var(--opaline-v2-ease-spring);
+}
+
+.opaline-v2-shell[data-sidebar-open="false"] .opaline-v2-titlebar {
+  padding-left: 232px;
+}
+
+.opaline-v2-titlebar-context {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  align-items: center;
+  gap: 12px;
+  overflow: hidden;
+}
+
+.opaline-v2-titlebar-copy {
+  min-width: 0;
+}
+
+.opaline-v2-titlebar-title {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--foreground);
+  font-size: 13px;
+  font-weight: 650;
+  line-height: 20px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.opaline-v2-titlebar-subtitle {
+  overflow: hidden;
+  color: var(--muted-foreground);
+  font-size: 12px;
+  line-height: 18px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.opaline-v2-titlebar-actions {
+  -webkit-app-region: no-drag;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.opaline-v2-tab-strip {
+  -webkit-app-region: no-drag;
+  display: flex;
+  height: 100%;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.opaline-v2-tab-controller {
+  position: relative;
+  display: inline-flex;
+  max-width: 220px;
+  min-width: 0;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 2px;
+}
+
+.opaline-v2-header-tab {
+  -webkit-app-region: no-drag;
+  display: inline-flex;
+  max-width: 190px;
+  height: 32px;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--opaline-v2-radius-control);
+  corner-shape: squircle;
+  padding: 0 11px;
+  background: transparent;
+  color: var(--muted-foreground);
+  cursor: default;
+  font: inherit;
+  font-size: 14px;
+}
+
+.opaline-v2-header-tab:hover {
+  background: color-mix(in oklch, var(--foreground) 6%, transparent);
+  color: var(--foreground);
+}
+
+.opaline-v2-header-tab[data-active="true"] {
+  background: color-mix(in oklch, var(--foreground) 8%, transparent);
+  color: var(--foreground);
+}
+
+.opaline-v2-header-tab-dot {
+  width: 7px;
+  height: 7px;
+  flex: 0 0 7px;
+  border-radius: 999px;
+  background: var(--primary);
+}
+
+.opaline-v2-header-tab-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.opaline-v2-workspace {
+  display: grid;
+  min-height: 0;
+  flex: 1;
+  grid-template-columns: minmax(0, 1fr) auto;
+  overflow: hidden;
+}
+
+.opaline-v2-content-stack {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.opaline-v2-content {
+  min-width: 0;
+  min-height: 0;
+  flex: 1;
+  overflow: hidden;
+}
+
+.opaline-v2-composer {
+  border-top: 1px solid color-mix(in oklch, var(--border), transparent 42%);
+  background: color-mix(in oklch, var(--background) 96%, transparent);
+}
+
+.opaline-v2-bottom {
+  position: relative;
+  z-index: 30;
+  width: 100%;
+  height: var(--opaline-v2-bottom-panel-height, 260px);
+  min-height: 0;
+  flex: 0 0 var(--opaline-v2-bottom-panel-height, 260px);
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  background: color-mix(in oklch, var(--card), transparent 6%);
+  opacity: 1;
+  transition:
+    height 300ms var(--opaline-v2-ease-spring),
+    flex-basis 300ms var(--opaline-v2-ease-spring),
+    opacity 150ms var(--opaline-v2-ease-control);
+}
+
+.opaline-v2-bottom[data-open="false"] {
+  height: 0;
+  flex-basis: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.opaline-v2-inspector-shell {
+  position: relative;
+  z-index: 41;
+  width: var(--opaline-v2-inspector-width, 320px);
+  min-width: 0;
+  height: 100%;
+  min-height: 0;
+  flex-shrink: 0;
+  overflow: visible;
+  opacity: 1;
+  transition:
+    width 300ms var(--opaline-v2-ease-spring),
+    opacity 150ms var(--opaline-v2-ease-control);
+}
+
+.opaline-v2-inspector-shell[data-open="false"] {
+  width: 0 !important;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.opaline-v2-inspector-shell[data-resizing="true"] {
+  cursor: col-resize;
+  transition: none;
+}
+
+.opaline-v2-inspector {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border-left: 1px solid var(--border);
+  background: color-mix(in oklch, var(--card), transparent 8%);
+  contain: layout paint;
+}
+
+.opaline-v2-panel {
+  border: 1px solid color-mix(in oklch, var(--border), transparent 18%);
+  border-radius: var(--opaline-v2-radius-surface);
+  corner-shape: squircle;
+  background: color-mix(in oklch, var(--card), transparent 4%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .opaline-v2-sidebar-shell,
+  .opaline-v2-sidebar,
+  .opaline-v2-main,
+  .opaline-v2-titlebar,
+  .opaline-v2-inspector-shell,
+  .opaline-v2-bottom,
+  .opaline-v2-collapsed-sidebar-trigger {
+    transition: none;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .opaline-v2-sidebar-shell {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (max-width: 980px) {
+  .opaline-v2-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .opaline-v2-inspector-shell {
+    display: none;
+  }
+}

@@ -1,0 +1,224 @@
+export {
+  AppShell,
+  AppShellBottomPanel,
+  AppShellChromeButton,
+  AppShellChromeControls,
+  AppShellCollapsedSidebarTrigger,
+  AppShellComposer,
+  AppShellContent,
+  AppShellHeader,
+  AppShellHeaderActions,
+  AppShellHeaderContextSurface,
+  AppShellHeaderPillButton,
+  AppShellHeaderToolButton,
+  AppShellNavigationControls,
+  AppShellRightPanel,
+  AppShellSidebarChrome,
+  AppShellTab,
+  AppShellTabActionButton,
+  AppShellTabActions,
+  AppShellTabController,
+  AppShellTabStrip,
+  OpalineV2ChromeButton,
+  OpalineV2CollapsedSidebarTrigger,
+  OpalineV2HeaderTab,
+  OpalineV2HeaderToolButton,
+  OpalineV2InspectorIcon,
+  OpalineV2NavigationControls,
+  OpalineV2Shell,
+  OpalineV2Sidebar,
+  OpalineV2SidebarItemButton,
+  ShellIconButton,
+} from "./AppShell";
+export { Button, IconButton, Pill, StatusDot } from "./Button";
+export type { OpalineV2ButtonProps } from "./Button";
+export type {
+  AppShellProps,
+  AppShellState,
+  AppShellTabItem,
+  OpalineV2ShellButtonProps,
+  OpalineV2ShellProps,
+  OpalineV2ShellState,
+  OpalineV2ShellTabItem,
+  OpalineV2SidebarItem,
+  OpalineV2SidebarProps,
+  OpalineV2SidebarSection,
+} from "./AppShell";
+export { OpalineThemeProvider, useOpalineTheme } from "./Theme";
+export type {
+  OpalineResolvedTheme,
+  OpalineTheme,
+  OpalineThemeProviderProps,
+  OpalineThemeState,
+} from "./Theme";
+export {
+  ShellHistoryProvider,
+  useShellHistory,
+  useShellHistoryContext,
+} from "../history/ShellHistory";
+export { AgentSessionComposer, AgentSessionSurface } from "../agent-session/AgentSessionSurface";
+export type {
+  AgentSessionComposerProps,
+  AgentSessionMessage,
+  AgentSessionMessagePart,
+  AgentSessionSurfaceProps,
+  AgentSessionToolEntry,
+  AgentSessionToolStatus,
+} from "../agent-session/AgentSessionSurface";
+export { AgentActivity, AgentActivityList, AgentSuggestion, AgentThinking } from "../agent-activity/AgentActivity";
+export type {
+  AgentActivityEntry,
+  AgentActivityListProps,
+  AgentActivityProps,
+  AgentActivityStatus,
+  AgentSuggestionProps,
+  AgentThinkingProps,
+} from "../agent-activity/AgentActivity";
+export { AgentContextAction, AgentContextSources, AgentContextSurface } from "../agent-context/AgentContextSurface";
+export type {
+  AgentContextActionProps,
+  AgentContextAnchor,
+  AgentContextMode,
+  AgentContextSource,
+  AgentContextStage,
+  AgentContextSurfaceProps,
+} from "../agent-context/AgentContextSurface";
+export { AdaptiveSidecarLayout, AdaptiveSidecarSurface, getAdaptiveSidecarMode } from "../adaptive-sidecar/AdaptiveSidecar";
+export type { AdaptiveSidecarLayoutProps, AdaptiveSidecarMode, AdaptiveSidecarSurfaceProps } from "../adaptive-sidecar/AdaptiveSidecar";
+export { SlotPanel } from "../slot-panel/SlotPanel";
+export type { SlotLauncherItem, SlotPanelHandle, SlotPanelProps, SlotTab } from "../slot-panel/SlotPanel";
+export { BottomPanel, TerminalSurface, clampBottomPanelHeight } from "../bottom-panel/BottomPanel";
+export type { BottomPanelHandle, BottomPanelProps, BottomPanelTab, TerminalSurfaceProps } from "../bottom-panel/BottomPanel";
+export { Composer } from "../composer/Composer";
+export { FileTree } from "../file-tree/FileTree";
+export type { FileTreeItem, FileTreeProps, TreeNode } from "../file-tree/FileTree";
+export { FileBrowserBreadcrumbs, FileBrowserPanel, FileBrowserTab } from "../file-browser/FileBrowserPanel";
+export type { FileBrowserPanelProps } from "../file-browser/FileBrowserPanel";
+export { OpalineMark } from "../icons/OpalineMark";
+export {
+  SettingsCard,
+  SettingsChoice,
+  SettingsOptionCard,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsSelect,
+  SettingsSidebar,
+  SettingsToggle,
+} from "../settings/Settings";
+export type {
+  SettingsCardProps,
+  SettingsChoiceOption,
+  SettingsChoiceProps,
+  SettingsNavItem,
+  SettingsNavSection,
+  SettingsOptionCardProps,
+  SettingsPanelProps,
+  SettingsRowProps,
+  SettingsSectionProps,
+  SettingsSelectProps,
+  SettingsSidebarProps,
+  SettingsToggleProps,
+} from "../settings/Settings";
+export {
+  ContextMenu,
+  ContextMenuCheckboxItem,
+  ContextMenuContent,
+  ContextMenuGroup,
+  ContextMenuItem,
+  ContextMenuPortal,
+  ContextMenuRadioGroup,
+  ContextMenuSeparator,
+  ContextMenuSub,
+  ContextMenuSubContent,
+  ContextMenuSubTrigger,
+  ContextMenuTrigger,
+} from "../primitives/ContextMenu";
+export {
+  Dialog,
+  DialogBody,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogOverlay,
+  DialogPortal,
+  DialogSection,
+  DialogTitle,
+  DialogTrigger,
+} from "../primitives/Dialog";
+export type { DialogSize, OpalineDialogContentProps } from "../primitives/Dialog";
+export { HoverPreview } from "../primitives/HoverPreview";
+export type { HoverPreviewProps } from "../primitives/HoverPreview";
+export { Timeline } from "../timeline/Timeline";
+export type { TimelineItem, TimelineProps, TimelineStatus } from "../timeline/Timeline";
+export {
+  DropdownMenu,
+  DropdownMenuCheckboxItem,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuItemIndicator,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "../primitives/DropdownMenu";
+export {
+  Sidebar,
+  SidebarBottomSlot,
+  SidebarFooter,
+  SidebarNavItemRow,
+  SidebarPrimary,
+  SidebarProjectRow,
+  SidebarScroll,
+  SidebarSection,
+  SidebarThreadRow,
+} from "./Sidebar";
+export type { SidebarBottomSlotProps, SidebarItem, SidebarNavItem, SidebarProject, SidebarProps } from "./Sidebar";
+export {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "../components/card";
+export {
+  Dialog as ShadcnDialog,
+  DialogClose as ShadcnDialogClose,
+  DialogContent as ShadcnDialogContent,
+  DialogDescription as ShadcnDialogDescription,
+  DialogFooter as ShadcnDialogFooter,
+  DialogHeader as ShadcnDialogHeader,
+  DialogTitle as ShadcnDialogTitle,
+  DialogTrigger as ShadcnDialogTrigger,
+} from "../components/dialog";
+export {
+  DropdownMenu as ShadcnDropdownMenu,
+  DropdownMenuContent as ShadcnDropdownMenuContent,
+  DropdownMenuGroup as ShadcnDropdownMenuGroup,
+  DropdownMenuItem as ShadcnDropdownMenuItem,
+  DropdownMenuLabel as ShadcnDropdownMenuLabel,
+  DropdownMenuSeparator as ShadcnDropdownMenuSeparator,
+  DropdownMenuTrigger as ShadcnDropdownMenuTrigger,
+} from "../components/dropdown-menu";
+export { ScrollArea as ShadcnScrollArea, ScrollBar as ShadcnScrollBar } from "../components/scroll-area";
+export { Separator as ShadcnSeparator } from "../components/separator";
+export { appActionAttributeNames, appActionAttributes } from "../sidebar/appActionAttributes";
+export { ThreadMessageRow, ThreadSurface } from "../thread/ThreadSurface";
+export type { ThreadMessage, ThreadMessagePart, ThreadSurfaceProps } from "../thread/ThreadSurface";
+export type {
+  ShellHistoryController,
+  ShellHistoryEntry,
+  ShellHistoryProviderProps,
+  ShellHistoryState,
+  UseShellHistoryOptions,
+} from "../history/ShellHistory";
