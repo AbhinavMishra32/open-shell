@@ -1,7 +1,7 @@
 import type { CSSProperties, PointerEvent as ReactPointerEvent, ReactNode } from "react";
 import React, { useEffect, useRef, useState, useCallback } from "react";
 import { Maximize2, Minimize2 } from "lucide-react";
-import "./bottom-panel.css";
+import { cn } from "../lib/utils";
 
 // Re-export SlotPanel types with Bottom-panel aliases for backwards compat
 export type { SlotTab as BottomPanelTab, SlotPanelHandle as BottomPanelHandle, SlotLauncherItem } from "../slot-panel/SlotPanel";
@@ -139,20 +139,20 @@ export const BottomPanel = React.forwardRef<SlotPanelHandle, BottomPanelProps>(
 
     return (
       <div
-        className="opaline-bottom-panel"
+        className="relative flex min-h-0 w-full shrink-0 flex-col border-t bg-background"
         data-app-shell-focus-area="bottom-panel"
         data-fullscreen={isFullscreen ? "true" : "false"}
         style={{ "--app-shell-bottom-panel-height": `${panelHeight}px` } as CSSProperties}
       >
         <div
-          className="opaline-bottom-panel-resize-handle"
+          className="absolute inset-x-0 -top-1 z-20 h-2 cursor-row-resize touch-none after:absolute after:inset-x-0 after:top-1 after:h-px after:bg-border hover:after:bg-primary"
           aria-label="Resize bottom panel"
           role="separator"
           onPointerDown={startResize}
         />
         <button
           type="button"
-          className="opaline-bottom-panel-fullscreen-action"
+          className="absolute right-9 top-1.5 z-20 flex size-6 items-center justify-center rounded-md text-muted-foreground hover:bg-muted hover:text-foreground"
           aria-label={isFullscreen ? "Restore bottom panel height" : "Maximize bottom panel"}
           title={isFullscreen ? "Restore bottom panel height" : "Maximize bottom panel"}
           onClick={toggleFullscreen}
@@ -196,7 +196,7 @@ export interface TerminalSurfaceProps {
 export function TerminalSurface({ children, className, cwd }: TerminalSurfaceProps) {
   return (
     <div
-      className={`opaline-terminal-surface${className ? ` ${className}` : ""}`}
+      className={cn("h-full min-h-0 overflow-hidden bg-background font-mono text-sm text-foreground", className)}
       data-opaline-terminal="true"
     >
       {children}

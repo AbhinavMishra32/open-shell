@@ -32,6 +32,7 @@ export {
 } from "./AppShell";
 export { Button, IconButton, Pill, StatusDot } from "./Button";
 export type { OpalineV2ButtonProps } from "./Button";
+export { Alert, AlertDescription, AlertTitle, Badge, Input, Spinner, Textarea } from "../components";
 export type {
   AppShellProps,
   AppShellState,
@@ -89,11 +90,8 @@ export { SlotPanel } from "../slot-panel/SlotPanel";
 export type { SlotLauncherItem, SlotPanelHandle, SlotPanelProps, SlotTab } from "../slot-panel/SlotPanel";
 export { BottomPanel, TerminalSurface, clampBottomPanelHeight } from "../bottom-panel/BottomPanel";
 export type { BottomPanelHandle, BottomPanelProps, BottomPanelTab, TerminalSurfaceProps } from "../bottom-panel/BottomPanel";
-export { Composer } from "../composer/Composer";
 export { FileTree } from "../file-tree/FileTree";
 export type { FileTreeItem, FileTreeProps, TreeNode } from "../file-tree/FileTree";
-export { FileBrowserBreadcrumbs, FileBrowserPanel, FileBrowserTab } from "../file-browser/FileBrowserPanel";
-export type { FileBrowserPanelProps } from "../file-browser/FileBrowserPanel";
 export { OpalineMark } from "../icons/OpalineMark";
 export {
   SettingsCard,
@@ -133,43 +131,11 @@ export {
   ContextMenuSubContent,
   ContextMenuSubTrigger,
   ContextMenuTrigger,
-} from "../primitives/ContextMenu";
-export {
-  Dialog,
-  DialogBody,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogOverlay,
-  DialogPortal,
-  DialogSection,
-  DialogTitle,
-  DialogTrigger,
-} from "../primitives/Dialog";
-export type { DialogSize, OpalineDialogContentProps } from "../primitives/Dialog";
+} from "../components/context-menu";
 export { HoverPreview } from "../primitives/HoverPreview";
 export type { HoverPreviewProps } from "../primitives/HoverPreview";
 export { Timeline } from "../timeline/Timeline";
 export type { TimelineItem, TimelineProps, TimelineStatus } from "../timeline/Timeline";
-export {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuItemIndicator,
-  DropdownMenuLabel,
-  DropdownMenuPortal,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger,
-} from "../primitives/DropdownMenu";
 export {
   Sidebar,
   SidebarBottomSlot,
@@ -213,8 +179,6 @@ export {
 export { ScrollArea as ShadcnScrollArea, ScrollBar as ShadcnScrollBar } from "../components/scroll-area";
 export { Separator as ShadcnSeparator } from "../components/separator";
 export { appActionAttributeNames, appActionAttributes } from "../sidebar/appActionAttributes";
-export { ThreadMessageRow, ThreadSurface } from "../thread/ThreadSurface";
-export type { ThreadMessage, ThreadMessagePart, ThreadSurfaceProps } from "../thread/ThreadSurface";
 export type {
   ShellHistoryController,
   ShellHistoryEntry,

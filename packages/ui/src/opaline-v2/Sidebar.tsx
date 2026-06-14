@@ -69,13 +69,13 @@ export function Sidebar({
   sectionLabels = { items: "Items", projects: "Projects" },
 }: SidebarProps) {
   return (
-    <aside className="opaline-v2-app-sidebar">
+    <aside className="flex h-full min-h-0 flex-col bg-sidebar text-sidebar-foreground">
       {primaryItems.length > 0 ? (
         <>
           <SidebarPrimary>
             {primaryItems.map((item) => renderNavItem?.(item) ?? <SidebarNavItemRow item={item} key={item.id} />)}
           </SidebarPrimary>
-          <Separator className="opaline-v2-app-sidebar-separator" />
+          <Separator />
         </>
       ) : null}
       <SidebarScroll>
@@ -90,7 +90,7 @@ export function Sidebar({
         ) : null}
         {items.length > 0 ? (
           <SidebarSection heading={sectionLabels.items ?? "Items"}>
-            <nav className="opaline-v2-app-sidebar-list" aria-label={sectionLabels.items ?? "Items"}>
+            <nav className="flex flex-col gap-1" aria-label={sectionLabels.items ?? "Items"}>
               {items.map((item) => renderItem?.(item, { inset: false }) ?? <SidebarThreadRow key={item.id} item={item} />)}
             </nav>
           </SidebarSection>
@@ -99,7 +99,7 @@ export function Sidebar({
       </SidebarScroll>
       {footer != null ? (
         <>
-          <Separator className="opaline-v2-app-sidebar-separator" />
+          <Separator />
           <SidebarFooter>{footer}</SidebarFooter>
         </>
       ) : null}
@@ -108,19 +108,19 @@ export function Sidebar({
 }
 
 export function SidebarPrimary({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <nav className={cn("opaline-v2-app-sidebar-primary", className)} aria-label="Primary" {...props}>{children}</nav>;
+  return <nav className={cn("flex flex-col gap-1 p-2", className)} aria-label="Primary" {...props}>{children}</nav>;
 }
 
 export function SidebarScroll({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) {
   return (
-    <ScrollArea className={cn("opaline-v2-app-sidebar-scroll", className)} {...appActionAttributes.sidebarScroll} {...props}>
-      <div className="opaline-v2-app-sidebar-scroll-content">{children}</div>
+    <ScrollArea className={cn("min-h-0 flex-1", className)} {...appActionAttributes.sidebarScroll} {...props}>
+      <div className="flex flex-col gap-2 p-2">{children}</div>
     </ScrollArea>
   );
 }
 
 export function SidebarFooter({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) {
-  return <div className={cn("opaline-v2-app-sidebar-footer", className)} {...props}>{children}</div>;
+  return <div className={cn("flex flex-col gap-1 p-2", className)} {...props}>{children}</div>;
 }
 
 export type SidebarBottomSlotProps = HTMLAttributes<HTMLDivElement> & {
@@ -177,16 +177,16 @@ export function SidebarBottomSlot({
 
   return (
     <section
-      className={cn("opaline-v2-sidebar-bottom-slot", className)}
+      className={cn("relative flex min-h-0 flex-col border-t", isCollapsed ? "h-auto" : "h-[var(--opaline-v2-sidebar-slot-height)]", className)}
       data-collapsed={isCollapsed ? "true" : "false"}
       style={{ ...style, "--opaline-v2-sidebar-slot-height": `${height}px` } as CSSProperties}
       {...props}
     >
-      <div className="opaline-v2-sidebar-bottom-slot-resize" onPointerDown={beginResize} onPointerMove={resize} onPointerCancel={endResize} onPointerUp={endResize} />
-      <Button className="opaline-v2-sidebar-bottom-slot-header" variant="ghost" onClick={() => setCollapsed(!isCollapsed)}>
+      <div className={cn("absolute inset-x-0 -top-1 h-2 cursor-row-resize touch-none", isCollapsed && "pointer-events-none")} onPointerDown={beginResize} onPointerMove={resize} onPointerCancel={endResize} onPointerUp={endResize} />
+      <Button className="w-full justify-start" variant="ghost" onClick={() => setCollapsed(!isCollapsed)}>
         {header}
       </Button>
-      <div className="opaline-v2-sidebar-bottom-slot-content">{children}</div>
+      <div className={cn("min-h-0 flex-1 overflow-hidden", isCollapsed && "hidden")}>{children}</div>
     </section>
   );
 }
@@ -194,14 +194,14 @@ export function SidebarBottomSlot({
 export function SidebarNavItemRow({ className, item, type = "button", ...props }: ButtonHTMLAttributes<HTMLButtonElement> & { item: SidebarNavItem }) {
   return (
     <Button
-      className={cn("opaline-v2-app-sidebar-nav-item", className)}
+      className={cn("w-full justify-start data-[active=true]:bg-sidebar-accent", className)}
       data-active={item.active === true ? "true" : undefined}
       onClick={item.onClick}
       type={type}
       variant="ghost"
       {...props}
     >
-      {item.icon != null ? <span className="opaline-v2-app-sidebar-nav-icon" aria-hidden="true">{item.icon}</span> : null}
+      {item.icon != null ? <span data-icon="inline-start" aria-hidden="true">{item.icon}</span> : null}
       <span>{item.label}</span>
     </Button>
   );
@@ -209,8 +209,8 @@ export function SidebarNavItemRow({ className, item, type = "button", ...props }
 
 export function SidebarSection({ children, heading }: { children: ReactNode; heading: string }) {
   return (
-    <section className="opaline-v2-app-sidebar-section" {...appActionAttributes.sidebarSection({ collapsed: false, heading })}>
-      <div className="opaline-v2-app-sidebar-section-label">{heading}</div>
+    <section className="flex flex-col gap-1" {...appActionAttributes.sidebarSection({ collapsed: false, heading })}>
+      <div className="px-2 py-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{heading}</div>
       {children}
     </section>
   );
@@ -220,12 +220,12 @@ export function SidebarProjectRow({ onSelect, project, renderItem }: { onSelect?
   const label = typeof project.label === "string" ? project.label : project.labelForAttributes ?? project.id;
   const expanded = project.collapsed !== true && project.threads != null;
   return (
-    <div className="opaline-v2-app-sidebar-project" data-active={project.active === true ? "true" : "false"} data-muted={project.muted === true ? "true" : "false"} {...appActionAttributes.sidebarProjectRow({ collapsed: project.collapsed === true, label, projectId: project.id })}>
-      <Button className="opaline-v2-app-sidebar-project-select" onClick={() => onSelect?.(project.id)} variant="ghost" {...appActionAttributes.sidebarProjectSelect}>
+    <div className="flex flex-col gap-1" data-active={project.active === true ? "true" : "false"} data-muted={project.muted === true ? "true" : "false"} {...appActionAttributes.sidebarProjectRow({ collapsed: project.collapsed === true, label, projectId: project.id })}>
+      <Button className="w-full justify-start" onClick={() => onSelect?.(project.id)} variant="ghost" {...appActionAttributes.sidebarProjectSelect}>
         {project.icon != null ? <span aria-hidden="true">{project.icon}</span> : null}
         <span>{project.label}</span>
       </Button>
-      {expanded ? <div className="opaline-v2-app-sidebar-list" {...appActionAttributes.sidebarProjectList({ projectId: project.id, showAll: false })}>{project.threads?.map((item) => renderItem?.(item, { inset: true }) ?? <SidebarThreadRow key={item.id} item={item} inset />)}</div> : null}
+      {expanded ? <div className="flex flex-col gap-1" {...appActionAttributes.sidebarProjectList({ projectId: project.id, showAll: false })}>{project.threads?.map((item) => renderItem?.(item, { inset: true }) ?? <SidebarThreadRow key={item.id} item={item} inset />)}</div> : null}
     </div>
   );
 }
@@ -234,9 +234,9 @@ export function SidebarThreadRow({ inset = false, item }: { inset?: boolean; ite
   const trailing = item.time ?? item.meta;
   const title = typeof item.title === "string" ? item.title : item.label ?? item.id;
   return (
-    <Button className="opaline-v2-app-sidebar-item" data-active={item.active === true ? "true" : "false"} data-inset={inset ? "true" : "false"} variant="ghost" {...appActionAttributes.sidebarThreadRow({ active: item.active === true, hostId: item.hostId, id: item.id, kind: item.kind ?? "local", pinned: item.pinned === true, title })}>
-      <span className="opaline-v2-app-sidebar-item-title">{item.title}</span>
-      {trailing != null ? <span className="opaline-v2-app-sidebar-item-meta">{trailing}</span> : null}
+    <Button className={cn("w-full justify-between data-[active=true]:bg-sidebar-accent", inset && "pl-6")} data-active={item.active === true ? "true" : "false"} data-inset={inset ? "true" : "false"} variant="ghost" {...appActionAttributes.sidebarThreadRow({ active: item.active === true, hostId: item.hostId, id: item.id, kind: item.kind ?? "local", pinned: item.pinned === true, title })}>
+      <span className="truncate">{item.title}</span>
+      {trailing != null ? <span className="shrink-0 text-xs text-muted-foreground">{trailing}</span> : null}
     </Button>
   );
 }

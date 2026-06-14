@@ -23,7 +23,7 @@ export function Button({ children, className, icon, size = "default", variant = 
 
   return (
     <ShadcnButton
-      className={cn("opaline-v2-button", className)}
+      className={className}
       size={resolvedSize as React.ComponentProps<typeof ShadcnButton>["size"]}
       variant={resolvedVariant as React.ComponentProps<typeof ShadcnButton>["variant"]}
       {...props}
@@ -39,9 +39,9 @@ export function IconButton(props: OpalineV2ButtonProps) {
 }
 
 export function Pill({ children }: { children: React.ReactNode }) {
-  return <span className="opaline-v2-pill">{children}</span>;
+  return <span className="inline-flex items-center rounded-full bg-secondary px-2 py-0.5 text-xs text-secondary-foreground">{children}</span>;
 }
 
 export function StatusDot({ tone = "neutral" }: { tone?: "green" | "neutral" | "orange" }) {
-  return <span aria-hidden="true" className="opaline-v2-status-dot" data-tone={tone} />;
+  return <span aria-hidden="true" className={cn("size-2 rounded-full", tone === "green" ? "bg-primary" : tone === "orange" ? "bg-destructive" : "bg-muted-foreground")} data-tone={tone} />;
 }

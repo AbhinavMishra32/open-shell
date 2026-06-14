@@ -3,7 +3,7 @@ import { ArrowUpRight, Expand, Sparkles, X } from "lucide-react";
 import type { HTMLAttributes, PointerEvent as ReactPointerEvent, ReactNode } from "react";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { createPortal } from "react-dom";
-import "./agent-context.css";
+import { cn } from "../lib/utils";
 
 export type AgentContextAnchor = { x: number; y: number };
 export type AgentContextMode = "anchored" | "floating";
@@ -108,7 +108,7 @@ export function AgentContextSurface({
           ref={surfaceRef}
           layout
           layoutId="opaline-agent-context-surface"
-          className={`opaline-agent-context-surface ${className}`.trim()}
+          className={cn("fixed z-50 flex w-[min(520px,calc(100vw-24px))] flex-col overflow-hidden rounded-lg border bg-popover text-popover-foreground shadow-lg", className)}
           data-mode={mode}
           data-stage={stage}
           style={{ left: position.left, top: position.top }}
@@ -126,17 +126,17 @@ export function AgentContextSurface({
         >
           {(mode === "floating" || title || eyebrow) ? (
             <header
-              className="opaline-agent-context-header"
+              className="flex min-h-11 items-center gap-2 border-b px-3 py-2"
               onPointerDown={(event: ReactPointerEvent<HTMLElement>) => {
                 if (mode === "floating" && !(event.target as HTMLElement).closest("button, a")) dragControls.start(event);
               }}
             >
-              <span className="opaline-agent-context-mark"><Sparkles size={14} /></span>
-              <div className="opaline-agent-context-heading">
-                {eyebrow ? <small>{eyebrow}</small> : null}
-                {title ? <strong>{title}</strong> : null}
+              <span className="flex size-7 shrink-0 items-center justify-center rounded-md bg-muted text-muted-foreground"><Sparkles size={14} /></span>
+              <div className="min-w-0 flex-1">
+                {eyebrow ? <small className="block truncate text-[10px] uppercase tracking-wide text-muted-foreground">{eyebrow}</small> : null}
+                {title ? <strong className="block truncate text-sm font-medium">{title}</strong> : null}
               </div>
-              <div className="opaline-agent-context-actions">
+              <div className="flex shrink-0 items-center gap-0.5 [&_button]:flex [&_button]:size-7 [&_button]:items-center [&_button]:justify-center [&_button]:rounded-md [&_button]:text-muted-foreground [&_button:hover]:bg-muted [&_button:hover]:text-foreground">
                 {mode === "anchored" && stage !== "prompt" && onModeChange ? (
                   <button type="button" onClick={() => onModeChange("floating")} aria-label={floatingLabel} title={floatingLabel}>
                     <Expand size={14} />
@@ -146,7 +146,7 @@ export function AgentContextSurface({
               </div>
             </header>
           ) : null}
-          <motion.div className="opaline-agent-context-body" layout transition={spring}>
+          <motion.div className="min-h-0 p-3" layout transition={spring}>
             {children}
           </motion.div>
         </motion.div>
@@ -164,9 +164,9 @@ export type AgentContextActionProps = HTMLAttributes<HTMLButtonElement> & {
 
 export function AgentContextAction({ icon, label, description, className = "", ...props }: AgentContextActionProps) {
   return (
-    <button className={`opaline-agent-context-action ${className}`.trim()} type="button" {...props}>
-      <span className="opaline-agent-context-action-icon">{icon ?? <Sparkles size={14} />}</span>
-      <span><strong>{label}</strong>{description ? <small>{description}</small> : null}</span>
+    <button className={cn("flex w-full items-start gap-3 rounded-md p-2 text-left hover:bg-muted", className)} type="button" {...props}>
+      <span className="flex size-7 shrink-0 items-center justify-center rounded-md border bg-background text-muted-foreground">{icon ?? <Sparkles size={14} />}</span>
+      <span className="min-w-0"><strong className="block text-sm font-medium">{label}</strong>{description ? <small className="mt-0.5 block text-xs text-muted-foreground">{description}</small> : null}</span>
     </button>
   );
 }
@@ -176,13 +176,13 @@ export type AgentContextSource = { id: string; title: string; url: string; domai
 export function AgentContextSources({ sources, label = "Sources" }: { sources: AgentContextSource[]; label?: ReactNode }) {
   if (sources.length === 0) return null;
   return (
-    <section className="opaline-agent-context-sources">
-      <small>{label}</small>
-      <div>
+    <section className="mt-3 border-t pt-3">
+      <small className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">{label}</small>
+      <div className="mt-2 flex flex-wrap gap-1.5">
         {sources.map((source, index) => (
-          <a href={source.url} key={source.id} target="_blank" rel="noreferrer">
-            <span>{index + 1}</span>
-            <b>{source.domain ?? source.title}</b>
+          <a className="inline-flex items-center gap-1 rounded-md border bg-background px-2 py-1 text-xs hover:bg-muted" href={source.url} key={source.id} target="_blank" rel="noreferrer">
+            <span className="text-muted-foreground">{index + 1}</span>
+            <b className="font-medium">{source.domain ?? source.title}</b>
             <ArrowUpRight size={11} />
           </a>
         ))}

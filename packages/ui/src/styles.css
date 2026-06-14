@@ -1,19 +1,12 @@
 @import "./tokens/opaline-theme.css";
 @import "./app-shell/app-shell.css";
-@import "./agent-activity/agent-activity.css";
-@import "./bottom-panel/bottom-panel.css";
 @import "./composer/composer.css";
 @import "./file-browser/file-browser-panel.css";
-@import "./file-tree/file-tree.css";
 @import "./primitives/button.css";
 @import "./primitives/context-menu.css";
 @import "./primitives/dialog.css";
-@import "./primitives/hover-preview.css";
 @import "./primitives/dropdown-menu.css";
-@import "./timeline/timeline.css";
-@import "./settings/settings.css";
 @import "./sidebar/sidebar.css";
-@import "./slot-panel/slot-panel.css";
 @import "./thread/thread-surface.css";
 
 @supports (corner-shape: squircle) {

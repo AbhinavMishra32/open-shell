@@ -1,7 +1,7 @@
 import { AlertCircle, Check, ChevronRight, Circle, LoaderCircle } from "lucide-react";
 import type { HTMLAttributes, ReactNode } from "react";
 import { memo, useState } from "react";
-import "./agent-activity.css";
+import { cn } from "../lib/utils";
 
 export type AgentActivityStatus = "pending" | "active" | "complete" | "warning" | "error";
 
@@ -46,12 +46,12 @@ export const AgentThinking = memo(function AgentThinking({
   }
 
   return (
-    <div className={`opaline-agent-thinking ${className}`} data-state={state} {...props}>
-      <button type="button" onClick={toggle} disabled={!expandable} aria-expanded={expandable ? isOpen : undefined}>
-        <span className={state === "thinking" ? "opaline-agent-shimmer" : ""}>{label ?? (state === "thinking" ? "Thinking" : "Thought")}</span>
-        {expandable ? <ChevronRight size={13} className={isOpen ? "is-open" : ""} /> : null}
+    <div className={cn("text-xs text-muted-foreground", className)} data-state={state} {...props}>
+      <button className="flex items-center gap-1.5 rounded-md py-1 text-left hover:text-foreground disabled:pointer-events-none" type="button" onClick={toggle} disabled={!expandable} aria-expanded={expandable ? isOpen : undefined}>
+        <span className={cn(state === "thinking" && "animate-pulse")}>{label ?? (state === "thinking" ? "Thinking" : "Thought")}</span>
+        {expandable ? <ChevronRight size={13} className={cn("transition-transform", isOpen && "rotate-90")} /> : null}
       </button>
-      {expandable && isOpen ? <div className="opaline-agent-thinking-content">{content}</div> : null}
+      {expandable && isOpen ? <div className="border-l pl-3 text-foreground">{content}</div> : null}
     </div>
   );
 });
@@ -72,18 +72,18 @@ export type AgentActivityListProps = HTMLAttributes<HTMLDivElement> & {
 
 export function AgentActivityList({ entries, className = "", ...props }: AgentActivityListProps) {
   return (
-    <div className={`opaline-agent-activity-list ${className}`} {...props}>
+    <div className={cn("space-y-2 border-l pl-4", className)} {...props}>
       {entries.map((entry) => {
         const entryStatus = entry.status ?? "pending";
         return (
-          <div className="opaline-agent-activity-entry" data-status={entryStatus} key={entry.id}>
-            <span className="opaline-agent-activity-entry-icon">{entry.icon ?? activityIcon(entryStatus)}</span>
-            <div>
-              <div className="opaline-agent-activity-entry-heading">
-                <strong className={entryStatus === "active" ? "opaline-agent-shimmer" : ""}>{entry.title}</strong>
-                {entry.meta ? <span>{entry.meta}</span> : null}
+          <div className="flex gap-2 text-xs" data-status={entryStatus} key={entry.id}>
+            <span className="mt-0.5 flex size-4 shrink-0 items-center justify-center text-muted-foreground data-[status=error]:text-destructive data-[status=warning]:text-destructive">{entry.icon ?? activityIcon(entryStatus)}</span>
+            <div className="min-w-0 flex-1">
+              <div className="flex items-center justify-between gap-3">
+                <strong className={cn("font-medium", entryStatus === "active" && "animate-pulse")}>{entry.title}</strong>
+                {entry.meta ? <span className="shrink-0 text-muted-foreground">{entry.meta}</span> : null}
               </div>
-              {entry.detail ? <p>{entry.detail}</p> : null}
+              {entry.detail ? <p className="mt-0.5 text-muted-foreground">{entry.detail}</p> : null}
             </div>
           </div>
         );
@@ -116,14 +116,14 @@ export function AgentActivity({
   }
 
   return (
-    <div className={`opaline-agent-activity ${className}`} data-status={status} {...props}>
-      <button className="opaline-agent-activity-summary" type="button" onClick={toggle} disabled={!expandable} aria-expanded={expandable ? isOpen : undefined}>
-        <span className="opaline-agent-activity-status">{activityIcon(status)}</span>
-        <span className="opaline-agent-activity-copy">
-          <strong className={status === "active" ? "opaline-agent-shimmer" : ""}>{label}</strong>
-          {detail ? <small>{detail}</small> : null}
+    <div className={cn("space-y-2", className)} data-status={status} {...props}>
+      <button className="flex w-full items-center gap-2 rounded-md py-1 text-left disabled:pointer-events-none" type="button" onClick={toggle} disabled={!expandable} aria-expanded={expandable ? isOpen : undefined}>
+        <span className="flex size-4 shrink-0 items-center justify-center text-muted-foreground data-[status=error]:text-destructive data-[status=warning]:text-destructive">{activityIcon(status)}</span>
+        <span className="min-w-0 flex-1">
+          <strong className={cn("block truncate text-xs font-medium", status === "active" && "animate-pulse")}>{label}</strong>
+          {detail ? <small className="block truncate text-[11px] text-muted-foreground">{detail}</small> : null}
         </span>
-        {expandable ? <ChevronRight size={14} className={isOpen ? "is-open" : ""} /> : null}
+        {expandable ? <ChevronRight size={14} className={cn("shrink-0 text-muted-foreground transition-transform", isOpen && "rotate-90")} /> : null}
       </button>
       {expandable && isOpen ? <AgentActivityList entries={entries} /> : null}
     </div>
@@ -140,16 +140,16 @@ export type AgentSuggestionProps = Omit<HTMLAttributes<HTMLDivElement>, "title">
 
 export function AgentSuggestion({ title, description, actionLabel = "Apply", onAction, disabled, className = "", ...props }: AgentSuggestionProps) {
   return (
-    <div className={`opaline-agent-suggestion ${className}`} {...props}>
-      <div><strong>{title}</strong>{description ? <p>{description}</p> : null}</div>
-      {onAction ? <button type="button" disabled={disabled} onClick={onAction}>{actionLabel}</button> : null}
+    <div className={cn("flex items-center justify-between gap-4 rounded-lg border bg-card p-3", className)} {...props}>
+      <div className="min-w-0"><strong className="text-sm font-medium">{title}</strong>{description ? <p className="mt-0.5 text-xs text-muted-foreground">{description}</p> : null}</div>
+      {onAction ? <button className="h-7 shrink-0 rounded-md bg-primary px-2 text-xs font-medium text-primary-foreground hover:bg-primary/80 disabled:opacity-50" type="button" disabled={disabled} onClick={onAction}>{actionLabel}</button> : null}
     </div>
   );
 }
 
 function activityIcon(status: AgentActivityStatus): ReactNode {
   if (status === "complete") return <Check size={12} />;
-  if (status === "active") return <LoaderCircle className="opaline-agent-spin" size={12} />;
+  if (status === "active") return <LoaderCircle className="animate-spin" size={12} />;
   if (status === "warning" || status === "error") return <AlertCircle size={12} />;
   return <Circle size={7} />;
 }

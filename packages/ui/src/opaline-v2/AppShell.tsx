@@ -11,7 +11,6 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../com
 import { ShellHistoryProvider } from "../history/ShellHistory";
 import type { ShellHistoryController } from "../history/ShellHistory";
 import { cn } from "../lib/utils";
-import "./opaline-v2.css";
 
 export type OpalineV2SidebarItem = {
   id: string;
@@ -338,7 +337,7 @@ export function OpalineV2Shell({
   const shell = (
     <TooltipProvider>
       <div
-        className={cn("opaline-v2-shell", className)}
+        className={cn("flex h-full min-h-0 w-full overflow-hidden bg-background text-foreground", className)}
         data-bottom-panel-open={bottomPanel != null && bottomPanelOpen ? "true" : "false"}
         data-inspector-open={resolvedInspector != null && inspectorOpen ? "true" : "false"}
         data-sidebar-open={sidebar != null && sidebarOpen ? "true" : "false"}
@@ -353,74 +352,77 @@ export function OpalineV2Shell({
       >
         {sidebar != null ? (
           <aside
-            className="opaline-v2-sidebar-shell"
+            className={cn(
+              "relative h-full min-h-0 shrink-0 overflow-visible bg-sidebar transition-[width,opacity] duration-200",
+              sidebarOpen ? "w-[var(--opaline-v2-sidebar-width)] opacity-100" : "pointer-events-none w-0 opacity-0"
+            )}
             data-open={sidebarOpen ? "true" : "false"}
             data-resizing={sidebarResizing ? "true" : "false"}
           >
-            {showSidebarChrome ? <div className="opaline-v2-sidebar-chrome">{sidebarChromeContent}</div> : null}
-            <div className="opaline-v2-sidebar">{sidebar}</div>
+            {showSidebarChrome ? <div className="flex h-12 items-center gap-1 px-3 [-webkit-app-region:drag] [&>*]:[-webkit-app-region:no-drag]">{sidebarChromeContent}</div> : null}
+            <div className="absolute inset-x-0 bottom-0 top-12 flex min-h-0 flex-col overflow-hidden">{sidebar}</div>
             <div
               aria-disabled={!sidebarOpen}
               aria-orientation="vertical"
-              className="opaline-v2-sidebar-resize-handle"
+              className="absolute inset-y-0 -right-2 z-50 flex w-4 cursor-col-resize touch-none select-none"
               onPointerDown={sidebarOpen ? startSidebarResize : undefined}
               role="separator"
             >
-              <div className="opaline-v2-resize-handle-line" />
+              <div className="m-auto h-full w-px bg-border opacity-0 transition-opacity hover:opacity-100" />
             </div>
           </aside>
         ) : null}
-        <section className="opaline-v2-main">
-          <header className="opaline-v2-titlebar">
-            {sidebar != null ? <div className="opaline-v2-collapsed-sidebar-trigger">{collapsedTriggerContent}</div> : null}
-            <div className="opaline-v2-titlebar-context">
+        <section className="relative flex min-w-0 flex-1 flex-col overflow-hidden border-l bg-background">
+          <header className="relative z-30 flex h-12 min-h-12 min-w-0 items-center justify-between gap-3 border-b px-3 select-none [-webkit-app-region:drag]">
+            {sidebar != null ? <div className={cn("absolute left-20 top-2 z-40 flex items-center gap-1 [-webkit-app-region:no-drag]", sidebarOpen && "pointer-events-none opacity-0")}>{collapsedTriggerContent}</div> : null}
+            <div className="flex min-w-0 flex-1 items-center gap-3 overflow-hidden">
               {headerTabs.length > 0 ? (
-                <div className="opaline-v2-tab-strip">
+                <div className="flex h-full min-w-0 items-center gap-1 [-webkit-app-region:no-drag]">
                   {headerTabs.map((tab) => (
-                    <div className="opaline-v2-tab-controller" data-tab-id={tab.id} key={tab.id}>
+                    <div className="relative inline-flex min-w-0 max-w-56 shrink-0 items-center gap-1" data-tab-id={tab.id} key={tab.id}>
                       {renderHeaderTab?.(tab, state) ?? <OpalineV2HeaderTab tab={tab} />}
                       {renderHeaderTabActions?.(tab, state)}
                     </div>
                   ))}
                 </div>
               ) : (
-                <div className="opaline-v2-titlebar-copy">
-                  {title != null ? <div className="opaline-v2-titlebar-title">{title}</div> : null}
-                  {subtitle != null ? <div className="opaline-v2-titlebar-subtitle">{subtitle}</div> : null}
+                <div className="min-w-0">
+                  {title != null ? <div className="truncate text-sm font-medium">{title}</div> : null}
+                  {subtitle != null ? <div className="truncate text-xs text-muted-foreground">{subtitle}</div> : null}
                 </div>
               )}
               {headerContent}
             </div>
-            <div className="opaline-v2-titlebar-actions">
+            <div className="inline-flex items-center gap-1 [-webkit-app-region:no-drag]">
               {actionContent}
             </div>
           </header>
-          <div className="opaline-v2-workspace">
-            <section className="opaline-v2-content-stack">
-              <main className="opaline-v2-content">{main}</main>
-              {composer != null ? <footer className="opaline-v2-composer">{composer}</footer> : null}
+          <div className="grid min-h-0 flex-1 grid-cols-[minmax(0,1fr)_auto] overflow-hidden max-[980px]:grid-cols-1">
+            <section className="relative flex min-h-0 min-w-0 flex-col overflow-hidden">
+              <main className="min-h-0 min-w-0 flex-1 overflow-hidden">{main}</main>
+              {composer != null ? <footer className="border-t">{composer}</footer> : null}
               {bottomPanelContent != null ? (
-                <section className="opaline-v2-bottom" data-open={bottomPanelOpen ? "true" : "false"}>
+                <section className={cn("relative z-30 min-h-0 w-full overflow-hidden border-t transition-[height,flex-basis,opacity] duration-200", bottomPanelOpen ? "h-[var(--opaline-v2-bottom-panel-height,260px)] basis-[var(--opaline-v2-bottom-panel-height,260px)] opacity-100" : "pointer-events-none h-0 basis-0 opacity-0")} data-open={bottomPanelOpen ? "true" : "false"}>
                   {bottomPanelContent}
                 </section>
               ) : null}
             </section>
             {resolvedInspector != null ? (
               <aside
-                className="opaline-v2-inspector-shell"
+                className={cn("relative z-40 h-full min-h-0 shrink-0 overflow-visible transition-[width,opacity] duration-200 max-[980px]:hidden", inspectorOpen ? "w-[var(--opaline-v2-inspector-width)] opacity-100" : "pointer-events-none w-0 opacity-0")}
                 data-open={inspectorOpen ? "true" : "false"}
                 data-resizing={inspectorResizing ? "true" : "false"}
               >
                 <div
                   aria-disabled={!inspectorOpen}
                   aria-orientation="vertical"
-                  className="opaline-v2-inspector-resize-handle"
+                  className="absolute inset-y-0 -left-2 z-50 flex w-4 cursor-col-resize touch-none select-none"
                   onPointerDown={inspectorOpen ? startInspectorResize : undefined}
                   role="separator"
                 >
-                  <div className="opaline-v2-resize-handle-line" />
+                  <div className="m-auto h-full w-px bg-border opacity-0 transition-opacity hover:opacity-100" />
                 </div>
-                <div className="opaline-v2-inspector">{resolvedInspector}</div>
+                <div className="absolute inset-0 flex min-h-0 min-w-0 flex-col overflow-hidden border-l bg-card">{resolvedInspector}</div>
               </aside>
             ) : null}
           </div>
@@ -444,18 +446,18 @@ export function OpalineV2Sidebar({
 }: OpalineV2SidebarProps) {
   return (
     <div className={cn("flex min-h-0 flex-1 flex-col", className)}>
-      <div className="opaline-v2-sidebar-header" data-reserve-window-controls={reserveWindowControls ? "true" : "false"}>
+      <div className={cn("flex min-h-10 items-center px-3 py-2 [-webkit-app-region:drag] [&>*]:[-webkit-app-region:no-drag]", reserveWindowControls && "pl-20")} data-reserve-window-controls={reserveWindowControls ? "true" : "false"}>
         {header ?? (
           <div className="min-w-0">
-            {title != null ? <div className="opaline-v2-sidebar-title">{title}</div> : null}
-            {subtitle != null ? <div className="opaline-v2-sidebar-subtitle">{subtitle}</div> : null}
+            {title != null ? <div className="truncate text-sm font-medium">{title}</div> : null}
+            {subtitle != null ? <div className="mt-0.5 truncate text-xs text-muted-foreground">{subtitle}</div> : null}
           </div>
         )}
       </div>
-      <ScrollArea className="opaline-v2-sidebar-scroll">
+      <ScrollArea className="min-h-0 flex-1 px-2 pb-2">
         {sections.map((section) => (
-          <div className="opaline-v2-sidebar-section" key={section.id}>
-            {section.label != null ? <div className="opaline-v2-sidebar-section-label">{section.label}</div> : null}
+          <div className="flex flex-col gap-1 py-1" key={section.id}>
+            {section.label != null ? <div className="px-2 py-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{section.label}</div> : null}
             {section.items.map((item) => (
               <React.Fragment key={item.id}>
                 {renderItem != null ? renderItem(item) : <OpalineV2SidebarItemButton item={item} />}
@@ -464,7 +466,7 @@ export function OpalineV2Sidebar({
           </div>
         ))}
       </ScrollArea>
-      {footer != null ? <div className="opaline-v2-sidebar-footer">{footer}</div> : null}
+      {footer != null ? <div className="flex min-h-12 items-center justify-between px-3 py-2 [-webkit-app-region:no-drag]">{footer}</div> : null}
     </div>
   );
 }
@@ -472,7 +474,7 @@ export function OpalineV2Sidebar({
 export function OpalineV2SidebarItemButton({ item }: { item: OpalineV2SidebarItem }) {
   return (
     <Button
-      className="opaline-v2-sidebar-item"
+      className="grid h-auto min-h-8 w-full grid-cols-[1.125rem_minmax(0,1fr)_auto] justify-stretch gap-2 px-2 text-left data-[active=true]:bg-accent"
       data-active={item.active ? "true" : undefined}
       disabled={item.disabled}
       onClick={item.onSelect}
@@ -480,9 +482,9 @@ export function OpalineV2SidebarItemButton({ item }: { item: OpalineV2SidebarIte
       type="button"
       variant="ghost"
     >
-      <span className="opaline-v2-sidebar-item-icon">{item.icon}</span>
-      <span className="opaline-v2-sidebar-item-label">{item.label}</span>
-      {item.meta != null ? <span className="opaline-v2-sidebar-item-meta">{item.meta}</span> : null}
+      <span className="inline-grid size-[1.125rem] place-items-center">{item.icon}</span>
+      <span className="truncate">{item.label}</span>
+      {item.meta != null ? <span className="truncate text-xs text-muted-foreground">{item.meta}</span> : null}
     </Button>
   );
 }
@@ -515,11 +517,11 @@ export function OpalineV2NavigationControls({
 }
 
 export function OpalineV2ChromeButton({ className, type = "button", ...props }: OpalineV2ShellButtonProps) {
-  return <button className={cn("opaline-v2-chrome-button", className)} type={type} {...props} />;
+  return <Button className={className} size="icon-sm" type={type} variant="ghost" {...props} />;
 }
 
 export function OpalineV2CollapsedSidebarTrigger({ className, type = "button", ...props }: OpalineV2ShellButtonProps) {
-  return <button className={cn("opaline-v2-collapsed-trigger-button", className)} type={type} {...props} />;
+  return <Button className={className} size="icon-sm" type={type} variant="ghost" {...props} />;
 }
 
 export function OpalineV2HeaderToolButton({
@@ -534,15 +536,17 @@ export function OpalineV2HeaderToolButton({
   pressed?: boolean;
 }) {
   const button = (
-    <button
+    <Button
       aria-label={label}
       aria-pressed={pressed}
-      className={cn("opaline-v2-header-tool-button", className)}
+      className={className}
+      size="icon-sm"
+      variant="ghost"
       type={type}
       {...props}
     >
       {children}
-    </button>
+    </Button>
   );
 
   if (label == null) {
@@ -572,11 +576,11 @@ function ShellSlot({ as: Component = "div", className, ...props }: AppShellSlotP
 }
 
 export function AppShellChromeControls(props: AppShellSlotProps) {
-  return <ShellSlot {...props} className={cn("opaline-v2-chrome-controls", props.className)} />;
+  return <ShellSlot {...props} className={cn("flex items-center gap-1", props.className)} />;
 }
 
 export function AppShellSidebarChrome(props: AppShellSlotProps) {
-  return <ShellSlot {...props} className={cn("opaline-v2-sidebar-chrome", props.className)} />;
+  return <ShellSlot {...props} className={cn("flex h-12 items-center gap-1 px-3", props.className)} />;
 }
 
 export function AppShellNavigationControls({ onHome, state, variant = "sidebar" }: {
@@ -588,19 +592,19 @@ export function AppShellNavigationControls({ onHome, state, variant = "sidebar" 
 }
 
 export function AppShellHeader(props: AppShellSlotProps) {
-  return <ShellSlot {...props} as="header" className={cn("opaline-v2-titlebar", props.className)} />;
+  return <ShellSlot {...props} as="header" className={cn("flex h-12 items-center justify-between gap-3 border-b px-3", props.className)} />;
 }
 
 export function AppShellHeaderContextSurface(props: AppShellSlotProps) {
-  return <ShellSlot {...props} className={cn("opaline-v2-titlebar-context", props.className)} />;
+  return <ShellSlot {...props} className={cn("flex min-w-0 flex-1 items-center gap-3 overflow-hidden", props.className)} />;
 }
 
 export function AppShellTabStrip(props: AppShellSlotProps) {
-  return <ShellSlot {...props} className={cn("opaline-v2-tab-strip", props.className)} />;
+  return <ShellSlot {...props} className={cn("flex h-full min-w-0 items-center gap-1", props.className)} />;
 }
 
 export function AppShellTabController(props: AppShellSlotProps) {
-  return <ShellSlot {...props} className={cn("opaline-v2-tab-controller", props.className)} />;
+  return <ShellSlot {...props} className={cn("relative inline-flex min-w-0 max-w-56 items-center gap-1", props.className)} />;
 }
 
 export function AppShellTab({ tab, ...props }: OpalineV2ShellButtonProps & { tab?: OpalineV2ShellTabItem }) {
@@ -608,7 +612,7 @@ export function AppShellTab({ tab, ...props }: OpalineV2ShellButtonProps & { tab
 }
 
 export function AppShellTabActions(props: AppShellSlotProps) {
-  return <ShellSlot {...props} className={cn("opaline-v2-tab-actions", props.className)} />;
+  return <ShellSlot {...props} className={cn("inline-flex items-center gap-1", props.className)} />;
 }
 
 export function AppShellTabActionButton(props: OpalineV2ShellButtonProps) {
@@ -616,27 +620,27 @@ export function AppShellTabActionButton(props: OpalineV2ShellButtonProps) {
 }
 
 export function AppShellHeaderActions(props: AppShellSlotProps) {
-  return <ShellSlot {...props} className={cn("opaline-v2-titlebar-actions", props.className)} />;
+  return <ShellSlot {...props} className={cn("inline-flex items-center gap-1", props.className)} />;
 }
 
 export function AppShellHeaderPillButton({ className, ...props }: OpalineV2ShellButtonProps) {
-  return <button className={cn("opaline-v2-header-pill-button", className)} {...props} />;
+  return <Button className={className} size="sm" variant="outline" {...props} />;
 }
 
 export function AppShellContent(props: AppShellSlotProps) {
-  return <ShellSlot {...props} as="section" className={cn("opaline-v2-content", props.className)} />;
+  return <ShellSlot {...props} as="section" className={cn("min-h-0 min-w-0 flex-1 overflow-hidden", props.className)} />;
 }
 
 export function AppShellComposer(props: AppShellSlotProps) {
-  return <ShellSlot {...props} as="section" className={cn("opaline-v2-composer", props.className)} />;
+  return <ShellSlot {...props} as="section" className={cn("border-t", props.className)} />;
 }
 
 export function AppShellRightPanel(props: AppShellSlotProps) {
-  return <ShellSlot {...props} className={cn("opaline-v2-inspector", props.className)} />;
+  return <ShellSlot {...props} className={cn("flex min-h-0 flex-col overflow-hidden border-l bg-card", props.className)} />;
 }
 
 export function AppShellBottomPanel(props: AppShellSlotProps) {
-  return <ShellSlot {...props} className={cn("opaline-v2-bottom-panel-content", props.className)} />;
+  return <ShellSlot {...props} className={cn("h-full min-h-0 overflow-hidden", props.className)} />;
 }
 
 export function OpalineV2InspectorIcon() {
@@ -655,10 +659,10 @@ export function OpalineV2HeaderTab({
   ...props
 }: OpalineV2ShellButtonProps & { tab: OpalineV2ShellTabItem }) {
   return (
-    <button className={cn("opaline-v2-header-tab", className)} data-active={tab.active ? "true" : undefined} type={type} {...props}>
-      {tab.dirty ? <span className="opaline-v2-header-tab-dot" /> : null}
-      <span className="opaline-v2-header-tab-title">{tab.title}</span>
-    </button>
+    <Button className={cn("max-w-48", className)} data-active={tab.active ? "true" : undefined} size="sm" type={type} variant={tab.active ? "secondary" : "ghost"} {...props}>
+      {tab.dirty ? <span className="size-2 rounded-full bg-primary" /> : null}
+      <span className="truncate">{tab.title}</span>
+    </Button>
   );
 }
 
@@ -676,7 +680,6 @@ function SidebarToggleIcon({ active }: { active: boolean }) {
       <path d="M7.5 4.5v11" stroke="currentColor" strokeWidth="1.5" />
       {active ? (
         <circle
-          className="opaline-v2-sidebar-state-dot"
           cx="16.5"
           cy="4.5"
           fill="#007aff"

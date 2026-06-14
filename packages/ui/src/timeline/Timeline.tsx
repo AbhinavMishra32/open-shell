@@ -1,5 +1,5 @@
 import type { HTMLAttributes, ReactNode } from "react";
-import "./timeline.css";
+import { cn } from "../lib/utils";
 
 export type TimelineStatus = "default" | "completed" | "active" | "pending" | "error" | "warning" | "pushed";
 
@@ -27,20 +27,20 @@ export function Timeline({
   ...props
 }: TimelineProps) {
   return (
-    <div className={`opaline-timeline ${className}`} data-density={density} {...props}>
+    <div className={cn("flex flex-col", density === "compact" ? "gap-2" : density === "spacious" ? "gap-5" : "gap-3", className)} data-density={density} {...props}>
       {items.map((item, index) => (
-        <div className="opaline-timeline-item" data-status={item.status ?? "default"} key={item.id}>
-          <div className="opaline-timeline-rail" aria-hidden="true">
-            <span className="opaline-timeline-marker">{item.icon}</span>
-            {showConnectors && index < items.length - 1 ? <span className="opaline-timeline-connector" /> : null}
+        <div className="grid grid-cols-[1.25rem_minmax(0,1fr)] gap-2" data-status={item.status ?? "default"} key={item.id}>
+          <div className="relative flex justify-center" aria-hidden="true">
+            <span className="relative z-10 inline-grid size-5 place-items-center rounded-full bg-background text-muted-foreground data-[status=active]:text-primary">{item.icon}</span>
+            {showConnectors && index < items.length - 1 ? <span className="absolute bottom-[-1.25rem] top-5 w-px bg-border" /> : null}
           </div>
-          <div className="opaline-timeline-content">
-            <div className="opaline-timeline-heading">
+          <div className="min-w-0 pb-2">
+            <div className="flex min-w-0 items-center justify-between gap-2">
               <strong>{item.title}</strong>
-              {item.meta ? <span>{item.meta}</span> : null}
+              {item.meta ? <span className="shrink-0">{item.meta}</span> : null}
             </div>
-            {item.description ? <div className="opaline-timeline-description">{item.description}</div> : null}
-            {item.content ? <div className="opaline-timeline-detail">{item.content}</div> : null}
+            {item.description ? <div className="text-sm text-muted-foreground">{item.description}</div> : null}
+            {item.content ? <div className="mt-2">{item.content}</div> : null}
           </div>
         </div>
       ))}

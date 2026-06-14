@@ -2,7 +2,7 @@ import { AnimatePresence, motion, useDragControls, useReducedMotion } from "fram
 import { ChevronDown, ChevronUp, Pin, PinOff, X } from "lucide-react";
 import type { CSSProperties, HTMLAttributes, PointerEvent as ReactPointerEvent, ReactNode, RefObject } from "react";
 import { createContext, useContext, useLayoutEffect, useMemo, useRef, useState } from "react";
-import "./adaptive-sidecar.css";
+import { cn } from "../lib/utils";
 
 export type AdaptiveSidecarMode = "overlay" | "shift" | "gutter";
 
@@ -97,7 +97,7 @@ export function AdaptiveSidecarLayout({
   return (
     <div
       ref={rootRef}
-      className={`opaline-adaptive-sidecar-layout ${className}`.trim()}
+      className={cn("relative flex h-full min-h-0 w-full overflow-hidden", className)}
       data-mode={mode}
       data-open={open ? "true" : "false"}
       data-pinned={pinned ? "true" : "false"}
@@ -109,7 +109,7 @@ export function AdaptiveSidecarLayout({
       {...props}
     >
       <motion.div
-        className="opaline-adaptive-sidecar-main"
+        className="min-w-0 flex-1"
         animate={{ x: shift }}
         transition={transition}
       >
@@ -119,7 +119,7 @@ export function AdaptiveSidecarLayout({
         <SidecarBoundsContext.Provider value={railRef}>
           <motion.aside
             ref={railRef}
-            className="opaline-adaptive-sidecar-rail"
+            className="absolute inset-y-0 right-0 z-30 flex w-[var(--opaline-sidecar-width)] items-start p-[var(--opaline-sidecar-gap)] data-[inline=true]:relative data-[inline=true]:z-auto data-[visible=false]:pointer-events-none"
             data-inline={inline ? "true" : "false"}
             data-visible={open ? "true" : "false"}
             aria-hidden={!open}
@@ -167,7 +167,7 @@ export function AdaptiveSidecarSurface({
   return (
     <motion.article
       layout
-      className={`opaline-adaptive-sidecar-surface ${className}`.trim()}
+      className={cn("flex max-h-full w-full flex-col overflow-hidden rounded-lg border bg-card text-card-foreground shadow-lg", className)}
       data-collapsed={collapsed ? "true" : "false"}
       data-pinned={pinned ? "true" : "false"}
       data-draggable={draggable ? "true" : "false"}
@@ -181,16 +181,16 @@ export function AdaptiveSidecarSurface({
       {...props}
     >
       <header
-        className="opaline-adaptive-sidecar-header"
+        className="flex min-h-11 shrink-0 items-center justify-between gap-3 border-b px-3 py-2"
         onPointerDown={(event: ReactPointerEvent<HTMLElement>) => {
           if (draggable && !(event.target as HTMLElement).closest("button, a")) dragControls.start(event);
         }}
       >
-        <div className="opaline-adaptive-sidecar-heading">
-          {eyebrow ? <span>{eyebrow}</span> : null}
-          <strong>{title}</strong>
+        <div className="min-w-0 flex-1">
+          {eyebrow ? <span className="block truncate text-[10px] font-medium uppercase tracking-wide text-muted-foreground">{eyebrow}</span> : null}
+          <strong className="block truncate text-sm font-medium">{title}</strong>
         </div>
-        <div className="opaline-adaptive-sidecar-actions">
+        <div className="flex shrink-0 items-center gap-0.5 [&_button]:flex [&_button]:size-7 [&_button]:items-center [&_button]:justify-center [&_button]:rounded-md [&_button]:text-muted-foreground [&_button:hover]:bg-muted [&_button:hover]:text-foreground">
           {actions}
           {onCollapsedChange ? (
             <button
@@ -223,14 +223,14 @@ export function AdaptiveSidecarSurface({
         {!collapsed ? (
           <motion.div
             key="content"
-            className="opaline-adaptive-sidecar-content"
+            className="flex min-h-0 flex-1 flex-col overflow-hidden"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={transition}
           >
-            <div className="opaline-adaptive-sidecar-scroll">{children}</div>
-            {footer ? <footer className="opaline-adaptive-sidecar-footer">{footer}</footer> : null}
+            <div className="min-h-0 flex-1 overflow-y-auto p-3">{children}</div>
+            {footer ? <footer className="shrink-0 border-t p-3">{footer}</footer> : null}
           </motion.div>
         ) : null}
       </AnimatePresence>

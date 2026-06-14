@@ -1,6 +1,19 @@
 export { Avatar, AvatarFallback, AvatarImage } from "./avatar";
 export { Badge, badgeVariants } from "./badge";
+export { Alert, AlertDescription, AlertTitle } from "./alert";
 export { Button, buttonVariants } from "./button";
+export { Input } from "./input";
+export { Spinner } from "./spinner";
+export { Textarea } from "./textarea";
+export {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "./card";
 export {
   ContextMenu,
   ContextMenuCheckboxItem,

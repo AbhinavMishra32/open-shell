@@ -1,7 +1,7 @@
 import type { CSSProperties, ReactNode } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { ContextMenu, ContextMenuTrigger } from "../primitives/ContextMenu";
-import "./file-tree.css";
+import { ContextMenu, ContextMenuTrigger } from "../components/context-menu";
+import { cn } from "../lib/utils";
 
 export type FileTreeItem = {
   children?: FileTreeItem[];
@@ -75,14 +75,14 @@ export function FileTree({
 
   return (
     <div
-      className={joinClassNames("opaline-file-tree", className)}
+      className={cn("flex h-full min-h-0 flex-col text-sm", className)}
       data-file-tree-colored-icons={coloredIcons ? "true" : undefined}
       data-file-tree-variant={variant}
       style={style}
     >
       <FileTreeIconSprite />
       <div
-        className="opaline-file-tree-root"
+        className="flex min-h-0 flex-1 flex-col outline-none"
         data-file-tree-has-context-menu-action-lane={showActions ? "true" : "false"}
         data-file-tree-has-git-lane={gitLane ? "true" : "false"}
         data-file-tree-virtualized-root="true"
@@ -90,14 +90,15 @@ export function FileTree({
         tabIndex={-1}
       >
         {search ? (
-          <div data-file-tree-search-container="true">
-            <label className="opaline-file-tree-search-label" htmlFor="opaline-file-tree-search">
+          <div className="shrink-0 p-2" data-file-tree-search-container="true">
+            <label className="sr-only" htmlFor="opaline-file-tree-search">
               {searchLabel}
             </label>
-            <div className="opaline-file-tree-search-field">
+            <div className="flex h-8 items-center gap-2 rounded-md border bg-background px-2 text-muted-foreground focus-within:ring-2 focus-within:ring-ring/30">
               <SearchIcon />
               <input
                 id="opaline-file-tree-search"
+                className="min-w-0 flex-1 bg-transparent text-xs text-foreground outline-none placeholder:text-muted-foreground"
                 data-file-tree-search-input="true"
                 placeholder={searchPlaceholder}
                 aria-label={searchAriaLabel}
@@ -105,8 +106,8 @@ export function FileTree({
             </div>
           </div>
         ) : null}
-        <div data-file-tree-virtualized-scroll="true">
-          <div data-file-tree-virtualized-list="true">
+        <div className="min-h-0 flex-1 overflow-y-auto" data-file-tree-virtualized-scroll="true">
+          <div className="py-1" data-file-tree-virtualized-list="true">
             {normalizedItems.map((item) => (
               <FileTreeRow
                 gitLane={gitLane}
@@ -158,7 +159,7 @@ function FileTreeRow({
   if (item.isEditing) {
     return (
       <div
-        className="opaline-file-tree-row"
+        className="relative flex h-7 w-full items-center gap-1.5 pr-2 text-xs"
         aria-expanded={isDirectory ? (item.expanded !== false ? "true" : "false") : undefined}
         style={
           {
@@ -171,21 +172,21 @@ function FileTreeRow({
         {Array.from({ length: level - 1 }).map((_, index) => (
           <span
             key={index}
-            className="opaline-file-tree-indent-guide"
-            style={{ "--indent-index": String(index) } as CSSProperties}
+            className="absolute inset-y-0 w-px bg-border/50"
+            style={{ left: 10 + index * 18 }}
             aria-hidden="true"
           />
         ))}
         {isDirectory ? (
-          <span className="opaline-file-tree-chevron-container">
-            <svg data-icon-name="file-tree-icon-chevron" aria-hidden="true">
+          <span className="flex size-4 shrink-0 items-center justify-center" style={{ marginLeft: 6 + (level - 1) * 18 }}>
+            <svg className="size-3" data-icon-name="file-tree-icon-chevron" aria-hidden="true">
               <use href="#file-tree-icon-chevron" />
             </svg>
           </span>
         ) : (
-          <span className="opaline-file-tree-chevron-spacer" />
+          <span className="size-4 shrink-0" style={{ marginLeft: 6 + (level - 1) * 18 }} />
         )}
-        <span data-item-section="icon">
+        <span className="flex size-4 shrink-0 items-center justify-center [&_svg]:size-4" data-item-section="icon">
           {item.icon ?? (
             <svg data-icon-name={iconName} data-icon-token={iconToken} aria-hidden="true">
               <use href={`#${iconName}`} />
@@ -193,7 +194,7 @@ function FileTreeRow({
           )}
         </span>
         <input
-          className="construct-file-inline-input"
+          className="h-6 min-w-0 flex-1 rounded border bg-background px-1.5 text-xs outline-none focus:ring-2 focus:ring-ring/30"
           defaultValue={item.name}
           autoFocus
           onFocus={(e) => {
@@ -222,7 +223,7 @@ function FileTreeRow({
 
   const buttonElement = (
     <button
-      className="opaline-file-tree-row"
+      className="group relative flex h-7 w-full items-center gap-1.5 pr-2 text-left text-xs text-muted-foreground outline-none hover:bg-muted hover:text-foreground data-[item-selected=true]:bg-muted data-[item-selected=true]:font-medium data-[item-selected=true]:text-foreground"
       data-file-tree-sticky-path={level === 1 ? item.path : undefined}
       data-file-tree-sticky-row={level === 1 && isDirectory ? "true" : undefined}
       data-path={item.path}
@@ -250,37 +251,37 @@ function FileTreeRow({
       {Array.from({ length: level - 1 }).map((_, index) => (
         <span
           key={index}
-          className="opaline-file-tree-indent-guide"
-          style={{ "--indent-index": String(index) } as CSSProperties}
+          className="absolute inset-y-0 w-px bg-border/50"
+          style={{ left: 10 + index * 18 }}
           aria-hidden="true"
         />
       ))}
       {isDirectory ? (
-        <span className="opaline-file-tree-chevron-container">
+        <span className="flex size-4 shrink-0 items-center justify-center" style={{ marginLeft: 6 + (level - 1) * 18 }}>
           <motion.span initial={false} animate={{ rotate: isExpanded ? 0 : -90 }} transition={disclosureTransition}>
-            <svg data-icon-name="file-tree-icon-chevron" aria-hidden="true">
+            <svg className="size-3" data-icon-name="file-tree-icon-chevron" aria-hidden="true">
               <use href="#file-tree-icon-chevron" />
             </svg>
           </motion.span>
         </span>
       ) : (
-        <span className="opaline-file-tree-chevron-spacer" />
+        <span className="size-4 shrink-0" style={{ marginLeft: 6 + (level - 1) * 18 }} />
       )}
-      <span data-item-section="icon">
+      <span className="flex size-4 shrink-0 items-center justify-center [&_svg]:size-4" data-item-section="icon">
         {item.icon ?? (
           <svg data-icon-name={iconName} data-icon-token={iconToken} aria-hidden="true">
             <use href={`#${iconName}`} />
           </svg>
         )}
       </span>
-      <span data-item-section="content">{item.name}</span>
-      <span data-item-section="decoration">
+      <span className="min-w-0 flex-1 truncate" data-item-section="content">{item.name}</span>
+      <span className="shrink-0" data-item-section="decoration">
         {item.decoration}
       </span>
-      {gitLane ? <span data-item-section="git">{item.gitStatus != null ? <GitDot status={item.gitStatus} /> : null}</span> : null}
+      {gitLane ? <span className="w-4 shrink-0 text-center" data-item-section="git">{item.gitStatus != null ? <GitDot status={item.gitStatus} /> : null}</span> : null}
       {showActions ? (
-        <span data-item-section="action">
-          <svg data-icon-name="file-tree-icon-ellipsis" aria-hidden="true">
+        <span className="flex size-5 shrink-0 items-center justify-center opacity-0 group-hover:opacity-100" data-item-section="action">
+          <svg className="size-3" data-icon-name="file-tree-icon-ellipsis" aria-hidden="true">
             <use href="#file-tree-icon-ellipsis" />
           </svg>
         </span>
@@ -292,9 +293,7 @@ function FileTreeRow({
     <>
       {renderRowContextMenu ? (
         <ContextMenu>
-          <ContextMenuTrigger asChild>
-            {buttonElement}
-          </ContextMenuTrigger>
+          <ContextMenuTrigger render={buttonElement} />
           {renderRowContextMenu(item)}
         </ContextMenu>
       ) : (
@@ -305,13 +304,13 @@ function FileTreeRow({
           {isExpanded ? (
             <motion.div
               key={`${item.path}:children`}
-              className="opaline-file-tree-submenu"
+              className="overflow-hidden"
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
               transition={disclosureTransition}
             >
-              <div className="opaline-file-tree-submenu-content">
+              <div>
                 {item.children?.map((child) => (
                   <FileTreeRow
                     gitLane={gitLane}
@@ -381,7 +380,7 @@ function readRecord(value: unknown): Record<string, unknown> {
 
 function GitDot({ status }: { status: NonNullable<FileTreeItem["gitStatus"]> }) {
   return (
-    <span className="opaline-file-tree-git-dot" data-git-status={status}>
+    <span className="text-[10px] font-medium text-muted-foreground data-[git-status=added]:text-emerald-600 data-[git-status=deleted]:text-destructive data-[git-status=modified]:text-amber-600" data-git-status={status}>
       {status.slice(0, 1).toUpperCase()}
     </span>
   );
@@ -409,13 +408,9 @@ function getIconToken(name: string, isDirectory: boolean) {
   return "default";
 }
 
-function joinClassNames(...classNames: Array<string | undefined>) {
-  return classNames.filter(Boolean).join(" ");
-}
-
 function SearchIcon() {
   return (
-    <svg className="opaline-file-tree-search-icon" viewBox="0 0 20 20" aria-hidden="true">
+    <svg className="size-4 shrink-0" viewBox="0 0 20 20" aria-hidden="true">
       <path
         d="M8.75 3.75a5 5 0 1 1 0 10 5 5 0 0 1 0-10Zm0 1.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7Zm4.1 7.1 3.15 3.15"
         fill="none"

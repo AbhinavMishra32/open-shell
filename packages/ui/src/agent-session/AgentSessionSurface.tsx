@@ -1,8 +1,8 @@
 import { ChevronRight, LoaderCircle, Sparkles } from "lucide-react";
 import type { HTMLAttributes, ReactNode, TextareaHTMLAttributes } from "react";
 import { useMemo, useState } from "react";
-import { Button } from "../primitives/Button";
-import "./agent-session.css";
+import { Button } from "../components/button";
+import { cn } from "../lib/utils";
 
 export type AgentSessionToolStatus = "pending" | "running" | "completed" | "error";
 
@@ -89,18 +89,18 @@ export function AgentSessionSurface({
   ...props
 }: AgentSessionSurfaceProps) {
   return (
-    <section className={`opaline-agent-session ${className}`.trim()} {...props}>
+    <section className={cn("flex min-h-0 flex-1 flex-col bg-background text-foreground", className)} {...props}>
       {(eyebrow != null || title != null || lead != null) ? (
-        <header className="opaline-agent-session-header">
-          {eyebrow != null ? <p className="opaline-agent-session-eyebrow">{eyebrow}</p> : null}
-          {title != null ? <h3 className="opaline-agent-session-title">{title}</h3> : null}
-          {lead != null ? <div className="opaline-agent-session-lead">{lead}</div> : null}
+        <header className="shrink-0 border-b px-4 py-3">
+          {eyebrow != null ? <p className="text-[10px] font-medium uppercase tracking-wide text-muted-foreground">{eyebrow}</p> : null}
+          {title != null ? <h3 className="mt-0.5 text-sm font-semibold">{title}</h3> : null}
+          {lead != null ? <div className="mt-1 text-xs text-muted-foreground">{lead}</div> : null}
         </header>
       ) : null}
 
-      <div className="opaline-agent-session-body">
+      <div className="min-h-0 flex-1 overflow-y-auto px-4 py-3 [&_[data-component=assistant-message]]:space-y-3 [&_[data-component=session-turn-message-container]]:space-y-4 [&_[data-component=text-part]]:text-sm [&_[data-component=user-message]]:ml-auto [&_[data-component=user-message]]:max-w-[85%] [&_[data-slot=user-message-body]]:rounded-lg [&_[data-slot=user-message-body]]:bg-muted [&_[data-slot=user-message-body]]:px-3 [&_[data-slot=user-message-body]]:py-2 [&_[data-slot$=-meta]]:text-[10px] [&_[data-slot$=-meta]]:text-muted-foreground">
         {messages.length === 0 ? (
-          <div className="opaline-agent-session-empty">{emptyState ?? "No messages yet."}</div>
+          <div className="flex min-h-32 items-center justify-center text-sm text-muted-foreground">{emptyState ?? "No messages yet."}</div>
         ) : (
           <div data-component="session-turn">
             <div data-slot="session-turn-content">
@@ -114,7 +114,7 @@ export function AgentSessionSurface({
         )}
       </div>
 
-      {composer ? <div className="opaline-agent-session-composer">{composer}</div> : null}
+      {composer ? <div className="shrink-0 border-t p-3">{composer}</div> : null}
     </section>
   );
 }
@@ -133,16 +133,16 @@ export function AgentSessionComposer({
   const isDisabled = disabled || pending || !value.trim();
 
   return (
-    <div className={`opaline-agent-session-compose ${className}`.trim()}>
+    <div className={cn("rounded-lg border bg-background p-2 focus-within:ring-2 focus-within:ring-ring/30", className)}>
       <textarea
         {...props}
-        className="opaline-agent-session-compose-input"
+        className="min-h-20 w-full resize-none bg-transparent px-1 text-sm outline-none placeholder:text-muted-foreground"
         value={value}
         onChange={(event) => onValueChange(event.target.value)}
         placeholder={placeholder}
         spellCheck
       />
-      <div className="opaline-agent-session-compose-actions">
+      <div className="mt-2 flex justify-end">
         <Button type="button" disabled={isDisabled} onClick={onSubmit}>
           {pending ? "Thinking" : submitLabel}
         </Button>
@@ -201,7 +201,7 @@ function AgentSessionPartView({ part }: { part: AgentSessionMessagePart }) {
   }
 
   if (part.type === "actions") {
-    return <div className="opaline-agent-session-actions">{part.content}</div>;
+    return <div className="flex flex-wrap items-center gap-2">{part.content}</div>;
   }
 
   if (part.type === "reasoning") {
@@ -263,19 +263,19 @@ function AgentSessionDisclosure({
   return (
     <div data-component={component}>
       <button
-        className="opaline-agent-session-disclosure"
+        className="flex w-full items-start justify-between gap-3 rounded-md py-1 text-left text-xs text-muted-foreground hover:text-foreground"
         type="button"
         aria-expanded={expandable ? open : undefined}
         onClick={() => expandable && setOpen((value) => !value)}
       >
-        <span data-slot="context-tool-group-title">
-          <span data-slot="context-tool-group-label" className={active ? "opaline-agent-session-shimmer" : ""}>
-            {active ? <LoaderCircle className="opaline-agent-session-spin" size={14} /> : <Sparkles size={14} />}
+        <span className="min-w-0" data-slot="context-tool-group-title">
+          <span className={cn("flex items-center gap-1.5 font-medium", active && "animate-pulse")} data-slot="context-tool-group-label">
+            {active ? <LoaderCircle className="animate-spin" size={14} /> : <Sparkles size={14} />}
             {label}
           </span>
-          {summary ? <span data-slot="context-tool-group-summary">{summary}</span> : null}
+          {summary ? <span className="mt-0.5 block text-[11px]" data-slot="context-tool-group-summary">{summary}</span> : null}
         </span>
-        {expandable ? <ChevronRight className={open ? "is-open" : ""} size={14} /> : null}
+        {expandable ? <ChevronRight className={cn("shrink-0 transition-transform", open && "rotate-90")} size={14} /> : null}
       </button>
       {expandable && open ? children : null}
     </div>
@@ -290,7 +290,7 @@ function ContextEntryRow({ entry }: { entry: AgentSessionToolEntry }) {
           <div data-slot="basic-tool-tool-info">
             <div data-slot="basic-tool-tool-info-structured">
               <div data-slot="basic-tool-tool-info-main">
-                <span data-slot="basic-tool-tool-title" className={isActive(entry.status) ? "opaline-agent-session-shimmer" : ""}>
+                <span data-slot="basic-tool-tool-title" className={cn("text-xs font-medium", isActive(entry.status) && "animate-pulse")}>
                   {entry.title}
                 </span>
                 {entry.subtitle ? <span data-slot="basic-tool-tool-subtitle">{entry.subtitle}</span> : null}
@@ -315,9 +315,9 @@ function ToolEntryCard({ tool }: { tool: AgentSessionToolEntry }) {
 
   return (
     <div data-component="tool-part-wrapper">
-      <div className="opaline-agent-session-tool-card">
+      <div className="overflow-hidden rounded-lg border bg-card">
         <button
-          className="opaline-agent-session-tool-trigger"
+          className="flex w-full items-center justify-between gap-3 p-3 text-left hover:bg-muted/50"
           type="button"
           aria-expanded={expandable ? open : undefined}
           onClick={() => expandable && setOpen((value) => !value)}
@@ -327,7 +327,7 @@ function ToolEntryCard({ tool }: { tool: AgentSessionToolEntry }) {
               <div data-slot="basic-tool-tool-info">
                 <div data-slot="basic-tool-tool-info-structured">
                   <div data-slot="basic-tool-tool-info-main">
-                    <span data-slot="basic-tool-tool-title" className={isActive(tool.status) ? "opaline-agent-session-shimmer" : ""}>
+                    <span data-slot="basic-tool-tool-title" className={cn("text-xs font-medium", isActive(tool.status) && "animate-pulse")}>
                       {tool.title}
                     </span>
                     {tool.subtitle ? <span data-slot="basic-tool-tool-subtitle">{tool.subtitle}</span> : null}
@@ -337,12 +337,12 @@ function ToolEntryCard({ tool }: { tool: AgentSessionToolEntry }) {
               </div>
             </div>
           </div>
-          <span className="opaline-agent-session-tool-meta">
-            <small>{statusLabel}</small>
-            {expandable ? <ChevronRight className={open ? "is-open" : ""} size={14} /> : null}
+          <span className="flex shrink-0 items-center gap-1 text-muted-foreground">
+            <small className="text-[10px]">{statusLabel}</small>
+            {expandable ? <ChevronRight className={cn("transition-transform", open && "rotate-90")} size={14} /> : null}
           </span>
         </button>
-        {expandable && open ? <div className="opaline-agent-session-tool-body">{tool.content}</div> : null}
+        {expandable && open ? <div className="border-t p-3 text-xs">{tool.content}</div> : null}
       </div>
     </div>
   );

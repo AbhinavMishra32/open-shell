@@ -6,9 +6,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "../primitives/DropdownMenu";
+} from "../components/dropdown-menu";
 import { ChevronLeft, ChevronRight, Plus, X } from "lucide-react";
-import "./slot-panel.css";
+import { cn } from "../lib/utils";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -300,15 +300,15 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
 
     return (
       <Tabs.Root
-        className={`opaline-slot-panel${className ? ` ${className}` : ""}`}
+        className={cn("flex h-full min-h-0 w-full flex-col bg-background", className)}
         value={activeTabId || ""}
         onValueChange={(val) => commitActiveTabId(val || null)}
       >
-        <div className="opaline-slot-panel-tabbar">
-          <div className="opaline-slot-panel-tabs-container">
+        <div className="flex h-9 shrink-0 items-center justify-between border-b bg-muted/20">
+          <div className="flex min-w-0 flex-1 items-center">
             {tabOverflow.canScrollLeft ? (
               <button
-                className="opaline-slot-panel-scroll-affordance is-left"
+                className="flex size-8 shrink-0 items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground"
                 type="button"
                 aria-label="Scroll tabs left"
                 onClick={() => scrollTabs("left")}
@@ -318,7 +318,7 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
             ) : null}
             <Tabs.List
               ref={tabsRef}
-              className="opaline-slot-panel-tabs"
+              className="flex min-w-0 flex-1 items-stretch overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               aria-label={ariaLabel}
               data-overflow-left={tabOverflow.canScrollLeft ? "true" : undefined}
               data-overflow-right={tabOverflow.canScrollRight ? "true" : undefined}
@@ -327,14 +327,14 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
                 <Tabs.Trigger
                   key={tab.id}
                   value={tab.id}
-                  className="opaline-slot-panel-tab"
+                  className="group relative flex h-9 max-w-52 shrink-0 items-center gap-1.5 border-r px-3 text-xs text-muted-foreground outline-none hover:bg-muted/50 hover:text-foreground data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:after:absolute data-[state=active]:after:inset-x-0 data-[state=active]:after:bottom-0 data-[state=active]:after:h-0.5 data-[state=active]:after:bg-primary"
                   data-tab-id={tab.id}
                   data-closable={tab.closable === true ? "true" : undefined}
                 >
-                  <span className="opaline-slot-panel-tab-icon-wrapper">
+                  <span className="relative flex size-4 shrink-0 items-center justify-center">
                     {tab.closable === true ? (
                       <span
-                        className="opaline-slot-panel-tab-close"
+                        className="absolute inset-0 z-10 hidden items-center justify-center rounded-sm bg-muted text-muted-foreground hover:text-foreground group-hover:flex"
                         onClick={(e) => {
                           e.stopPropagation();
                           handleCloseTab(tab.id);
@@ -349,16 +349,16 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
                       </span>
                     ) : null}
                     {tab.icon != null ? (
-                      <span className="opaline-slot-panel-tab-icon">{tab.icon}</span>
+                      <span className="flex items-center justify-center [&_svg]:size-3.5">{tab.icon}</span>
                     ) : null}
                   </span>
-                  <span className="opaline-slot-panel-tab-title">{tab.title}</span>
+                  <span className="truncate">{tab.title}</span>
                 </Tabs.Trigger>
               ))}
             </Tabs.List>
             {tabOverflow.canScrollRight ? (
               <button
-                className="opaline-slot-panel-scroll-affordance is-right"
+                className="flex size-8 shrink-0 items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground"
                 type="button"
                 aria-label="Scroll tabs right"
                 onClick={() => scrollTabs("right")}
@@ -368,17 +368,15 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
             ) : null}
             {launcherItems.length > 0 && (
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className="opaline-slot-panel-add-action" type="button" aria-label="Add tab">
+                <DropdownMenuTrigger render={<button className="flex size-8 shrink-0 items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground" type="button" aria-label="Add tab" />}>
                     <Plus size={15} strokeWidth={1.8} />
-                  </button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="start" className="opaline-slot-panel-launcher-menu" side="bottom">
+                <DropdownMenuContent align="start" className="min-w-52" side="bottom">
                   {launcherItems.map((item) => (
                     <DropdownMenuItem key={item.type} onSelect={() => handleLauncherSelect(item)}>
                       {item.icon}
                       <span>{item.title}</span>
-                      {item.shortcut && <span className="opaline-slot-panel-launcher-shortcut">{item.shortcut}</span>}
+                      {item.shortcut && <span className="ml-auto text-xs text-muted-foreground">{item.shortcut}</span>}
                     </DropdownMenuItem>
                   ))}
                 </DropdownMenuContent>
@@ -386,9 +384,9 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
             )}
           </div>
           {onClose && (
-            <div className="opaline-slot-panel-actions">
+            <div className="flex shrink-0 items-center border-l">
               <button
-                className="opaline-slot-panel-action opaline-slot-panel-close-action"
+                className="flex size-8 items-center justify-center text-muted-foreground hover:bg-muted hover:text-foreground"
                 type="button"
                 aria-label="Close panel"
                 onClick={onClose}
@@ -400,24 +398,24 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
         </div>
 
         {openTabs.length === 0 && launcherItems.length > 0 ? (
-          <div className="opaline-slot-panel-outlet opaline-slot-panel-launcher-container">
-            <div className="opaline-slot-panel-launcher-grid">
-              <div className="opaline-slot-launcher-header">
-                <h3>Select a tool to open</h3>
-                <p>Click any option below to initialize the surface.</p>
+          <div className="min-h-0 flex-1 overflow-auto">
+            <div className="mx-auto flex min-h-full max-w-2xl flex-col justify-center gap-6 p-8">
+              <div className="text-center">
+                <h3 className="text-sm font-semibold">Select a tool to open</h3>
+                <p className="mt-1 text-xs text-muted-foreground">Click any option below to initialize the surface.</p>
               </div>
-              <div className="opaline-slot-launcher-cards">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {launcherItems.map((item) => (
                   <button
                     key={item.type}
                     type="button"
-                    className="opaline-slot-launcher-card"
+                    className="flex items-start gap-3 rounded-lg border bg-card p-4 text-left transition-colors hover:bg-muted/50"
                     onClick={() => handleLauncherSelect(item)}
                   >
-                    <div className="opaline-slot-launcher-card-icon">{item.icon}</div>
-                    <div className="opaline-slot-launcher-card-info">
-                      <h4>{item.title}</h4>
-                      {item.description && <p>{item.description}</p>}
+                    <div className="flex size-8 shrink-0 items-center justify-center rounded-md bg-muted [&_svg]:size-4">{item.icon}</div>
+                    <div className="min-w-0">
+                      <h4 className="text-sm font-medium">{item.title}</h4>
+                      {item.description && <p className="mt-0.5 text-xs text-muted-foreground">{item.description}</p>}
                     </div>
                   </button>
                 ))}
@@ -425,22 +423,22 @@ export const SlotPanel = React.forwardRef<SlotPanelHandle, SlotPanelProps>(
             </div>
           </div>
         ) : openTabs.length === 0 ? (
-          <div className="opaline-slot-panel-outlet opaline-slot-panel-launcher-container">
-            <div className="opaline-slot-panel-launcher-grid">
-              <div className="opaline-slot-launcher-header">
-                <h3>No tabs open</h3>
-                <p>Use the ref handle to open a tab with any content.</p>
+          <div className="min-h-0 flex-1 overflow-auto">
+            <div className="flex min-h-full items-center justify-center p-8">
+              <div className="text-center">
+                <h3 className="text-sm font-semibold">No tabs open</h3>
+                <p className="mt-1 text-xs text-muted-foreground">Use the ref handle to open a tab with any content.</p>
               </div>
             </div>
           </div>
         ) : outlet !== undefined ? (
-          <div className="opaline-slot-panel-outlet">{outlet}</div>
+          <div className="min-h-0 flex-1 overflow-hidden">{outlet}</div>
         ) : (
           openTabs.map((tab) => (
             <Tabs.Content
               key={tab.id}
               value={tab.id}
-              className="opaline-slot-panel-outlet"
+              className="min-h-0 flex-1 overflow-hidden outline-none"
               forceMount={keepMounted ? true : undefined}
               hidden={keepMounted && activeTabId !== tab.id ? true : undefined}
             >

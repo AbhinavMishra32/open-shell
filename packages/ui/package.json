@@ -37,7 +37,6 @@
       "import": "./dist/opaline-v2/index.js",
       "default": "./dist/opaline-v2/index.js"
     },
-    "./v2/styles.css": "./dist/opaline-v2/styles.css",
     "./styles.css": "./dist/styles.css",
     "./theme.css": "./src/theme.css",
     "./package.json": "./package.json"
